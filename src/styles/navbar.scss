@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+}
+
+$top-bar-colour: #71c2ff;
+$menu-bar-colour: #ff7948;
+$hover-colour: red;
+
+@mixin flex-display($justify: left){
+    display: flex;
+    flex-direction: row;
+    justify-content: $justify;
+}
+
+
+.barBlock {
+    font-size: 100px;
+}
+
+.topBarBlock {
+    @include flex-display;
+    gap: 1.5em;
+
+    background-color: $top-bar-colour;
+
+    height: 1em;
+
+    font-size: 70px;
+
+}
+
+.topBarBlock > * {
+
+    height: 1.25em;
+
+    font-size: 80%;
+}
+
+
+a:hover {
+    background-color:$hover-colour;
+}
+
+#homeButton {
+    margin-right: auto;
+}
+
+#loginButton {
+    margin-right: 1em;
+}
+
+
+.menuBarBlock {
+    @include flex-display(center);
+    gap: 1.5em;
+
+    height: 1em;
+
+    font-size: 70px;
+
+    background-color: $menu-bar-colour;
+}
+
+.menuBarBlock > * {
+
+    height: 1.25em;
+
+    font-size: 80%;
+
+}
