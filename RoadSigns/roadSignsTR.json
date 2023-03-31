@@ -1,0 +1,658 @@
+[
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/78/Turkey_road_sign_T-1a.svg",
+        "title": "\nCurve to right\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/72/Turkey_road_sign_T-1b.svg",
+        "title": "\nCurve to left\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/5d/Turkey_road_sign_T-2a.svg",
+        "title": "\nDouble curve, first to right\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/21/Turkey_road_sign_T-2b.svg",
+        "title": "\nDouble curve, first to left\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/16/Turkey_road_sign_T-3a.svg",
+        "title": "\nSteep descent\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/7b/Turkey_road_sign_T-3b.svg",
+        "title": "\nSteep ascent\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/a/a7/Turkey_road_sign_T-4a.svg",
+        "title": "\nRoad narrows on both sides\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/0/0d/Turkey_road_sign_T-4b.svg",
+        "title": "\nRoad narrows on right side\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/29/Turkey_road_sign_T-4c.svg",
+        "title": "\nRoad narrows on left side\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/e/e3/Turkey_road_sign_T-5.svg",
+        "title": "\nMovable bridge\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/8/8f/Turkey_road_sign_T-6.svg",
+        "title": "\nRoad ends in sea or river\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/7e/Turkey_road_sign_T-7.svg",
+        "title": "\nBump road\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/ff/Turkey_road_sign_T-8.svg",
+        "title": "\nSlippery road when wet\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/4/4f/Turkey_road_sign_T-9.svg",
+        "title": "\nLoose gravel\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/29/Turkey_road_sign_T-10.svg",
+        "title": "\nRocks can be fall\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/0/08/Turkey_road_sign_T-11.svg",
+        "title": "\nPedestrian crossing\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/6d/Turkey_road_sign_T-12.svg",
+        "title": "\nSchool crossing\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/29/Turkey_road_sign_T-13.svg",
+        "title": "\nBikes can be cross on the road\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/f4/Turkey_road_sign_T-14a.svg",
+        "title": "\nDomestic Animals can be cross on the road\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/69/Turkey_road_sign_T-14b.svg",
+        "title": "\nWild animals crossing\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/e/e9/Turkey_road_sign_T-15.svg",
+        "title": "\nRoadworks area\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/61/Turkey_road_sign_T-16.svg",
+        "title": "\nTraffic light ahead\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/da/Turkey_road_sign_T-17.svg",
+        "title": "\nLow-flying aircraft\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/65/Turkey_road_sign_T-18.svg",
+        "title": "\nCrosswinds\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/3/38/Turkey_road_sign_T-19.svg",
+        "title": "\nTwo-way traffic\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/9/99/Turkey_road_sign_T-20.svg",
+        "title": "\nBe careful\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/b6/Turkey_road_sign_T-21.svg",
+        "title": "\nUnprotected intersection\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/9/9e/Turkey_road_sign_T-22a.svg",
+        "title": "\nSide road to the left and right\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/67/Turkey_road_sign_T-22b.svg",
+        "title": "\nSide road to the right\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/c6/Turkey_road_sign_T-22c.svg",
+        "title": "\nSide road to the left\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/da/Turkey_road_sign_T-23a.svg",
+        "title": "\nMerging traffic on right\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/4/4b/Turkey_road_sign_T-23b.svg",
+        "title": "\nMerging traffic on left\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/bb/Turkey_road_sign_T-24.svg",
+        "title": "\nRoundabout\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/7e/Turkey_road_sign_T-25.svg",
+        "title": "\nRailroad crossing with barrier\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/f5/Turkey_road_sign_T-26.svg",
+        "title": "\nRailroad crossing without barrier\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/54/Turkey_road_sign_T-27a.svg",
+        "title": "\nSingle track Railroad crossing\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/1b/Turkey_road_sign_T-27b.svg",
+        "title": "\nDoubletipel track Railroad crossing\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/b6/Turkey_road_sign_T-28a-b.svg",
+        "title": "\nCountdown marker (300m)\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/a/aa/Turkey_road_sign_T-29a-b.svg",
+        "title": "\nCountdown marker (200m)\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/e/e3/Turkey_road_sign_T-30a-b.svg",
+        "title": "\nCountdown marker (100m)\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/fc/Turkey_road_sign_T-36.svg",
+        "title": "\nSoft verges\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/e/e0/Turkey_road_sign_T-37.svg",
+        "title": "\nIce or snow\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/3/36/Turkey_road_sign_T-38.svg",
+        "title": "\nTraffic queues likely\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/5e/Turkey_road_sign_T-39.svg",
+        "title": "\nTrams crossing\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/4/45/Turkey_road_sign_T-33a.svg",
+        "title": "\nCurve dangerous\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/59/Turkey_road_sign_T-33b.svg",
+        "title": "\nCurve dangerous\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/5b/Turkey_road_sign_T-33d-e.svg",
+        "title": "\nClearance signs (roadworks)\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/c2/Turkey_road_sign_T-34a-b.svg",
+        "title": "\nClearance signs\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/71/Turkey_road_sign_T-35.svg",
+        "title": "\nTraffic island sign\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/20/Turkey_road_sign_T-31a-b.svg",
+        "title": "\nBridge signs\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/de/Turkey_road_sign_T-32.svg",
+        "title": "\nObstacle\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/a/a6/Turkey_road_sign_TT-1.svg",
+        "title": "\nYield\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/e/e3/Turkey_road_sign_TT-2.svg",
+        "title": "\nStop\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/cb/Turkey_road_sign_TT-2a.svg",
+        "title": "\nStop, children crossing\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/9/92/Turkey_road_sign_TT-3.svg",
+        "title": "\nYield to oncoming traffic\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/e/e8/Turkey_road_sign_TT-4.svg",
+        "title": "\nNo entry\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/9/92/Turkey_road_sign_TT-5.svg",
+        "title": "\nClosed to all vehicles\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/bf/Turkey_road_sign_TT-6.svg",
+        "title": "\nNo entry for cars\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/df/Turkey_road_sign_TT-7.svg",
+        "title": "\nNo entry for motorbike\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/a/ad/Turkey_road_sign_TT-8.svg",
+        "title": "\nNo entry for bike\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/bd/Turkey_road_sign_TT-9.svg",
+        "title": "\nNo entry for mopeds\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/77/Turkey_road_sign_TT-10a.svg",
+        "title": "\nNo entry for trucks\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/61/Turkey_road_sign_TT-11.svg",
+        "title": "\nNo entry for trailers\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/4/43/Turkey_road_sign_TT-12.svg",
+        "title": "\nNo entry for pedestrians\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/24/Turkey_road_sign_TT-13.svg",
+        "title": "\nNo entry for animal-drawn vehicles\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/72/Turkey_road_sign_TT-14.svg",
+        "title": "\nNo entry for handcarts\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/21/Turkey_road_sign_TT-15.svg",
+        "title": "\nNo entry for tractors\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/75/Turkey_road_sign_TT-16a.svg",
+        "title": "\nNo entry for vehicles carrying explosive substances\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/0/0e/Turkey_road_sign_TT-16b.svg",
+        "title": "\nNo entry for vehicles carrying dangerous goods\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/a/a6/Turkey_road_sign_TT-17.svg",
+        "title": "\nNo entry for vehicles carrying water pollutive substances\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/fa/Turkey_road_sign_TT-18.svg",
+        "title": "\nNo entry for  motorbike or cars\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/22/Turkey_road_sign_TT-19.svg",
+        "title": "\nNo entry for  motorbike Cars or animal-drawn vehicles\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/a/a7/Turkey_road_sign_TT-20.svg",
+        "title": "\nWidth limit\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/b5/Turkey_road_sign_TT-21.svg",
+        "title": "\nHeight limit\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/8/8b/Turkey_road_sign_TT-22.svg",
+        "title": "\nLength limit\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/9/93/Turkey_road_sign_TT-23.svg",
+        "title": "\nAxle mass limit\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/58/Turkey_road_sign_TT-24.svg",
+        "title": "\nMass limit\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/c3/Turkey_road_sign_TT-25.svg",
+        "title": "\nMaximum separation\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/0/0c/Turkey_road_sign_TT-26a.svg",
+        "title": "\nNo right turn\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/d6/Turkey_road_sign_TT-26b.svg",
+        "title": "\nNo left turn\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/4/42/Turkey_road_sign_TT-26c.svg",
+        "title": "\nNo U-turn\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/6c/Turkey_road_sign_TT-27.svg",
+        "title": "\nNo overtaking\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/fb/Turkey_road_sign_TT-28.svg",
+        "title": "\nNo overtaking by goods vehicles\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/e/eb/Turkey_road_sign_TT-29-50.svg",
+        "title": "\nMaximum speed limit\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/3/3d/Turkey_road_sign_TT-30.svg",
+        "title": "\nNo audible warning devices\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/fd/Turkey_road_sign_TT-31.svg",
+        "title": "\nPassing without stopping prohibited\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/5b/Turkey_road_sign_TT-32.svg",
+        "title": "\nEnd of all local prohibitions\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/f0/Turkey_road_sign_TT-33-50.svg",
+        "title": "\nEnd of speed limit\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/7a/Turkey_road_sign_TT-34a.svg",
+        "title": "\nEnd of overtaking prohibition\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/8/8f/Turkey_road_sign_TT-34b.svg",
+        "title": "\nEnd of overtaking prohibition by goods vehicles\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/8/80/Turkey_road_sign_TT-35a.svg",
+        "title": "\nTurn right\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/7e/Turkey_road_sign_TT-35b.svg",
+        "title": "\nTurn left\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/da/Turkey_road_sign_TT-35c.svg",
+        "title": "\nProceed straight\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/6f/Turkey_road_sign_TT-35d.svg",
+        "title": "\nProceed straight or turn right\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/d8/Turkey_road_sign_TT-35e.svg",
+        "title": "\nProceed straight or turn left\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/9/9f/Turkey_road_sign_TT-35g.svg",
+        "title": "\nTurn right ahead\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/c7/Turkey_road_sign_TT-35h.svg",
+        "title": "\nTurn left ahead\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/65/Turkey_road_sign_TT-36a.svg",
+        "title": "\nKeep right\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/bf/Turkey_road_sign_TT-36b.svg",
+        "title": "\nKeep left\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/75/Turkey_road_sign_TT-37.svg",
+        "title": "\nDetour\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/8/86/Turkey_road_sign_TT-38a.svg",
+        "title": "\nBike path\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/df/Turkey_road_sign_TT-39a.svg",
+        "title": "\nPedestrian path\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/3/34/Turkey_road_sign_TT-40a.svg",
+        "title": "\nBridle path\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/16/Turkey_road_sign_TT-41a-30.svg",
+        "title": "\nMinimum speed\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/c5/Turkey_road_sign_TT-41b-30.svg",
+        "title": "\nEnd of minimum speed\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/1c/Turkey_road_sign_TT-42a.svg",
+        "title": "\nSnow chains mandatory\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/72/Turkey_road_sign_TT-43a.svg",
+        "title": "\nTurn left for vehicles carrying dangerous goods\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/5c/Turkey_road_sign_TT-43b.svg",
+        "title": "\nProceed straight for vehicles carrying dangerous goods\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/8/80/Turkey_road_sign_TT-43c.svg",
+        "title": "\nTurn right for vehicles carrying dangerous goods\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/7d/Turkey_road_sign_B-2a.svg",
+        "title": "\nNo through side road\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/df/Turkey_road_sign_B-2b.svg",
+        "title": "\nNo through side road\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/d7/Turkey_road_sign_B-3.svg",
+        "title": "\nDetour\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/4/4e/Turkey_road_sign_B-4.svg",
+        "title": "\nPrescribed direction\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/cf/Turkey_road_sign_B-8c.svg",
+        "title": "\nGeneral speed limits\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/b2/Turkey_road_sign_B-14a.svg",
+        "title": "\nCrosswalk\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/d1/Turkey_road_sign_B-16.svg",
+        "title": "\nOne-way traffic\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/3/33/Turkey_road_sign_B-17.svg",
+        "title": "\nNo through road\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/bf/Turkey_road_sign_B-18.svg",
+        "title": "\nStart of Expressway\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/1e/Turkey_road_sign_B-19.svg",
+        "title": "\nEnd of Expressway\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/28/Turkey_road_sign_B-20.svg",
+        "title": "\nStart of road for motor vehicles\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/21/Turkey_road_sign_B-21.svg",
+        "title": "\nEnd of road for motor vehicles\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/6/63/Turkey_road_sign_B-22.svg",
+        "title": "\nBuses stop\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/9/94/Turkey_road_sign_B-23.svg",
+        "title": "\nFirst aid post\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/ce/Turkey_road_sign_B-24.svg",
+        "title": "\nRepair shop\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/ff/Turkey_road_sign_B-25.svg",
+        "title": "\nPublic telephone\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/bc/Turkey_road_sign_B-26.svg",
+        "title": "\nPetrol station\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/2a/Turkey_road_sign_B-27.svg",
+        "title": "\nHotel\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/c8/Turkey_road_sign_B-28.svg",
+        "title": "\nRestaurant\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/2b/Turkey_road_sign_B-30.svg",
+        "title": "\nFountain or faucet\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/23/Turkey_road_sign_B-31.svg",
+        "title": "\nPicnic site\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/18/Turkey_road_sign_B-32.svg",
+        "title": "\nStarting point of walks\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/78/Turkey_road_sign_B-33.svg",
+        "title": "\nCamping site\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/73/Turkey_road_sign_B-34.svg",
+        "title": "\nCaravan site\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/11/Turkey_road_sign_B-35.svg",
+        "title": "\nCamping and caravan site\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/4/41/Turkey_road_sign_B-36.svg",
+        "title": "\nYouth hostel\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/9/9a/Turkey_road_sign_B-37.svg",
+        "title": "\nPriority over oncoming traffic\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/a/a3/Turkey_road_sign_B-38.svg",
+        "title": "\nPriority road\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/c5/Turkey_road_sign_B-39.svg",
+        "title": "\nEnd of priority road\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/5b/Turkey_road_sign_B-43.svg",
+        "title": "\nTraffic radio information\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/58/Turkey_road_sign_B-45a.svg",
+        "title": "\nPedestrian underpass\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/e/ec/Turkey_road_sign_B-46.svg",
+        "title": "\nSwimming pool\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/a/a9/Turkey_road_sign_B-49.svg",
+        "title": "\nTunnel\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/bb/Turkey_road_sign_B-55a.svg",
+        "title": "\nEscape lane\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/9/99/Turkey_road_sign_P-1.svg",
+        "title": "\nNo parking\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/de/Turkey_road_sign_P-2.svg",
+        "title": "\nNo standing or parking\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/1a/Turkey_road_sign_P-3a.svg",
+        "title": "\nParking\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/e/e3/Turkey_road_sign_P-3f.svg",
+        "title": "\nUnderground parking or public parking garage\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/f/fa/Turkey_road_sign_P-3c.svg",
+        "title": "\nParking footway\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/db/Turkey_road_sign_P-3b.svg",
+        "title": "\nParking verge footway\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/12/Turkey_road_sign_P-3h.svg",
+        "title": "\nParking for tram\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/51/Turkey_road_sign_P-3g.svg",
+        "title": "\nParking for metro\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/c/c9/Turkey_road_sign_P-3d.svg",
+        "title": "\nParking footway\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/8/81/Turkey_road_sign_P-3e.svg",
+        "title": "\nParking verge footway\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/24/Turkey_road_sign_PL-1.svg",
+        "title": "\nLength\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/5b/Turkey_road_sign_PL-2.svg",
+        "title": "\nDistance\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/b/bb/Turkey_road_sign_PL-3.svg",
+        "title": "\nSide extension (of parking and stopping ban)\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/0/08/Turkey_road_sign_PL-5.svg",
+        "title": "\nStop ahead\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/d/d8/Turkey_road_sign_PL-6.svg",
+        "title": "\nDisabled parking\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/3/3c/Turkey_road_sign_PL-7.1.svg",
+        "title": "\nIce or snow\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/5/52/Turkey_road_sign_PL-8.1.svg",
+        "title": "\nBeginning (of parking and stopping ban)\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/1/1f/Turkey_road_sign_PL-8.2.svg",
+        "title": "\nEnding (of parking and stopping ban)\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/2/26/Turkey_road_sign_PL-8.3.svg",
+        "title": "\nContinuation (of parking and stopping ban)\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/72/Turkey_road_sign_PL-11.1.svg",
+        "title": "\nDirection of priority road\n\n"
+    },
+    {
+        "img": "//upload.wikimedia.org/wikipedia/commons/7/7b/Turkey_road_sign_PL-11.2.svg",
+        "title": "\nDirection of priority road\n\n"
+    }
+]
