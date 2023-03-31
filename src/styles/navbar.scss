@@ -1,5 +1,7 @@
 body {
     margin: 0;
+    overflow-x: hidden;
+    white-space: nowrap;
 }
 
 $top-bar-colour: #71c2ff;
@@ -66,5 +68,4 @@ a:hover {
     height: 1.25em;
 
     font-size: 80%;
-
 }

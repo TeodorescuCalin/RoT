@@ -1,0 +1,70 @@
+@import "navbar";
+
+@mixin horizontally-centered() {
+  position: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+@mixin size-scale($value) {
+
+  width: $value;
+  height: $value / 2;
+}
+
+#countrySelection {
+  @include horizontally-centered;
+  margin-top: 50px;
+
+
+  @include flex-display(center);
+  flex-wrap: wrap;
+  row-gap: 10vh;
+  column-gap: 100px;
+
+  @include size-scale(1200px);
+}
+
+#countrySelection > * {
+  flex: 0 0 20%;
+
+  border-radius: 10px 10px 10px 10px;
+  border-style: solid;
+
+  text-align: center;
+
+  font-size: 5vh;
+
+  height: 60%;
+  display: block;
+}
+
+.countryBlock__image {
+  @include horizontally-centered;
+  margin-top: 30%;
+  width: 80%;
+  height: auto;
+  border-style: none;
+  display: block;
+}
+
+@media only screen and (max-width: 1180px) {
+
+  #countrySelection {
+    @include size-scale(600px);
+  }
+}
+
+@media only screen and(max-width: 600px) {
+
+  #countrySelection {
+    @include size-scale(400px);
+
+  }
+}
+
+@media only screen and(min-width: 2000px) {
+
+  #countrySelection > * {
+    font-size: 50px;
+  }
+}
