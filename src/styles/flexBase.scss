@@ -1,0 +1,71 @@
+@mixin flex-display($justify: left){
+  display: flex;
+  flex-direction: row;
+  justify-content: $justify;
+  flex-wrap: wrap;
+  row-gap: 10vh;
+  column-gap: 100px;
+}
+
+@mixin size-scale($value) {
+
+  width: $value;
+  height: $value / 2;
+}
+
+@mixin horizontally-centered() {
+  position: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flexBlock {
+  @include horizontally-centered;
+  margin-top: 50px;
+
+
+  @include flex-display(center);
+
+  @include size-scale(1200px);
+}
+
+.flexBlock__container {
+  flex: 0 0 20%;
+
+}
+
+
+@media only screen and (max-width: 1180px) {
+
+  .flexBlock {
+    @include size-scale(600px);
+  }
+}
+
+@media only screen and(max-width: 600px) {
+
+  .flexBlock {
+    @include size-scale(400px);
+
+  }
+}
+
+@media only screen and(max-width: 340px)
+{
+
+  .flexBlock {
+    @include size-scale(200px);
+  }
+}
+
+@media only screen and(max-width: 200px) {
+
+  .flexBlock {
+    @include size-scale(100px);
+    column-gap: 0;
+  }
+
+  .flexBlock__container {
+    flex-basis: 100%;
+  }
+}

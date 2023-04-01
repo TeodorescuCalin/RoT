@@ -1,3 +1,5 @@
+@import "flexBase";
+
 body {
     margin: 0;
     overflow-x: hidden;
@@ -7,12 +9,6 @@ body {
 $top-bar-colour: #71c2ff;
 $menu-bar-colour: #ff7948;
 $hover-colour: red;
-
-@mixin flex-display($justify: left){
-    display: flex;
-    flex-direction: row;
-    justify-content: $justify;
-}
 
 
 .barBlock {
@@ -27,7 +23,7 @@ $hover-colour: red;
 
     height: 1em;
 
-    font-size: 70px;
+    font-size: 5px;
 
 }
 
@@ -53,7 +49,6 @@ a:hover {
 
 
 .menuBarBlock {
-    @include flex-display(center);
     gap: 1.5em;
 
     height: 1em;
@@ -67,5 +62,5 @@ a:hover {
 
     height: 1.25em;
 
-    font-size: 80%;
+    font-size: 30%;
 }

@@ -1,38 +1,14 @@
 @import "navbar";
+@import "flexBase";
 
-@mixin horizontally-centered() {
-  position: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-@mixin size-scale($value) {
-
-  width: $value;
-  height: $value / 2;
-}
-
-#countrySelection {
-  @include horizontally-centered;
-  margin-top: 50px;
-
-
-  @include flex-display(center);
-  flex-wrap: wrap;
-  row-gap: 10vh;
-  column-gap: 100px;
-
-  @include size-scale(1200px);
-}
-
-#countrySelection > * {
-  flex: 0 0 20%;
+.countryBlock {
 
   border-radius: 10px 10px 10px 10px;
   border-style: solid;
 
   text-align: center;
 
-  font-size: 5vh;
+  font-size: 3vw;
 
   height: 60%;
   display: block;
@@ -40,31 +16,34 @@
 
 .countryBlock__image {
   @include horizontally-centered;
-  margin-top: 30%;
   width: 80%;
   height: auto;
   border-style: none;
   display: block;
 }
 
-@media only screen and (max-width: 1180px) {
-
-  #countrySelection {
-    @include size-scale(600px);
+@media only screen and(max-width: 340px)
+{
+  .countryBlock {
+    border-radius: 5px 5px 5px 5px;
   }
 }
 
-@media only screen and(max-width: 600px) {
+@media only screen and(max-width: 200px) {
 
-  #countrySelection {
-    @include size-scale(400px);
+  .countryBlock {
+    height: 100%;
+    font-size: 10px;
+  }
 
+  .countryBlock__image {
+    width: 60%;
   }
 }
 
 @media only screen and(min-width: 2000px) {
 
-  #countrySelection > * {
+  .countryBlock {
     font-size: 50px;
   }
 }

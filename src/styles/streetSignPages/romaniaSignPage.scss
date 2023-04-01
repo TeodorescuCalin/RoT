@@ -1,0 +1,44 @@
+@import "../navbar";
+@import "../flexBase";
+
+.signCategoryBlock {
+
+  border-style: solid;
+  border-radius: 5px 5px 5px 5px;
+
+  padding: 2px 2px 2px 2px;
+
+  height: auto;
+
+  flex-basis: 30%;
+
+  text-align: center;
+}
+
+.signCategoryDescription {
+
+  width: 100%;
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+@media only screen and(max-width: 1180px) {
+
+  .signCategoryBlock {
+    flex-basis: 50%;
+  }
+}
+
+
+@media only screen and(max-width: 600px) {
+
+  #signCategorySelection {
+    @include size-scale(400px);
+
+  }
+
+  .signCategoryBlock {
+    flex-basis: 80%
+
+  }
+}
