@@ -1,0 +1,47 @@
+@import "../navbar";
+@import "../flexBase";
+
+
+.signBlock {
+    border-style: double;
+    border-radius: 5px 5px 5px 5px;
+
+    height: 180px;
+
+    word-wrap: break-word;
+    white-space: pre-line;
+
+    text-align: center;
+}
+
+.signBlock__name {
+    font-weight: bold;
+    height: 10%;
+}
+
+.signBlock__description {
+    margin-top: auto;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+}
+
+@media only screen and(max-width: 1180px) {
+
+    .flexBlock {
+        @include size-scale(400);
+    }
+
+    .flexBlock__container {
+        flex-basis: 60%;
+    }
+}
+
+@media only screen and(max-width: 340px) {
+
+    .signBlock {
+        height: 500px;
+    }
+}
