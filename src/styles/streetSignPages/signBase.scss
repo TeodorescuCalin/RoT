@@ -1,0 +1,14 @@
+@import "../navbar";
+@import "../flexBase";
+
+.signBlock {
+  color: white;
+  background-color: $primary-color;
+  border-color: #1526ff;
+}
+
+.signBlock img {
+  border-color: black;
+  border-style: solid;
+  background-color: white;
+}

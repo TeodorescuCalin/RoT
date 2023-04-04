@@ -1,5 +1,7 @@
-@import "navbar";
-@import "flexBase";
+@import "../navbar.css";
+@import "../flexBase";
+@import "linkStyling";
+
 
 .countryBlock {
 
@@ -17,8 +19,6 @@
 .countryBlock__image {
   @include horizontally-centered;
   width: 80%;
-  height: auto;
-  border-style: none;
   display: block;
 }
 
@@ -44,8 +44,6 @@
 @media only screen and(min-width: 2000px) {
 
   .countryBlock {
-    font-size: 50px;
+    font-size: 70px;
   }
 }
-
-img { width:100px}

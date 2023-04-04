@@ -1,6 +1,7 @@
 @import "../navbar";
 @import "../flexBase";
-
+@import "linkStyling";
+@import "signBase";
 
 .signBlock {
   border-style: double;
@@ -34,9 +35,9 @@
   }
 }
 
-@media only screen and(max-width: 340px) {
-
-  .signBlock {
-    height: 500px;
-  }
-}
+//@media only screen and(max-width: 340px) {
+//
+//  .signBlock {
+//    height: 500px;
+//  }
+//}

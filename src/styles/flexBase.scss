@@ -1,3 +1,5 @@
+
+
 @mixin flex-display($justify: left){
   display: flex;
   flex-direction: row;
@@ -14,14 +16,13 @@
 }
 
 @mixin horizontally-centered() {
-  position: center;
   margin-left: auto;
   margin-right: auto;
 }
 
 .flexBlock {
   @include horizontally-centered;
-  margin-top: 50px;
+  margin-top: 5vh;
 
 
   @include flex-display(center);
@@ -31,21 +32,20 @@
 
 .flexBlock__container {
   flex: 0 0 20%;
-
 }
 
 
 @media only screen and (max-width: 1180px) {
 
   .flexBlock {
-    @include size-scale(600px);
+    @include size-scale(650px);
   }
 }
 
 @media only screen and(max-width: 600px) {
 
   .flexBlock {
-    @include size-scale(400px);
+    @include size-scale(300px);
 
   }
 }
@@ -66,6 +66,6 @@
   }
 
   .flexBlock__container {
-    flex-basis: 100%;
+    flex-basis: 60%;
   }
 }

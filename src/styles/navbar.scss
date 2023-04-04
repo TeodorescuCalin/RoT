@@ -1,14 +1,14 @@
 @import "flexBase";
+$primary-color: #0088a9;
+$background-color: #24252A;
+$subMenuBoxShadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
 body {
-    margin: 0;
-    overflow-x: hidden;
-    white-space: nowrap;
+    background-color: $background-color;
 }
 
 $top-bar-colour: #71c2ff;
 $menu-bar-colour: #ff7948;
-$hover-colour: red;
 
 
 .barBlock {
@@ -32,11 +32,6 @@ $hover-colour: red;
     height: 1.25em;
 
     font-size: 80%;
-}
-
-
-a:hover {
-    background-color:$hover-colour;
 }
 
 #homeButton {

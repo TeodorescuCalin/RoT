@@ -1,12 +1,12 @@
-@import "../navbar";
 @import "../flexBase";
-
+@import "linkStyling";
+@import "signBase";
 
 .signBlock {
     border-style: double;
     border-radius: 5px 5px 5px 5px;
 
-    height: 180px;
+    height: 230px;
 
     word-wrap: break-word;
     white-space: pre-line;
@@ -23,25 +23,49 @@
     margin-top: auto;
 }
 
+.signBlock__name {
+    height: 30%;
+}
+
 img {
     width: 100px;
     height: 100px;
 }
 
-@media only screen and(max-width: 1180px) {
+@media only screen and(max-width: 900px) {
 
-    .flexBlock {
-        @include size-scale(400);
+    .signContainer {
+        @include size-scale(500px);
+        column-gap: 50px;
     }
 
-    .flexBlock__container {
-        flex-basis: 60%;
+    .signBlock {
+        flex-basis: 40%;
+    }
+}
+
+@media only screen and(max-width: 500px) {
+
+    .signContainer {
+        @include size-scale(300px);
+        column-gap: 5px;
+    }
+
+    .signBlock {
+        flex-basis: 30%;
+        height: 180px;
+        font-size: 8px;
+    }
+
+    .signBlock img {
+        width: 50px;
+        height: 50px;
     }
 }
 
 @media only screen and(max-width: 340px) {
 
     .signBlock {
-        height: 500px;
+        height: 150px;
     }
 }
