@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+	<link rel="stylesheet" type="text/css" href="login.css">
+	<script src="https://kit.fontawesome.com/a4b0c75974.js" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+</head>
+<body>
+	<div id="navigationBar"></div>
+	<script>
+		$(function(){
+		$("#navigationBar").load("navbar.html");
+		});
+	</script>
+	<div class="loginBlock">
+		<h1>Autentificare</h1>
+
+			<div class="form-container">
+				<div class="usernameContainer">
+					<label for="uname"><b>Nume cont</b></label>
+					<i class ="fas fa-user"></i>
+					<input type="text" placeholder="Introdu nume" name="uname" required>
+				</div>
+				
+				<div class="passwordContainer">
+					<label for="psw"><b>Parola</b></label>
+					<i class ="fas fa-lock"></i>
+					<input type="password" placeholder="Introdu parola" name="psw" required>
+					<div class="forgotPassword"><a href="forgotPassword.html"> Ai uitat parola?</a></div>
+				</div>
+				<button type="submit">Autentificare</button>
+			</div>
+			<div class="newAccount"><a href="register.html">Creeaza un cont nou</a></div>
+		</form>
+	</div>
+</body>
+</html>

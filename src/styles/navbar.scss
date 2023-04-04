@@ -1,70 +1,258 @@
-body {
-    margin: 0;
-}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
-$top-bar-colour: #71c2ff;
-$menu-bar-colour: #ff7948;
-$hover-colour: red;
+$gradientColor: linear-gradient(to right, rgb(113, 194, 255) 5%, rgb(52, 88, 119));
+$hoverColor: #0088a9;
+$backgroundColor: #24252A;
+$subMenuBoxShadowColor: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+$loginButtonColor: rgba(0, 136, 169, 1);
+$loginButtonHoverColor: rgba(0, 136, 169, 0.5);
 
 @mixin flex-display($justify: left){
     display: flex;
-    flex-direction: row;
+    //flex-direction: row;
     justify-content: $justify;
 }
 
-
-.barBlock {
-    font-size: 100px;
+@mixin block-display($display: left){
+    text-align: center;
+    display: $display;
 }
 
-.topBarBlock {
-    @include flex-display;
-    gap: 1.5em;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: $backgroundColor;
+}
 
-    background-color: $top-bar-colour;
+header {
+    @include flex-display(space-between);
+    position: absolute;
+    width: 100%;
+    top: 0;
+    right: 0;
+    align-items: flex-start;
+    background: transparent;
+    padding: 20px 6%;
+    transition: all .50s ease;
+}
 
-    height: 1em;
+.navButtons{
+    text-align: center;
+    position: relative;
+    display: flex;
+    top: 38px;
+    list-style: none;
+}
 
-    font-size: 70px;
+.navButtons a:hover {
+    color: #0088a9;
+}
+
+.navButtons a:active {
+    color: yellow;
+}
+
+.navButtons a {
+    @include block-display(block);
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    text-decoration: none;
+    padding: 5px 0;
+    margin: 0 20px;
+    transition: all .50s ease;
+    background-color: $backgroundColor;
 
 }
 
-.topBarBlock > * {
-
-    height: 1.25em;
-
-    font-size: 80%;
+div .login {
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    text-decoration: none;
+    //padding: 100px 0;
+    margin: 0 20px;
+    transition: all .50s ease;
+    position: relative;
+    padding: 9px 25px;
+    border: none;
+    border-radius: 50px;
+    background-color: $loginButtonColor;
+    cursor: pointer;
+    top: 31px;
+    //transition: all .50s ease;
 }
 
-
-a:hover {
-    background-color:$hover-colour;
+div .login:hover {
+    background-color: $loginButtonHoverColor;
 }
 
-#homeButton {
-    margin-right: auto;
+.subMenuHighwayCode {
+    position: relative;
+    background-color: #0088a9;
+    display: none;
+    list-style: none;
+    border: none;
+    top: 15px;
+    line-height: 50px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-#loginButton {
-    margin-right: 1em;
+nav ul li:hover ul {
+    display: block;
 }
 
-
-.menuBarBlock {
-    @include flex-display(center);
-    gap: 1.5em;
-
-    height: 1em;
-
-    font-size: 70px;
-
-    background-color: $menu-bar-colour;
+.subMenuHighwayCode a:hover {
+    color: $hoverColor;
 }
 
-.menuBarBlock > * {
+@media (max-width: 1304px) {
+    .navButtons {
+        @include block-display(block);
+        position: relative;
+        width: 100%;
+        top: 180px;
+        left: 20px;
+        line-height: 80px;
+        transition: all .5s ease;
+        transition-duration: 200ms;
+    }
 
-    height: 1.25em;
+    .navButtons a {
+        font-size: 28px;
+    }
 
-    font-size: 80%;
+    .subMenuHighwayCode {
+        line-height: 50px;
+        margin-bottom: 20px;
+    }
+
+    div.textHomePage {
+        align-content: flex-end;
+    }
 
 }
+
+@media (max-width: 350px) {
+    //.navButtons {
+    //    position: relative;
+    //    display: block;
+    //    width: 100%;
+    //    top: 180px;
+    //    left: 20px;
+    //    line-height: 80px;
+    //    text-align: center;
+    //    transition: all .5s ease;
+    //    transition-duration: 200ms;
+    //}
+    //
+    //.navButtons a {
+    //    font-size: 28px;
+    //}
+    //
+    //.subMenuHighwayCode {
+    //    line-height: 50px;
+    //    margin-bottom: 20px;
+    //}
+    .navButtons a {
+        font-size: 28px;
+    }
+}
+
+//li, a, button {
+//    font-family: "Montserrat", sans-serif;
+//    font-weight: 500;
+//    font-size: 22px;
+//    color: white;
+//    text-decoration: none;
+//}
+//
+//header {
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: center;
+//
+//    padding: 30px 8%;
+//}
+//
+//.nav_links {
+//    list-style: none;
+//}
+//
+//.nav_links ul {
+//    display: flex;
+//    flex-direction: row;
+//}
+//
+//.nav_links ul a {
+//    display: block;
+//    flex-direction: row;
+//    padding: 0px 15px;
+//}
+//
+//.nav_links li {
+//    display: block;
+//    padding: 0px 15px;
+//}
+//
+//.nav_links li a {
+//    transition: all 0.3s ease 0s;
+//}
+//
+//.nav_links li a:hover {
+//    color: #0088a9;
+//}
+//
+//button {
+//    padding: 9px 25px;
+//    background-color: rgba(0, 136, 169, 1);
+//    border: none;
+//    border-radius: 50px;
+//    cursor: pointer;
+//    transition: all 0.3s ease 0s;
+//}
+//
+//button:hover {
+//    background-color: rgba(0, 136, 169, 0.5);
+//}
+//
+//@media screen and (max-width: 1304px) {
+//    .homeButton {
+//        svg {
+//            width:  225px;
+//            height: 225px;
+//            padding-left: 20px;
+//            transition: all 1s ease-in-out;
+//        }
+//    }
+//
+//    .nav_links {
+//        flex-direction: column;
+//        align-items: flex-start;
+//    }
+//    nav ul {
+//        position: fixed;
+//        width: 100%;
+//        top: 225px;
+//        left: 0;
+//        padding-top: 100px;
+//        margin-right: 5000px;
+//        text-align: center;
+//    }
+//    nav ul li {
+//        display: block;
+//        margin: 100px 100px;
+//        line-height: 100px;
+//    }
+//    nav ul li a {
+//        font-size: 70px;
+//    }
+//    button {
+//        font-size: 60px;
+//        color: white;
+//        text-decoration: none;
+//    }
+//}
