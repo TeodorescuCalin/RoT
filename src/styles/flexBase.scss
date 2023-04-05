@@ -33,39 +33,3 @@
 .flexBlock__container {
   flex: 0 0 20%;
 }
-
-
-@media only screen and (max-width: 1180px) {
-
-  .flexBlock {
-    @include size-scale(650px);
-  }
-}
-
-@media only screen and(max-width: 600px) {
-
-  .flexBlock {
-    @include size-scale(300px);
-
-  }
-}
-
-@media only screen and(max-width: 340px)
-{
-
-  .flexBlock {
-    @include size-scale(200px);
-  }
-}
-
-@media only screen and(max-width: 200px) {
-
-  .flexBlock {
-    @include size-scale(100px);
-    column-gap: 0;
-  }
-
-  .flexBlock__container {
-    flex-basis: 60%;
-  }
-}

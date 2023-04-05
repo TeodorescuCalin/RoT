@@ -32,6 +32,13 @@ img {
     height: 100px;
 }
 
+@media only screen and (max-width: 1180px) {
+
+    .signContainer {
+        @include size-scale(650px);
+    }
+}
+
 @media only screen and(max-width: 900px) {
 
     .signContainer {

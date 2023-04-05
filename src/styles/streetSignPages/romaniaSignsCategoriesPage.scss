@@ -23,6 +23,10 @@
 
 @media only screen and(max-width: 1180px) {
 
+  #signCategorySelection {
+    @include size-scale(650px);
+  }
+
   .signCategoryBlock {
     flex-basis: 50%;
   }
