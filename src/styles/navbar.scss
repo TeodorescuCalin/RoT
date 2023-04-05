@@ -5,6 +5,8 @@ body {
 $top-bar-colour: #71c2ff;
 $menu-bar-colour: #ff7948;
 $hover-colour: red;
+$primary-color: #0088a9;
+$background-color: #24252A;
 
 @mixin flex-display($justify: left){
     display: flex;

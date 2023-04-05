@@ -1,0 +1,89 @@
+@import "navbar";
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap');
+
+
+$text-color: white;
+$selected-answer-color: light-blue;
+
+@mixin box-border($border-size) {
+  border-width: $border-size;
+  border-color: $primary-color;
+}
+
+@mixin font-style($font-size) {
+  color: $text-color;
+  font-family: 'Akaya Kanadaka', cursive;
+  font-size: $font-size;
+
+}
+
+body {
+  background-color: $background-color;
+}
+
+.questionContainer {
+  @include box-border(5px);
+  border-style: solid;
+
+  width: 800px;
+  height: 800px;
+
+  display: block;
+
+  margin: 50px auto 50px auto;
+}
+
+.questionContainer__description {
+  border-bottom: solid;
+  @include box-border(5px);
+
+  width: 100%;
+  height: 80%;
+}
+
+.questionContainer__description__title {
+  height: 5%;
+
+  margin-bottom: 3%;
+  padding-top: 2%;
+
+  @include font-style(180%);
+  text-align: center;
+}
+
+.questionContainer__description__image {
+  height: 90%;
+}
+
+.questionContainer__description__image * {
+  border: none;
+  margin-left: 5%;
+  width: 90%;
+  height: 90%;
+}
+
+.questionContainer__answerBlock {
+  width: 50%;
+  margin-top: 10px;
+  margin-right: 0;
+  float: left;
+}
+
+.questionContainer__answerBlock__answer {
+
+  @include font-style(30px);
+  margin-left: 10px;
+  margin-bottom: 10px;
+  user-select: none;
+}
+
+.questionContainer__answerBlock__answer--selected {
+  background-color: #2df5ff;
+}
+
+.answer__badge {
+
+  text-align: center;
+  border: solid white 3px;
+  margin-right: 10px;
+}
