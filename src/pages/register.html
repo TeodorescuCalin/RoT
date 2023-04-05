@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="ro">
 <head>
-	<link rel="stylesheet" type="text/css" href="register.css">
+	<meta charset="UTF-8">
+
+	<title> Înregistrare </title>
+
+	<link rel="stylesheet" type="text/css" href="../styles/register.css">
 	<script src="https://kit.fontawesome.com/a4b0c75974.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 </head>
@@ -13,30 +17,29 @@
 		});
 	</script>
 	<div class="registerBlock">
-		<h1>Inregistrare</h1>
+		<h1>Înregistrare</h1>
 
 			<div class="form-container">
                 <div class="emailContainer">
 					<label for="email"><b>Email</b></label>
 					<i class ="fas fa-envelope"></i>
-					<input type="text" placeholder="Introdu adresa de mail" name="email" required>
+					<input type="text" placeholder="Introdu adresa de mail" id="email" required>
 				</div>
 
 				<div class="usernameContainer">
 					<label for="uname"><b>Nume cont</b></label>
 					<i class ="fas fa-user"></i>
-					<input type="text" placeholder="Introdu nume" name="uname" required>
+					<input type="text" placeholder="Introdu nume" id="uname" required>
 				</div>
-				
+
 				<div class="passwordContainer">
 					<label for="psw"><b>Parola</b></label>
 					<i class ="fas fa-lock"></i>
-					<input type="password" placeholder="Introdu parola" name="psw" required>
+					<input type="password" placeholder="Introdu parola" id="psw" required>
 				</div>
 				<button type="submit">Inregistrare</button>
 			</div>
 			<div class="oldAccount">Ai deja un cont? <a href="login.html"> Autentifica-te</a></div>
-		</form>
 	</div>
 </body>
 </html>

@@ -1,15 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
-$gradientColor: linear-gradient(to right, rgb(113, 194, 255) 5%, rgb(52, 88, 119));
 $hoverColor: #0088a9;
 $backgroundColor: #24252A;
-$subMenuBoxShadowColor: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 $loginButtonColor: rgba(0, 136, 169, 1);
 $loginButtonHoverColor: rgba(0, 136, 169, 0.5);
 
 @mixin flex-display($justify: left){
     display: flex;
-    //flex-direction: row;
     justify-content: $justify;
 }
 
@@ -37,7 +34,7 @@ header {
     transition: all .50s ease;
 }
 
-.navButtons{
+.navBar__buttons{
     text-align: center;
     position: relative;
     display: flex;
@@ -45,15 +42,15 @@ header {
     list-style: none;
 }
 
-.navButtons a:hover {
-    color: #0088a9;
+.navBar__buttons a:hover {
+    color: $hoverColor;
 }
 
-.navButtons a:active {
+.navBar__buttons a:active {
     color: yellow;
 }
 
-.navButtons a {
+.navBar__buttons a {
     @include block-display(block);
     color: white;
     font-family: "Montserrat", sans-serif;
@@ -73,7 +70,6 @@ div .login {
     font-weight: 500;
     font-size: 20px;
     text-decoration: none;
-    //padding: 100px 0;
     margin: 0 20px;
     transition: all .50s ease;
     position: relative;
@@ -83,7 +79,6 @@ div .login {
     background-color: $loginButtonColor;
     cursor: pointer;
     top: 31px;
-    //transition: all .50s ease;
 }
 
 div .login:hover {
@@ -92,13 +87,13 @@ div .login:hover {
 
 .subMenuHighwayCode {
     position: relative;
-    background-color: #0088a9;
+    background-color: $hoverColor;
     display: none;
     list-style: none;
     border: none;
     top: 15px;
     line-height: 50px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
 }
 
 nav ul li:hover ul {
@@ -110,7 +105,7 @@ nav ul li:hover ul {
 }
 
 @media (max-width: 1304px) {
-    .navButtons {
+    .navBar__buttons {
         @include block-display(block);
         position: relative;
         width: 100%;
@@ -121,7 +116,7 @@ nav ul li:hover ul {
         transition-duration: 200ms;
     }
 
-    .navButtons a {
+    .navBar__buttons a {
         font-size: 28px;
     }
 
@@ -137,122 +132,7 @@ nav ul li:hover ul {
 }
 
 @media (max-width: 350px) {
-    //.navButtons {
-    //    position: relative;
-    //    display: block;
-    //    width: 100%;
-    //    top: 180px;
-    //    left: 20px;
-    //    line-height: 80px;
-    //    text-align: center;
-    //    transition: all .5s ease;
-    //    transition-duration: 200ms;
-    //}
-    //
-    //.navButtons a {
-    //    font-size: 28px;
-    //}
-    //
-    //.subMenuHighwayCode {
-    //    line-height: 50px;
-    //    margin-bottom: 20px;
-    //}
-    .navButtons a {
+    .navBar__buttons a {
         font-size: 28px;
     }
 }
-
-//li, a, button {
-//    font-family: "Montserrat", sans-serif;
-//    font-weight: 500;
-//    font-size: 22px;
-//    color: white;
-//    text-decoration: none;
-//}
-//
-//header {
-//    display: flex;
-//    justify-content: space-between;
-//    align-items: center;
-//
-//    padding: 30px 8%;
-//}
-//
-//.nav_links {
-//    list-style: none;
-//}
-//
-//.nav_links ul {
-//    display: flex;
-//    flex-direction: row;
-//}
-//
-//.nav_links ul a {
-//    display: block;
-//    flex-direction: row;
-//    padding: 0px 15px;
-//}
-//
-//.nav_links li {
-//    display: block;
-//    padding: 0px 15px;
-//}
-//
-//.nav_links li a {
-//    transition: all 0.3s ease 0s;
-//}
-//
-//.nav_links li a:hover {
-//    color: #0088a9;
-//}
-//
-//button {
-//    padding: 9px 25px;
-//    background-color: rgba(0, 136, 169, 1);
-//    border: none;
-//    border-radius: 50px;
-//    cursor: pointer;
-//    transition: all 0.3s ease 0s;
-//}
-//
-//button:hover {
-//    background-color: rgba(0, 136, 169, 0.5);
-//}
-//
-//@media screen and (max-width: 1304px) {
-//    .homeButton {
-//        svg {
-//            width:  225px;
-//            height: 225px;
-//            padding-left: 20px;
-//            transition: all 1s ease-in-out;
-//        }
-//    }
-//
-//    .nav_links {
-//        flex-direction: column;
-//        align-items: flex-start;
-//    }
-//    nav ul {
-//        position: fixed;
-//        width: 100%;
-//        top: 225px;
-//        left: 0;
-//        padding-top: 100px;
-//        margin-right: 5000px;
-//        text-align: center;
-//    }
-//    nav ul li {
-//        display: block;
-//        margin: 100px 100px;
-//        line-height: 100px;
-//    }
-//    nav ul li a {
-//        font-size: 70px;
-//    }
-//    button {
-//        font-size: 60px;
-//        color: white;
-//        text-decoration: none;
-//    }
-//}
