@@ -17,6 +17,12 @@ $selected-answer-color: light-blue;
 
 }
 
+@mixin resize($size, $font-size) {
+  height: $size;
+  width: $size * 5 / 6;
+  font-size: $font-size;
+}
+
 body {
   background-color: $background-color;
 }
@@ -26,7 +32,7 @@ body {
   border-style: solid;
 
   width: 800px;
-  height: 800px;
+  height: 1000px;
 
   display: block;
 
@@ -38,7 +44,7 @@ body {
   @include box-border(5px);
 
   width: 100%;
-  height: 80%;
+  height: 70%;
 }
 
 .questionContainer__description__title {
@@ -62,19 +68,26 @@ body {
   height: 90%;
 }
 
+#questionAnswersBlock {
+  height: 20%;
+}
+
 .questionContainer__answerBlock {
   width: 50%;
   margin-top: 10px;
-  margin-right: 0;
   float: left;
 }
 
 .questionContainer__answerBlock__answer {
 
-  @include font-style(30px);
-  margin-left: 10px;
-  margin-bottom: 10px;
+  margin: 0 0 10px 15px;
+  @include font-style(200%);
   user-select: none;
+  border: solid;
+  width: 90%;
+  @include box-border(2px);
+  border-radius: 5px 5px 5px 5px;
+
 }
 
 .questionContainer__answerBlock__answer--selected {
@@ -84,6 +97,64 @@ body {
 .answer__badge {
 
   text-align: center;
-  border: solid white 3px;
+  border-right: solid;
+  @include box-border(2px);
   margin-right: 10px;
+}
+
+.formButtonsBlock {
+
+  width: 100%;
+  height: 10%;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.formButtonsBlock__button {
+  height: 60%;
+
+  flex-basis: 35%;
+
+  border-radius: 10px;
+
+  @include font-style(120%);
+  color: black;
+}
+
+.formButtonsBlock__button--green {
+  background: greenyellow;
+}
+
+.formButtonsBlock__button--yellow {
+  background: yellow;
+}
+
+
+@media only screen and(max-width: 840px) {
+  .questionContainer {
+    @include resize(750px, 80%);
+  }
+}
+
+@media only screen and(max-width: 640px) {
+  .questionContainer {
+    @include resize(600px, 60%);
+  }
+}
+
+@media only screen and(max-width: 400px) {
+  .questionContainer {
+    @include resize(420px, 40%);
+  }
+  .questionContainer * {
+    border-width: 2px ;
+  }
+  .questionContainer__answerBlock {
+    margin-top: 2px;
+  }
+  .questionContainer__answerBlock__answer {
+    margin-left: 7px;
+  }
 }
