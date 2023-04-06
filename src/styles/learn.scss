@@ -78,7 +78,7 @@ body {
   float: left;
 }
 
-.questionContainer__answerBlock__answer {
+.questionContainer__answerBlock__choiceAnswer {
 
   margin: 0 0 10px 15px;
   @include font-style(200%);
@@ -90,7 +90,7 @@ body {
 
 }
 
-.questionContainer__answerBlock__answer--selected {
+.questionContainer__answerBlock__choiceAnswer--selected {
   background-color: #2df5ff;
 }
 
@@ -131,6 +131,10 @@ body {
   background: yellow;
 }
 
+label img {
+  width: 80px;
+  height: 80px;
+}
 
 @media only screen and(max-width: 840px) {
   .questionContainer {
@@ -154,7 +158,7 @@ body {
   .questionContainer__answerBlock {
     margin-top: 2px;
   }
-  .questionContainer__answerBlock__answer {
+  .questionContainer__answerBlock__choiceAnswer {
     margin-left: 7px;
   }
 }
