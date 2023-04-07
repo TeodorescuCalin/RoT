@@ -1,0 +1,128 @@
+body {
+  background-color: #24252A;
+  font-family: Arial, sans-serif;
+}
+
+.navBar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.login {
+  display: none;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.loginBlock {
+  margin: auto;
+  margin-top: 200px;
+  background-color: #24252A;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #0088a9;
+  box-shadow: 0px 0px 10px 1px rgba(255, 255, 255, 0.3);
+  padding: 20px;
+  max-width: 400px;
+  height: 350px;
+}
+.loginBlock h1 {
+  text-align: center;
+  color: white;
+}
+.loginBlock .form-container label {
+  display: block;
+  margin-bottom: 1px;
+  color: white;
+}
+.loginBlock .form-container input[type=text],
+.loginBlock .form-container input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  padding-left: 60px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #0088a9;
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: white;
+  background: #24252A;
+}
+.loginBlock .form-container input[type=text]:focus,
+.loginBlock .form-container input[type=password]:focus {
+  box-shadow: inset 0px 0px 5px 5px rgba(26, 188, 156, 0.25);
+  outline-width: 0px;
+}
+.loginBlock .form-container .usernameContainer,
+.loginBlock .form-container .passwordContainer {
+  position: relative;
+}
+.loginBlock .form-container .usernameContainer i,
+.loginBlock .form-container .passwordContainer i {
+  position: absolute;
+  width: 47px;
+  height: 41px;
+  color: #fff;
+  font-size: 18px;
+  background: #0088a9;
+  border-radius: 5px 0 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0px 0px 0px;
+}
+.loginBlock .form-container button {
+  background-color: #0088a9;
+  color: #24252A;
+  padding: 14px 20px;
+  margin: 15px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+.loginBlock .form-container button:hover {
+  background-color: #005f76;
+}
+.loginBlock .forgotPassword {
+  text-align: left;
+  margin: 100px, 20px;
+  color: #0088a9;
+}
+.loginBlock .newAccount {
+  text-align: center;
+  color: blue;
+  margin: 30px, 30px;
+}
+.loginBlock a:link {
+  color: #0088a9;
+  text-decoration: none;
+}
+.loginBlock a:hover {
+  text-decoration: underline;
+}
+.loginBlock a:visited {
+  color: #0088a9;
+}
+.loginBlock input::-moz-placeholder {
+  color: white;
+}
+.loginBlock input::placeholder {
+  color: white;
+}
+@media screen and (max-width: 600px) {
+  .loginBlock {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1304px) {
+  #navigationBar {
+    display: none;
+  }
+}/*# sourceMappingURL=login.css.map */
