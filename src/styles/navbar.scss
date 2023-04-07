@@ -9,7 +9,6 @@ $loginButtonHoverColor: rgba(0, 136, 169, 0.5);
 
 @mixin flex-display($justify: left){
     display: flex;
-    //flex-direction: row;
     justify-content: $justify;
 }
 
@@ -61,7 +60,6 @@ header {
     text-decoration: none;
     padding: 5px 0;
     margin: 0 20px;
-    //transition: all .50s ease;
 }
 
 .homeButton {
@@ -130,6 +128,10 @@ div.textHomePage {
 }
 
 @media (max-width: 1304px) {
+    .navBar {
+        height: 100px;
+    }
+
     .navButtons {
         @include block-display(block);
         position: relative;
@@ -271,11 +273,5 @@ div.textHomePage {
         top: 40px;
         line-height: 60px;
         padding: 0 0 0 0;
-    }
-}
-
-@media (max-width: 350px) {
-    .navBar__buttons a {
-        font-size: 28px;
     }
 }
