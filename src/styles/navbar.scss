@@ -1,70 +1,275 @@
-body {
-    margin: 0;
-}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
-$top-bar-colour: #71c2ff;
-$menu-bar-colour: #ff7948;
-$hover-colour: red;
+$gradientColor: linear-gradient(to right, rgb(113, 194, 255) 5%, rgb(52, 88, 119));
+$hoverColor: #0088a9;
+$backgroundColor: #24252A;
+$subMenuBoxShadowColor: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+$loginButtonColor: rgba(0, 136, 169, 1);
+$loginButtonHoverColor: rgba(0, 136, 169, 0.5);
 
 @mixin flex-display($justify: left){
     display: flex;
-    flex-direction: row;
+    //flex-direction: row;
     justify-content: $justify;
 }
 
-
-.barBlock {
-    font-size: 100px;
+@mixin block-display($display: left){;
+    text-align: center;
+    display: $display;
 }
 
-.topBarBlock {
-    @include flex-display;
-    gap: 1.5em;
-
-    background-color: $top-bar-colour;
-
-    height: 1em;
-
-    font-size: 70px;
-
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: $backgroundColor;
 }
 
-.topBarBlock > * {
-
-    height: 1.25em;
-
-    font-size: 80%;
+header {
+    @include flex-display(space-between);
+    position: absolute;
+    width: 100%;
+    top: 0;
+    right: 0;
+    align-items: flex-start;
+    background: transparent;
+    padding: 20px 6%;
+    transition: all .50s ease;
 }
 
-
-a:hover {
-    background-color:$hover-colour;
+.navButtons{
+    position: relative;
+    display: flex;
+    top: 38px;
+    list-style: none;
 }
 
-#homeButton {
-    margin-right: auto;
+.navButtons a:hover {
+    color: $hoverColor;
 }
 
-#loginButton {
-    margin-right: 1em;
+.navButtons a:active {
+    color: yellow;
 }
 
-
-.menuBarBlock {
-    @include flex-display(center);
-    gap: 1.5em;
-
-    height: 1em;
-
-    font-size: 70px;
-
-    background-color: $menu-bar-colour;
+.navButtons a, .loginButton {
+    @include block-display(block);
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    text-decoration: none;
+    padding: 5px 0;
+    margin: 0 20px;
+    //transition: all .50s ease;
 }
 
-.menuBarBlock > * {
+.homeButton {
+    padding: 9px 25px;
+}
 
-    height: 1.25em;
+.loginButton {
+    position: relative;
+    padding: 9px 25px;
+    border: none;
+    border-radius: 50px;
+    background-color: $loginButtonColor;
+    cursor: pointer;
+    top: 34px;
+    transition: all .50s ease;
+}
 
-    font-size: 80%;
+.loginButton:hover {
+    background-color: $loginButtonHoverColor;
+}
 
+.subMenuHighwayCode {
+    position: relative;
+    background-color: #0088a9;
+    display: none;
+    list-style: none;
+    border: none;
+    top: 15px;
+    line-height: 50px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+}
+
+nav ul li:hover ul {
+    display: block;
+}
+
+.subMenuHighwayCode a:hover {
+    color: $hoverColor;
+}
+
+div.textHomePage {
+    height: 800px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    text-decoration: none;
+    padding: 5px 0;
+    margin: 0 20px;
+    transition: all .50s ease;
+}
+
+.dropNav {
+    color: white;
+    font-size: 34px;
+    cursor: pointer;
+    display:none;
+}
+
+#checkNav {
+    display: none;
+}
+
+@media (max-width: 1304px) {
+    .navButtons {
+        @include block-display(block);
+        position: relative;
+        width: 100%;
+        top: 60px;
+        visibility: hidden;
+        line-height: 80px;
+        padding: 0 0 0 0;
+    }
+
+    .dropNav {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 20%;
+        left: 45%;
+        justify-content: center;
+        align-items: center;
+        line-height: 120px;
+    }
+
+    .navButtons a {
+        font-size: 28px;
+    }
+
+    .subMenuHighwayCode {
+        line-height: 50px;
+        margin-bottom: 20px;
+    }
+
+    div.textHomePage {
+        align-content: flex-end;
+    }
+
+    #checkNav:checked ~ .navButtons {
+        visibility: visible;
+    }
+}
+
+@media (max-width: 800px) {
+    .homeButton svg {
+        height: 90px;
+        width: 90px;
+    }
+
+    .navButtons a {
+        font-size: 20px;
+        padding: 0 0 0 0;
+    }
+
+    .navButtons {
+        line-height: 60px;
+        padding: 0 0 0 0;
+        top: 50px;
+    }
+
+    .navButtons ul {
+        padding: 0 0 0 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .homeButton svg {
+        height: 65px;
+        width: 65px;
+        margin-top: 14px;
+    }
+
+    .dropNav {
+        font-size: 28px;
+    }
+
+    .loginButton {
+        font-size: 18px;
+    }
+
+    .navButtons a {
+        font-size: 18px;
+        padding: 0 0 0 0;
+    }
+
+    .navButtons {
+        top: 45px;
+        line-height: 60px;
+        padding: 0 0 0 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .homeButton svg {
+        height: 60px;
+        width: 60px;
+        margin-top: 18px;
+    }
+
+    .dropNav {
+        font-size: 24px;
+        line-height: 100px;
+    }
+
+    .loginButton {
+        font-size: 16px;
+    }
+
+    .navButtons a {
+        font-size: 18px;
+        padding: 0 0 0 0;
+    }
+
+    .navButtons {
+        top: 40px;
+        line-height: 60px;
+        padding: 0 0 0 0;
+    }
+}
+
+@media (max-width: 399px) {
+    .homeButton svg {
+        height: 30px;
+        width: 30px;
+        margin-top: 18px;
+    }
+
+    .dropNav {
+        font-size: 10px;
+        line-height: 100px;
+    }
+
+    .loginButton {
+        font-size: 12px;
+    }
+
+    .navButtons a {
+        font-size: 18px;
+        padding: 0 0 0 0;
+    }
+
+    .navButtons {
+        top: 40px;
+        line-height: 60px;
+        padding: 0 0 0 0;
+    }
 }
