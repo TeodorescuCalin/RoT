@@ -1,0 +1,77 @@
+@import "../navbar.css";
+@import "../flexBase";
+@import "linkStyling";
+
+
+.countryBlock {
+
+  border-radius: 10px 10px 10px 10px;
+  border-style: solid;
+
+  text-align: center;
+
+  font-size: 3vw;
+
+  height: 60%;
+  display: block;
+}
+
+.countryBlock__image {
+  @include horizontally-centered;
+  width: 80%;
+  display: block;
+}
+
+
+
+
+@media only screen and (max-width: 1180px) {
+
+  .selectionTab {
+    @include size-scale(650px);
+  }
+}
+
+@media only screen and(max-width: 600px) {
+
+  .selectionTab {
+    @include size-scale(300px);
+
+  }
+}
+
+@media only screen and(max-width: 340px)
+{
+
+  .selectionTab {
+    @include size-scale(200px);
+  }
+  .countryBlock {
+    border-radius: 5px 5px 5px 5px;
+  }
+}
+
+@media only screen and(max-width: 200px) {
+
+  .selectionTab {
+    @include size-scale(100px);
+    column-gap: 0;
+  }
+
+  .countryBlock {
+    flex-basis: 60%;
+    height: 100%;
+    font-size: 10px;
+  }
+
+  .countryBlock__image {
+    width: 60%;
+  }
+}
+
+@media only screen and(min-width: 2000px) {
+
+  .countryBlock {
+    font-size: 70px;
+  }
+}

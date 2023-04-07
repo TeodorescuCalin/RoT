@@ -1,0 +1,35 @@
+
+
+@mixin flex-display($justify: left){
+  display: flex;
+  flex-direction: row;
+  justify-content: $justify;
+  flex-wrap: wrap;
+  row-gap: 10vh;
+  column-gap: 100px;
+}
+
+@mixin size-scale($value) {
+
+  width: $value;
+  height: $value / 2;
+}
+
+@mixin horizontally-centered() {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flexBlock {
+  @include horizontally-centered;
+  margin-top: 5vh;
+
+
+  @include flex-display(center);
+
+  @include size-scale(1200px);
+}
+
+.flexBlock__container {
+  flex: 0 0 20%;
+}

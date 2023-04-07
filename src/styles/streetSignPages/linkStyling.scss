@@ -1,0 +1,17 @@
+@import "../navbar";
+
+a:link {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+a:visited {
+  color: white;
+}
+
+a {
+  color: white;
+  border-color: $primary-color;
+}
