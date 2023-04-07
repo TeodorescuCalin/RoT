@@ -5,18 +5,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>britishSigns</title>
 
-    <script src="https://code.jquery.com/jquery-3.6.3.js"> </script>
-    <script>
-    $(function(){
-      $("#navigationBar").load("navbar.html");
-    });
-    </script>
-
     <link rel="stylesheet" href="../styles/streetSignPages/foreignSigns.css">
+    <script src="https://kit.fontawesome.com/3ec5bc2749.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
-    <div id="navigationBar"></div>
+    <header id="navigationBar"></header>
     <div id="signBlock" class="flexBlock signContainer">
         <div class="flexBlock__container signBlock">
             <img src="//upload.wikimedia.org/wikipedia/commons/9/91/Traffic-signs-manual-chapter-3-diagram_602_%282008%29.svg" alt="picture not available">
@@ -1460,5 +1454,8 @@
         </div>
 
     </div>
+
+    <script src="../scripts/navBar/loadNavbar.js"></script>
+    <script src="../scripts/navBar/navbarPushOnExpand.js"></script>
 </body>
 </html>

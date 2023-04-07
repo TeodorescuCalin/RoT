@@ -1,7 +1,4 @@
-#navigationBar {
-  margin-bottom: 200px;
-}
-
+@import "../navbar";
 
 @mixin flex-display($justify: left){
   display: flex;

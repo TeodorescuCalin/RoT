@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 $gradientColor: linear-gradient(to right, rgb(113, 194, 255) 5%, rgb(52, 88, 119));
-$hoverColor: #0088a9;
+$primary-color: #0088a9;
+$hoverColor: $primary-color;
 $backgroundColor: #24252A;
 $subMenuBoxShadowColor: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 $loginButtonColor: rgba(0, 136, 169, 1);
@@ -26,7 +27,6 @@ header, header * {
 
 header {
     @include flex-display(space-between);
-    position: absolute;
     width: 100%;
     top: 0;
     right: 0;
