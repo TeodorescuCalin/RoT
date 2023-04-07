@@ -13,19 +13,20 @@ function createNewQuestion(questionFileText){
     const jsonObj = JSON.parse(questionFileText);
     const questionId = Math.floor(Math.random() * jsonObj.questionList.length);
     const currentQuestion = jsonObj.questionList[questionId];
+
     document.getElementById("questionTitle").innerText = currentQuestion.title;
     document.getElementById("questionImage").src = currentQuestion.imagePath;
     switch (currentQuestion.type) {
         case "multipleChoice": {
-            createNewMultipleChoiceDiv(currentQuestion.answers);
+            generateAnswersArray("multipleChoiceAnswers.json", currentQuestion.totalAnswerCount, currentQuestion.answers, createNewMultipleChoiceDiv);
             break;
         }
         case "multipleChoice_long": {
-            createNewLongMultipleChoiceDiv(currentQuestion.answers);
+            generateAnswersArray("longMultipleChoiceAnswers.json", currentQuestion.totalAnswerCount, currentQuestion.answers, createNewLongMultipleChoiceDiv);
             break;
         }
         case "count": {
-            createNewCountDiv(currentQuestion.answers);
+            generateAnswersArray("countAnswers.json", currentQuestion.totalAnswerCount, currentQuestion.answers, createNewCountDiv);
             break;
         }
     }
@@ -65,7 +66,7 @@ function createNewMultipleChoiceDiv(answers) {
     rightSideDiv.classList.add("questionContainer__answerBlock");
 
     for(let index = 0; index < answers.length; ++ index ) {
-        let answer = newMultipleChoiceAnswer(index, answers[index]);
+        let answer = newMultipleChoiceAnswer(index, answers[index].text);
 
         if ( index < answers.length / 2) {
             leftSideDiv.appendChild(answer);
@@ -83,7 +84,7 @@ function createNewLongMultipleChoiceDiv(answers) {
     questionDiv.classList.add("questionContainer__answerBlock");
     questionDiv.classList.add("questionContainer__answerBlock--long");
     for(let index = 0; index < answers.length; ++ index ) {
-        let answer = newMultipleChoiceAnswer(index, answers[index]);
+        let answer = newMultipleChoiceAnswer(index, answers[index].text);
         questionDiv.appendChild(answer);
     }
 
@@ -108,7 +109,7 @@ function createNewCountDiv(answers) {
         label.for = "answer" + index + "Count";
 
         let image = document.createElement("img");
-        image.src = answers[index];
+        image.src = answers[index].source;
 
         let input = document.createElement("input");
         input.type = "number";
@@ -131,5 +132,36 @@ function createNewCountDiv(answers) {
 
     document.getElementById("questionAnswersBlock").appendChild(leftSideDiv);
     document.getElementById("questionAnswersBlock").appendChild(rightSideDiv);
+}
 
+function generateAnswersArray(
+    filename,
+    answerCount,
+    correctAnswers,
+    callback
+) {
+
+    let answerFile = new XMLHttpRequest();
+    answerFile.overrideMimeType("application/json");
+    answerFile.open("GET", "../../../data/learn/" + filename, true);
+    answerFile.onreadystatechange = function() {
+        if ( answerFile.readyState === 4 && answerFile.status === 200 ) {
+            const answerList = JSON.parse(answerFile.responseText).answerList;
+
+            let responseArray = answerList.filter(element => correctAnswers.includes(element.id));
+
+            let groupSize = Math.floor(answerList.length / answerCount);
+            let responseGroupArray = responseArray.map(element => Math.floor(element.id/groupSize));
+
+            for(group = 0; group < answerCount; ++ group) {
+                if(responseGroupArray.includes(group)) {
+                    continue;
+                }
+                responseArray.push(answerList[Math.floor((Math.random() * groupSize)) + group * groupSize]);
+            }
+
+            callback(responseArray);
+        }
+    }
+    answerFile.send(null);
 }

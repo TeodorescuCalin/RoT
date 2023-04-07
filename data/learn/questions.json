@@ -5,30 +5,28 @@
       "title": "Ce semne rutiere vedeți in imaginea de mai jos?",
       "imagePath": "https://www.google.com/maps/embed?pb=!4v1680679268637!6m8!1m7!1s0BxyVxBR8bNwNv5CtJdbyA!2m2!1d47.16222492464944!2d27.59210920100176!3f64.33765819761379!4f-8.887095613636347!5f0.4200115384163643",
       "answers": [
-        "Stop",
-        "Cedeaza trecerea",
-        "Drum cu prioritate",
-        "Oprirea interzisa"
-      ]
+        0,
+        1
+      ],
+      "totalAnswerCount": 4
     },
     {
       "type": "multipleChoice_long",
       "title": "Cum va comportati in urmatoarea intersectie?",
       "imagePath": "https://www.google.com/maps/embed?pb=!4v1680679268637!6m8!1m7!1s0BxyVxBR8bNwNv5CtJdbyA!2m2!1d47.16222492464944!2d27.59210920100176!3f64.33765819761379!4f-8.887095613636347!5f0.4200115384163643",
       "answers": [
-        "Accelerez pentru a trece rapid prin intersectie",
-        "Opresc in mijlocul drumului si ma duc sa iau cafea",
-        "Incep sa fac gogosi in mijlocul intersectiei(daca am cauciucuri de iarna)"
-      ]
+        2
+      ],
+      "totalAnswerCount": 3
     },
     {
       "type": "count",
       "title": "Numarati cate semne rutiere de fiecare fel se vad in imagine",
       "imagePath": "https://www.google.com/maps/embed?pb=!4v1680679268637!6m8!1m7!1s0BxyVxBR8bNwNv5CtJdbyA!2m2!1d47.16222492464944!2d27.59210920100176!3f64.33765819761379!4f-8.887095613636347!5f0.4200115384163643",
       "answers": [
-        "//upload.wikimedia.org/wikipedia/commons/3/38/France_road_sign_A17.svg",
-        "//upload.wikimedia.org/wikipedia/commons/3/38/France_road_sign_A17.svg"
-      ]
+        2
+      ],
+      "totalAnswerCount": 2
     }
   ]
 }

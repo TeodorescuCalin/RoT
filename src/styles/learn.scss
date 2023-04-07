@@ -201,12 +201,20 @@ body {
     width: 40px;
     height: 40px;
   }
+
+  .questionContainer__answerBlock__answer--choice {
+    font-size: 20px;
+  }
 }
 
 @media only screen and(max-width: 640px) {
 
   .questionContainer__answerBlock__answer--count label {
     margin-left: 10%;
+  }
+
+  .questionContainer__answerBlock__answer--choice {
+    font-size: 15px;
   }
 }
 
@@ -221,5 +229,9 @@ body {
     font-size: 15px;
     height: 20px;
     width: 30px;
+  }
+
+  .questionContainer__answerBlock__answer--choice {
+    font-size: 10px;
   }
 }
