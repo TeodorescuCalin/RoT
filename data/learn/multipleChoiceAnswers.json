@@ -1,16 +1,20 @@
 {
   "answerList": [
     {
+      "id": 0,
+      "text": "Stop"
+    },
+    {
       "id": 1,
-      "text": "Stationarea interzisa"
+      "text": "Cedeaza trecerea"
     },
     {
       "id": 2,
-      "text": "Drum infundat"
+      "text": "Drum cu prioritate"
     },
     {
       "id": 3,
-      "text": "Viteza minima"
+      "text": "Oprirera interzisa"
     }
   ]
 }

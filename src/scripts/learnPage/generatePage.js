@@ -31,6 +31,31 @@ function createNewQuestion(questionFileText){
     }
 }
 
+function newMultipleChoiceAnswer(index, text) {
+
+    let answer = document.createElement("div");
+    answer.id = "answer" + index;
+    answer.classList.add("questionContainer__answerBlock__answer");
+    answer.classList.add("questionContainer__answerBlock__answer--choice");
+    answer.addEventListener('click', () => {
+        if ( answer.classList.contains('questionContainer__answerBlock__answer--choice--selected')) {
+            answer.classList.remove('questionContainer__answerBlock__answer--choice--selected');
+        } else {
+            answer.classList.add('questionContainer__answerBlock__answer--choice--selected');
+        }
+    })
+
+    let span = document.createElement("span");
+    span.classList.add("answer__badge");
+    span.innerText = String.fromCharCode(65 + index);
+
+
+    answer.appendChild(span);
+    answer.appendChild(document.createTextNode(text));
+
+    return answer;
+}
+
 function createNewMultipleChoiceDiv(answers) {
     let leftSideDiv = document.createElement("div");
     let rightSideDiv = document.createElement("div");
@@ -40,30 +65,13 @@ function createNewMultipleChoiceDiv(answers) {
     rightSideDiv.classList.add("questionContainer__answerBlock");
 
     for(let index = 0; index < answers.length; ++ index ) {
-        let answer = document.createElement("div");
-        answer.id = "answer" + index;
-        answer.classList.add("questionContainer__answerBlock__answer");
-        answer.classList.add("questionContainer__answerBlock__answer--choice");
-        answer.addEventListener('click', () => {
-            if ( answer.classList.contains('questionContainer__answerBlock__answer--choice--selected')) {
-                answer.classList.remove('questionContainer__answerBlock__answer--choice--selected');
-            } else {
-                answer.classList.add('questionContainer__answerBlock__answer--choice--selected');
-            }
-        })
-
-        let span = document.createElement("span");
-        span.classList.add("answer__badge");
-        span.innerText = String.fromCharCode(65 + index);
+        let answer = newMultipleChoiceAnswer(index, answers[index]);
 
         if ( index < answers.length / 2) {
             leftSideDiv.appendChild(answer);
         } else {
             rightSideDiv.appendChild(answer);
         }
-
-        answer.appendChild(span);
-        answer.appendChild(document.createTextNode(answers[index]));
     }
 
     document.getElementById("questionAnswersBlock").appendChild(leftSideDiv);
@@ -75,26 +83,8 @@ function createNewLongMultipleChoiceDiv(answers) {
     questionDiv.classList.add("questionContainer__answerBlock");
     questionDiv.classList.add("questionContainer__answerBlock--long");
     for(let index = 0; index < answers.length; ++ index ) {
-        let answer = document.createElement("div");
-        answer.id = "answer" + index;
-        answer.classList.add("questionContainer__answerBlock__answer");
-        answer.classList.add("questionContainer__answerBlock__answer--choice");
-        answer.addEventListener('click', () => {
-            if ( answer.classList.contains('questionContainer__answerBlock__answer--choice--selected')) {
-                answer.classList.remove('questionContainer__answerBlock__answer--choice--selected');
-            } else {
-                answer.classList.add('questionContainer__answerBlock__answer--choice--selected');
-            }
-        })
-
-        let span = document.createElement("span");
-        span.classList.add("answer__badge");
-        span.innerText = String.fromCharCode(65 + index);
-
+        let answer = newMultipleChoiceAnswer(index, answers[index]);
         questionDiv.appendChild(answer);
-
-        answer.appendChild(span);
-        answer.appendChild(document.createTextNode(answers[index]));
     }
 
     document.getElementById("questionAnswersBlock").appendChild(questionDiv);
