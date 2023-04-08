@@ -11,7 +11,7 @@ document.getElementById("navigationBar")
             <i class="fa-solid fa-bars"></i>
         </label>
         <ul class="navButtons">
-            <li> <a href="https://www.scoalarutiera.ro/curs-legislatie" target="_blank" id="learnButton"> Invata </a> </li>
+            <li> <a href="learn.html" id="learnButton"> Invata </a> </li>
             <li> <a href="#" id="highwayCodeButton"> Legislatie </a> </li>
             <li> <a href="streetSigns.html" id="roadSigns"> Semne de circulatie </a> </li>
             <li> <a href="#" id="testsButton"> Chestionare </a> </li>
@@ -25,6 +25,6 @@ document.getElementById("checkNav").addEventListener('change', element => {
     if ( element.target.checked === true ) {
         document.getElementById("navigationBar").style.marginBottom = "500px";
     } else {
-        document.getElementById("navigationBar").style.marginBottom = "200px";
+        document.getElementById("navigationBar").style.marginBottom = "0px";
     }
 })

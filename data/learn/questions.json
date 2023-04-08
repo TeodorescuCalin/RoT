@@ -9,7 +9,7 @@
         1
       ],
       "totalAnswerCount": 4,
-      "explanation": "<span class=\"emphasizeMessage\"> Ai grija </span> la semnul <span class=\"roadSignName\">Stop</span>; el chiar daca nu este cu fata inspre tine poate fi recunoscut dupa forma particulara. <span class=\"emphasizeMessage\"> Ai grija </span> de asemenea la semnul <span class=\"roadSignName\">Oprirea interzisa</span> in contrast cu <span class=\"roadSignName\">Stationarea interzisa</span>",
+      "explanation": "<span class=\"emphasizeMessage\"> Ai grija </span> la semnul <a class=\"roadSignName\" href=\"romaniaPrioritySigns.html\">Stop</a>; el chiar daca nu este cu fata inspre tine poate fi recunoscut dupa forma particulara. <span class=\"emphasizeMessage\"> Ai grija </span> de asemenea la semnul <a class=\"roadSignName\" href=\"romaniaRestrictionSigns.html\">Oprirea interzisa</a> in contrast cu <a class=\"roadSignName\" href=\"romaniaRestrictionSigns.html\">Stationarea interzisa</a>",
       "tagList": [
         {
           "property": "latitude",
@@ -60,7 +60,7 @@
         }
       ],
       "totalAnswerCount": 4,
-      "explanation": "In imagine exista doua semne de <span class=\"roadSignName\">Drum cu prioritate</span>; <span class=\"emphasizeMessage\"> Ai grija! </span> Chiar daca semnul nu este cu fata inspre tine, el poate fi recunoscut dupa forma sa rectangulara",
+      "explanation": "In imagine exista doua semne de <a class=\"roadSignName\" href=\"romaniaPrioritySigns.html\">Drum cu prioritate</a>; <span class=\"emphasizeMessage\"> Ai grija! </span> Chiar daca semnul nu este cu fata inspre tine, el poate fi recunoscut dupa forma sa rectangulara",
       "tagList": [
         {
           "property": "latitude",

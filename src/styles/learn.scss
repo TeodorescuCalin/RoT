@@ -24,7 +24,7 @@ $selected-answer-color: light-blue;
 }
 
 body {
-  background-color: $background-color;
+  background-color: $backgroundColor;
 }
 
 .questionContainer {
@@ -88,6 +88,15 @@ body {
   font-weight: bold;
   text-decoration: underline;
   text-underline: $text-color;
+}
+#questionExplanation {
+
+  a:hover {
+    text-decoration: underline;
+  }
+  a:visited {
+    color: white;
+  }
 }
 
 #questionExplanation .emphasizeMessage {
@@ -176,7 +185,7 @@ body {
 }
 
 .questionContainer__answerBlock__answer--count input {
-  background-color: $background-color;
+  background-color: $backgroundColor;
   margin-left: 40%;
   height: 30px;
   width: 50px;
