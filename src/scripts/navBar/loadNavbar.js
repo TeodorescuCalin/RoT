@@ -20,3 +20,11 @@ document.getElementById("navigationBar")
         </ul>
     </nav>
     <button type="button" onclick = "window.location.href='login.html'" class="loginButton"> Login </button>`
+
+document.getElementById("checkNav").addEventListener('change', element => {
+    if ( element.target.checked === true ) {
+        document.getElementById("navigationBar").style.marginBottom = "500px";
+    } else {
+        document.getElementById("navigationBar").style.marginBottom = "200px";
+    }
+})
