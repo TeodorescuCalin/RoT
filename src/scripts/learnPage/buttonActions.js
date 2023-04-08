@@ -20,7 +20,7 @@ function checkAnswers() {
 function compareAnswers(currentQuestion) {
     if(currentQuestion.type === "count") {
         const divAnswers = document.getElementsByClassName("questionContainer__answerBlock__answer");
-        for (index = 0; index < divAnswers.length; ++ index) {
+        for (let index = 0; index < divAnswers.length; ++ index) {
             const currentAnswerId = parseInt(divAnswers[index].id.slice(6));
             const currentAnswerValue = parseInt(divAnswers[index].children[1].value);
             const isPartOfAnswer = currentQuestion.answers
@@ -42,7 +42,7 @@ function compareAnswers(currentQuestion) {
 
     } else {
         const divAnswers = document.getElementsByClassName("questionContainer__answerBlock__answer");
-        for (index = 0; index < divAnswers.length; ++ index) {
+        for (let index = 0; index < divAnswers.length; ++ index) {
             const currentAnswerId = parseInt(divAnswers[index].id.slice(6));
             if ( divAnswers[index].classList.contains("questionContainer__answerBlock__answer--choice--selected") ) {
                 if(currentQuestion.answers.includes(currentAnswerId)) {

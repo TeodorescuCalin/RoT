@@ -17,6 +17,7 @@ function createNewQuestion(questionFileText){
     document.getElementById("questionTitle").innerText = currentQuestion.title;
     document.getElementById("questionImage").src = currentQuestion.imagePath;
     document.getElementById("questionId").value = questionId;
+    addTags(currentQuestion.tagList);
     switch (currentQuestion.type) {
         case "multipleChoice": {
             generateAnswersArray(
@@ -165,7 +166,7 @@ function generateAnswersArray(
             let groupSize = Math.floor(answerList.length / answerCount);
             let responseGroupArray = responseArray.map(element => Math.floor(element.id/groupSize));
 
-            for(group = 0; group < answerCount; ++ group) {
+            for(let group = 0; group < answerCount && responseArray.length !== answerCount; ++ group) {
                 if(responseGroupArray.includes(group)) {
                     continue;
                 }
@@ -179,4 +180,14 @@ function generateAnswersArray(
         }
     }
     answerFile.send(null);
+}
+
+function addTags(questionTags) {
+    let imageData = document.getElementById("placeInformation");
+    for (let index = 0; index < questionTags.length; ++ index) {
+        let newMeta = document.createElement("meta");
+        newMeta.propety = questionTags[index].property;
+        newMeta.content = questionTags[index].value;
+        imageData.appendChild(newMeta);
+    }
 }
