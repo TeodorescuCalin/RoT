@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Learn</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <script>
+        $(function () {
+            $("#navigationBar").load("navbar.html");
+        });
+    </script>
+    <script src="../scripts/learnPage/buttonActions.js"></script>
+    <link rel="stylesheet" href="../styles/learn.css">
+</head>
+<body>
+    <div id="navigationBar"></div>
+    <div id="questionContainer" class="questionContainer">
+        <input id="questionId" type="hidden">
+        <div id="questionDescription" class="questionContainer__description">
+            <div id="questionTitle" class="questionContainer__description__title"></div>
+            <div id="placeInformation" class="questionContainer__description__image" vocab="https://schema.org/" typeof="Place">
+                <iframe id="questionImage"> </iframe>
+            </div>
+        </div>
+        <div id="questionAnswersBlock">
+        </div>
+        <div id="formButtonsBlock" class="formButtonsBlock">
+            <button id="nextQuestionButton" class="formButtonsBlock__button formButtonsBlock__button--yellow" onclick="nextQuestion()"> ➔ Urmatoarea intrebare </button>
+            <button id="sendAnswerButton" class="formButtonsBlock__button formButtonsBlock__button--green" onclick="checkAnswers()"> ☑ Trimite raspunsul </button>
+        </div>
+        <div id="questionExplanation"></div>
+    </div>
+
+
+    <script src="../scripts/learnPage/generatePage.js"> </script>
+</body>
+</html>

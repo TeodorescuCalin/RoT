@@ -1,0 +1,273 @@
+@import "navbar";
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap');
+
+
+$text-color: white;
+$selected-answer-color: light-blue;
+
+@mixin box-border($border-size) {
+  border-width: $border-size;
+  border-color: $primary-color;
+}
+
+@mixin font-style($font-size) {
+  color: $text-color;
+  font-family: 'Akaya Kanadaka', cursive;
+  font-size: $font-size;
+
+}
+
+@mixin resize($size, $font-size) {
+  height: $size;
+  width: $size * 5 / 6;
+  font-size: $font-size;
+}
+
+body {
+  background-color: $background-color;
+}
+
+.questionContainer {
+  @include box-border(5px);
+  border-style: solid;
+
+  width: 800px;
+  height: 1200px;
+
+  display: block;
+
+  margin: 50px auto 50px auto;
+}
+
+.questionContainer__description {
+  border-bottom: solid;
+  @include box-border(5px);
+
+  width: 100%;
+  height: 55%;
+}
+
+.questionContainer__description__title {
+  height: 5%;
+
+  margin-bottom: 3%;
+  padding-top: 2%;
+
+  @include font-style(180%);
+  text-align: center;
+}
+
+.questionContainer__description__image {
+  height: 90%;
+}
+
+.questionContainer__description__image * {
+  border: none;
+  margin-left: 5%;
+  width: 90%;
+  height: 90%;
+}
+
+#questionAnswersBlock {
+  height: 20%;
+}
+
+#formButtonsBlock {
+
+  border-bottom: solid;
+  @include box-border(5px);
+}
+
+#questionExplanation {
+  margin-left: 10px;
+  height: 10%;
+  @include font-style(200%);
+}
+
+#questionExplanation .roadSignName {
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline: $text-color;
+}
+
+#questionExplanation .emphasizeMessage {
+  color: red;
+}
+
+.questionContainer__answerBlock {
+  width: 50%;
+  margin-top: 10px;
+  float: left;
+}
+
+.questionContainer__answerBlock__answer {
+
+  margin: 0 0 10px 15px;
+  @include font-style(200%);
+  user-select: none;
+  border: solid;
+  width: 90%;
+  @include box-border(2px);
+  border-radius: 5px 5px 5px 5px;
+
+}
+
+.questionContainer__answerBlock__answer--choice--selected {
+  background-color: #2df5ff;
+}
+
+.questionContainer__answerBlock--long {
+  width: 105%;
+}
+
+.answer__badge {
+
+  text-align: center;
+  border-right: solid;
+  border-bottom: solid;
+  @include box-border(2px);
+  margin-right: 10px;
+}
+
+.formButtonsBlock {
+
+  width: 100%;
+  height: 10%;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.formButtonsBlock__button {
+  height: 60%;
+
+  flex-basis: 35%;
+
+  border-radius: 10px;
+
+  @include font-style(120%);
+  color: black;
+}
+
+#sendAnswerButton:disabled {
+  cursor: default;
+}
+
+.formButtonsBlock__button:hover {
+  cursor: pointer;
+}
+
+.formButtonsBlock__button--green {
+  background: greenyellow;
+}
+
+.formButtonsBlock__button--yellow {
+  background: yellow;
+}
+
+.questionContainer__answerBlock__answer--count label {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+.questionContainer__answerBlock__answer--count input {
+  background-color: $background-color;
+  margin-left: 40%;
+  height: 30px;
+  width: 50px;
+  @include font-style(30px);
+  user-select: none;
+}
+
+.questionContainer__answerBlock__answer--count img {
+  position: relative;
+  top: 5px;
+  width: 80px;
+  height: 80px;
+}
+
+@media only screen and(max-width: 840px) {
+  .questionContainer {
+    @include resize(750px, 80%);
+  }
+  #questionExplanation {
+    font-size: 170%;
+  }
+}
+@media only screen and(max-width: 640px) {
+  .questionContainer {
+    @include resize(600px, 60%);
+  }
+}
+
+@media only screen and(max-width: 400px) {
+  .questionContainer {
+    @include resize(420px, 40%);
+  }
+  .questionContainer * {
+    border-width: 2px ;
+  }
+  .questionContainer__answerBlock {
+    margin-top: 2px;
+  }
+  .questionContainer__answerBlock__choiceAnswer {
+    margin-left: 7px;
+  }
+  #questionExplanation {
+    font-size: 150%;
+  }
+}
+
+
+
+@media only screen and(max-width: 840px) {
+
+  .questionContainer__answerBlock__answer--count label {
+    font-size: 20px;
+  }
+
+  .questionContainer__answerBlock__answer--count input {
+    top: -5px;
+    font-size: 20px;
+    width: 40px;
+    height: 20px;
+  }
+
+  .questionContainer__answerBlock__answer--choice {
+    font-size: 20px;
+  }
+}
+
+@media only screen and(max-width: 640px) {
+
+  .questionContainer__answerBlock__answer--choice {
+    font-size: 15px;
+  }
+}
+
+@media only screen and(max-width: 400px) {
+
+  .questionContainer__answerBlock__answer {
+    margin-left: 5px;
+    margin-bottom: 5px;
+  }
+
+  .questionContainer__answerBlock__answer--count label {
+    font-size: 15px;
+  }
+
+  .questionContainer__answerBlock__answer--count input {
+    font-size: 15px;
+    height: 20px;
+    width: 30px;
+  }
+
+  .questionContainer__answerBlock__answer--choice {
+    font-size: 10px;
+  }
+}

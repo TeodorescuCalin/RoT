@@ -1,0 +1,36 @@
+{
+  "answerList": [
+    {
+      "id": 0,
+      "text": "Stop"
+    },
+    {
+      "id": 1,
+      "text": "Cedeaza trecerea"
+    },
+    {
+      "id": 2,
+      "text": "Drum cu prioritate"
+    },
+    {
+      "id": 3,
+      "text": "Oprirera interzisa"
+    },
+    {
+      "id": 4,
+      "text": "Incetineste"
+    },
+    {
+      "id": 5,
+      "text": "Drum infundat"
+    },
+    {
+      "id": 6,
+      "text": "Drum denivelat"
+    },
+    {
+      "id": 7,
+      "text": "Atentie cade tencuiala"
+    }
+  ]
+}
