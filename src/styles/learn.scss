@@ -32,7 +32,7 @@ body {
   border-style: solid;
 
   width: 800px;
-  height: 1000px;
+  height: 1200px;
 
   display: block;
 
@@ -44,7 +44,7 @@ body {
   @include box-border(5px);
 
   width: 100%;
-  height: 65%;
+  height: 55%;
 }
 
 .questionContainer__description__title {
@@ -70,6 +70,28 @@ body {
 
 #questionAnswersBlock {
   height: 20%;
+}
+
+#formButtonsBlock {
+
+  border-bottom: solid;
+  @include box-border(5px);
+}
+
+#questionExplanation {
+  margin-left: 10px;
+  height: 10%;
+  @include font-style(200%);
+}
+
+#questionExplanation .roadSignName {
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline: $text-color;
+}
+
+#questionExplanation .emphasizeMessage {
+  color: red;
 }
 
 .questionContainer__answerBlock {
@@ -128,6 +150,10 @@ body {
   color: black;
 }
 
+#sendAnswerButton:disabled {
+  cursor: default;
+}
+
 .formButtonsBlock__button:hover {
   cursor: pointer;
 }
@@ -141,20 +167,26 @@ body {
 }
 
 .questionContainer__answerBlock__answer--count label {
-  margin-left: 20%;
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  word-wrap: break-word;
+  white-space: pre-line;
 }
 
 .questionContainer__answerBlock__answer--count input {
-  position: relative;
-  height: 50px;
+  background-color: $background-color;
+  margin-left: 40%;
+  height: 30px;
   width: 50px;
   @include font-style(30px);
   user-select: none;
-  top: -25px;
-  left: 15%;
 }
 
 .questionContainer__answerBlock__answer--count img {
+  position: relative;
+  top: 5px;
   width: 80px;
   height: 80px;
 }
@@ -163,8 +195,10 @@ body {
   .questionContainer {
     @include resize(750px, 80%);
   }
+  #questionExplanation {
+    font-size: 170%;
+  }
 }
-
 @media only screen and(max-width: 640px) {
   .questionContainer {
     @include resize(600px, 60%);
@@ -184,22 +218,24 @@ body {
   .questionContainer__answerBlock__choiceAnswer {
     margin-left: 7px;
   }
+  #questionExplanation {
+    font-size: 150%;
+  }
 }
 
 
 
 @media only screen and(max-width: 840px) {
 
-  .questionContainer__answerBlock__answer--count img {
-    width: 40px;
-    height: 40px;
+  .questionContainer__answerBlock__answer--count label {
+    font-size: 20px;
   }
 
   .questionContainer__answerBlock__answer--count input {
     top: -5px;
     font-size: 20px;
     width: 40px;
-    height: 40px;
+    height: 20px;
   }
 
   .questionContainer__answerBlock__answer--choice {
@@ -209,10 +245,6 @@ body {
 
 @media only screen and(max-width: 640px) {
 
-  .questionContainer__answerBlock__answer--count label {
-    margin-left: 10%;
-  }
-
   .questionContainer__answerBlock__answer--choice {
     font-size: 15px;
   }
@@ -220,9 +252,13 @@ body {
 
 @media only screen and(max-width: 400px) {
 
-  .questionContainer__answerBlock__answer--count img {
-    width: 30px;
-    height: 30px;
+  .questionContainer__answerBlock__answer {
+    margin-left: 5px;
+    margin-bottom: 5px;
+  }
+
+  .questionContainer__answerBlock__answer--count label {
+    font-size: 15px;
   }
 
   .questionContainer__answerBlock__answer--count input {

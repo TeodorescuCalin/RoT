@@ -2,15 +2,35 @@
   "answerList": [
     {
       "id": 0,
-      "source": "//upload.wikimedia.org/wikipedia/commons/3/38/France_road_sign_A17.svg"
+      "text": "Stop"
     },
     {
       "id": 1,
-      "source": "//upload.wikimedia.org/wikipedia/commons/0/04/Romania_road_sign_A20.svg"
+      "text": "Cedeaza trecerea"
     },
     {
       "id": 2,
-      "source": "//upload.wikimedia.org/wikipedia/commons/8/88/Romania_road_sign_A38.svg"
+      "text": "Drum cu prioritate"
+    },
+    {
+      "id": 3,
+      "text": "Oprirera interzisa"
+    },
+    {
+      "id": 4,
+      "text": "Incetineste"
+    },
+    {
+      "id": 5,
+      "text": "Drum infundat"
+    },
+    {
+      "id": 6,
+      "text": "Drum denivelat"
+    },
+    {
+      "id": 7,
+      "text": "Atentie cade tencuiala"
     }
   ]
 }

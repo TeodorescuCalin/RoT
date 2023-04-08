@@ -16,45 +16,60 @@ function createNewQuestion(questionFileText){
 
     document.getElementById("questionTitle").innerText = currentQuestion.title;
     document.getElementById("questionImage").src = currentQuestion.imagePath;
+    document.getElementById("questionId").value = questionId;
     switch (currentQuestion.type) {
         case "multipleChoice": {
-            generateAnswersArray("multipleChoiceAnswers.json", currentQuestion.totalAnswerCount, currentQuestion.answers, createNewMultipleChoiceDiv);
+            generateAnswersArray(
+                "multipleChoiceAnswers.json",
+                currentQuestion.totalAnswerCount,
+                currentQuestion.answers,
+                createNewMultipleChoiceDiv
+            );
             break;
         }
         case "multipleChoice_long": {
-            generateAnswersArray("longMultipleChoiceAnswers.json", currentQuestion.totalAnswerCount, currentQuestion.answers, createNewLongMultipleChoiceDiv);
+            generateAnswersArray("longMultipleChoiceAnswers.json",
+                currentQuestion.totalAnswerCount
+                , currentQuestion.answers
+                , createNewLongMultipleChoiceDiv
+            );
             break;
         }
         case "count": {
-            generateAnswersArray("countAnswers.json", currentQuestion.totalAnswerCount, currentQuestion.answers, createNewCountDiv);
+            generateAnswersArray("countAnswers.json"
+                , currentQuestion.totalAnswerCount
+                , currentQuestion.answers
+                    .map(e => e.id),
+                createNewCountDiv
+            );
             break;
         }
     }
 }
 
-function newMultipleChoiceAnswer(index, text) {
+function newMultipleChoiceAnswer(answer, answerDivIndex) {
 
-    let answer = document.createElement("div");
-    answer.id = "answer" + index;
-    answer.classList.add("questionContainer__answerBlock__answer");
-    answer.classList.add("questionContainer__answerBlock__answer--choice");
-    answer.addEventListener('click', () => {
-        if ( answer.classList.contains('questionContainer__answerBlock__answer--choice--selected')) {
-            answer.classList.remove('questionContainer__answerBlock__answer--choice--selected');
+    let newAnswerDiv = document.createElement("div");
+    newAnswerDiv.id = "answer" + answer.id;
+    newAnswerDiv.classList.add("questionContainer__answerBlock__answer");
+    newAnswerDiv.classList.add("questionContainer__answerBlock__answer--choice");
+    newAnswerDiv.addEventListener('click', () => {
+        if ( newAnswerDiv.classList.contains('questionContainer__answerBlock__answer--choice--selected')) {
+            newAnswerDiv.classList.remove('questionContainer__answerBlock__answer--choice--selected');
         } else {
-            answer.classList.add('questionContainer__answerBlock__answer--choice--selected');
+            newAnswerDiv.classList.add('questionContainer__answerBlock__answer--choice--selected');
         }
-    })
+    });
 
     let span = document.createElement("span");
     span.classList.add("answer__badge");
-    span.innerText = String.fromCharCode(65 + index);
+    span.innerText = String.fromCharCode(65 + answerDivIndex);
 
 
-    answer.appendChild(span);
-    answer.appendChild(document.createTextNode(text));
+    newAnswerDiv.appendChild(span);
+    newAnswerDiv.appendChild(document.createTextNode(answer.text));
 
-    return answer;
+    return newAnswerDiv;
 }
 
 function createNewMultipleChoiceDiv(answers) {
@@ -66,7 +81,7 @@ function createNewMultipleChoiceDiv(answers) {
     rightSideDiv.classList.add("questionContainer__answerBlock");
 
     for(let index = 0; index < answers.length; ++ index ) {
-        let answer = newMultipleChoiceAnswer(index, answers[index].text);
+        let answer = newMultipleChoiceAnswer(answers[index], index);
 
         if ( index < answers.length / 2) {
             leftSideDiv.appendChild(answer);
@@ -84,7 +99,7 @@ function createNewLongMultipleChoiceDiv(answers) {
     questionDiv.classList.add("questionContainer__answerBlock");
     questionDiv.classList.add("questionContainer__answerBlock--long");
     for(let index = 0; index < answers.length; ++ index ) {
-        let answer = newMultipleChoiceAnswer(index, answers[index].text);
+        let answer = newMultipleChoiceAnswer(answers[index], index);
         questionDiv.appendChild(answer);
     }
 
@@ -101,15 +116,13 @@ function createNewCountDiv(answers) {
 
     for(let index = 0; index < answers.length; ++ index ) {
         let answer = document.createElement("div");
-        answer.id = "answer" + index;
+        answer.id = "answer" + answers[index].id;
         answer.classList.add("questionContainer__answerBlock__answer");
         answer.classList.add("questionContainer__answerBlock__answer--count");
 
         let label = document.createElement("label");
         label.for = "answer" + index + "Count";
-
-        let image = document.createElement("img");
-        image.src = answers[index].source;
+        label.innerText = answers[index].text;
 
         let input = document.createElement("input");
         input.type = "number";
@@ -126,7 +139,6 @@ function createNewCountDiv(answers) {
         }
 
         answer.appendChild(label);
-        label.appendChild(image);
         answer.appendChild(input);
     }
 
@@ -157,7 +169,10 @@ function generateAnswersArray(
                 if(responseGroupArray.includes(group)) {
                     continue;
                 }
-                responseArray.push(answerList[Math.floor((Math.random() * groupSize)) + group * groupSize]);
+                if ( Math.random() < 0.5 )
+                    responseArray.push(answerList[Math.floor((Math.random() * groupSize)) + group * groupSize]);
+                else
+                    responseArray.unshift(answerList[Math.floor((Math.random() * groupSize)) + group * groupSize]);
             }
 
             callback(responseArray);
