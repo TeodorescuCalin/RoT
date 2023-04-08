@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+
+    <link rel="stylesheet" href="../styles/quiz.css">
+</head>
+<body>
+<header id="navigationBar"></header>
+    <div id="questionContainer" class="questionContainer">
+        <input id="questionId" type="hidden">
+        <div id="questionDescription" class="questionContainer__description">
+            <div id="questionTitle" class="questionContainer__description__title"></div>
+        </div>
+        <div id="questionAnswersBlock">
+            <div class="questionContainer__answerBlock__answer">
+                <span class="answer__badge">A</span>
+            </div>
+            <div class="questionContainer__answerBlock__answer">
+                <span class="answer__badge">B</span>
+            </div>
+            <div class="questionContainer__answerBlock__answer">
+                <span class="answer__badge">C</span>
+            </div>
+        </div>
+        <div id="formButtonsBlock" class="formButtonsBlock">
+            <button id="nextQuestionButton" class="formButtonsBlock__button formButtonsBlock__button--yellow" onclick="nextQuestion()"> ➔ Raspund mai tarziu </button>
+            <button id="sendAnswerButton" class="formButtonsBlock__button formButtonsBlock__button--green" onclick="checkAnswers()"> ☑ Trimite raspunsul </button>
+        </div>
+        <div id="quizInformationBlock">
+            <div class="quizInformationBlock__information">
+                Intrebari corecte
+                <div class="quizInformationCount" id="correctQuestions">0</div>
+            </div>
+            <div class="quizInformationBlock__information">
+                Intrebari gresite
+                <div class="quizInformationCount" id="wrongQuestions">0</div>
+            </div>
+            <div class="quizInformationBlock__information">
+                Intrebari ramase
+                <div class="quizInformationCount" id="remainingQuestions">26</div>
+            </div>
+        </div>
+    </div>
+    <script src="../scripts/navBar/loadNavbar.js"></script>
+    <script src="../scripts/quizPage/generatePage.js"></script>
+    <script src="../scripts/quizPage/buttonActions.js"></script>
+</body>
+</html>

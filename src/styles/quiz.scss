@@ -1,0 +1,104 @@
+@import "questionnaireBase";
+
+.questionContainer__description {
+  img {
+    width: 600px;
+    margin-left: 13%;
+    margin-bottom: 5px;
+  }
+}
+
+#questionAnswersBlock {
+  margin-top: 10px;
+  margin-left: 9%;
+}
+
+#quizInformationBlock {
+  @include font-style(200%);
+  display: flex;
+  justify-content: space-around;
+
+  span {
+  }
+  #correctQuestions {
+    color: lightgreen;
+  }
+  #wrongQuestions {
+    color: red;
+  }
+  #remainingQuestions {
+    color: yellow;
+  }
+}
+
+.quizInformationCount {
+  text-align: center;
+}
+
+.questionContainer__answerBlock__answer {
+
+  margin-bottom: 10px;
+}
+
+.questionContainer__answerBlock__answer--selected {
+  background-color: #2df5ff;
+}
+
+.formButtonsBlock__button {
+  height: 35px;
+}
+
+@media only screen and(max-width: 840px) {
+  .quizInformationBlock__information {
+    font-size: 20px;
+  }
+
+  .questionContainer__answerBlock__answer {
+    font-size: 20px;
+  }
+
+  .questionContainer__description img {
+    width: 450px;
+  }
+}
+@media only screen and(max-width: 640px) {
+  .quizInformationBlock__information {
+    font-size: 15px;
+  }
+
+  .formButtonsBlock__button {
+    font-size: 12px;
+  }
+
+  .questionContainer__answerBlock__answer {
+    font-size: 15px;
+  }
+
+  .questionContainer__description img {
+    width: 280px;
+  }
+}
+
+@media only screen and(max-width: 400px) {
+  .formButtonsBlock__button {
+    height: 20px;
+    font-size: 8px;
+  }
+
+  .quizInformationBlock__information {
+    font-size: 8px;
+  }
+
+  .questionContainer__answerBlock__answer {
+    margin-left: 5px;
+    margin-bottom: 5px;
+  }
+
+  .questionContainer__answerBlock__answer {
+    font-size: 10px;
+  }
+
+  .questionContainer__description img {
+    width: 200px;
+  }
+}

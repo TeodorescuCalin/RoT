@@ -1,0 +1,141 @@
+@import "navbar";
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap');
+
+
+$text-color: white;
+$selected-answer-color: light-blue;
+
+@mixin box-border($border-size) {
+  border-width: $border-size;
+  border-color: $primary-color;
+}
+
+@mixin font-style($font-size) {
+  color: $text-color;
+  font-family: 'Akaya Kanadaka', cursive;
+  font-size: $font-size;
+
+}
+
+body {
+  background-color: $backgroundColor;
+}
+
+.questionContainer {
+  @include box-border(5px);
+  border-style: solid;
+
+  width: 800px;
+
+  display: block;
+
+  margin: 50px auto 50px auto;
+}
+
+.questionContainer__description {
+  border-bottom: solid;
+  @include box-border(5px);
+
+  width: 100%;
+}
+
+.questionContainer__description__title {
+  height: 5%;
+
+  margin-bottom: 3%;
+  padding-top: 2%;
+
+  @include font-style(180%);
+  text-align: center;
+}
+#formButtonsBlock {
+
+  border-bottom: solid;
+  @include box-border(5px);
+}
+
+.questionContainer__answerBlock {
+  width: 50%;
+  margin-top: 10px;
+  float: left;
+}
+
+.questionContainer__answerBlock__answer {
+
+  @include font-style(200%);
+  user-select: none;
+  border: solid;
+  width: 90%;
+  @include box-border(2px);
+  border-radius: 5px 5px 5px 5px;
+
+}
+
+.answer__badge {
+
+  text-align: center;
+  border-right: solid;
+  border-bottom: solid;
+  @include box-border(2px);
+  margin-right: 10px;
+}
+
+.formButtonsBlock {
+
+  width: 100%;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.formButtonsBlock__button {
+  margin-bottom: 5px;
+
+  flex-basis: 35%;
+
+  border-radius: 10px;
+
+  @include font-style(120%);
+  color: black;
+}
+
+#sendAnswerButton:disabled {
+  cursor: default;
+}
+
+.formButtonsBlock__button:hover {
+  cursor: pointer;
+}
+
+.formButtonsBlock__button--green {
+  background: greenyellow;
+}
+
+.formButtonsBlock__button--yellow {
+  background: yellow;
+}
+
+@media only screen and(max-width: 840px) {
+  .questionContainer {
+    width: 625px;
+  }
+}
+
+@media only screen and(max-width: 640px) {
+  .questionContainer {
+    width: 380px;
+  }
+}
+
+@media only screen and(max-width: 400px) {
+  .questionContainer {
+    width: 280px;
+  }
+  .questionContainer * {
+    border-width: 2px ;
+  }
+  .questionContainer__answerBlock {
+    margin-top: 2px;
+  }
+}

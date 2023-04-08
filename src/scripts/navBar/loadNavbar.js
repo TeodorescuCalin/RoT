@@ -14,7 +14,7 @@ document.getElementById("navigationBar")
             <li> <a href="learn.html" id="learnButton"> Invata </a> </li>
             <li> <a href="#" id="highwayCodeButton"> Legislatie </a> </li>
             <li> <a href="streetSigns.html" id="roadSigns"> Semne de circulatie </a> </li>
-            <li> <a href="#" id="testsButton"> Chestionare </a> </li>
+            <li> <a href="quiz.html" id="testsButton"> Chestionare </a> </li>
             <li> <a href="#" id="aboutButton"> Despre </a> </li>
             <li> <a href="#" id="helpButton"> Ajutor </a> </li>
         </ul>

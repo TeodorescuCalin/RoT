@@ -11,7 +11,8 @@ rawFile.send(null);
 
 function createNewQuestion(questionFileText){
     const jsonObj = JSON.parse(questionFileText);
-    const questionId = Math.floor(Math.random() * jsonObj.questionList.length);
+    // const questionId = Math.floor(Math.random() * jsonObj.questionList.length);
+    const questionId = 2;
     const currentQuestion = jsonObj.questionList[questionId];
 
     document.getElementById("questionTitle").innerText = currentQuestion.title;
