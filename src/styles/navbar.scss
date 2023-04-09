@@ -279,3 +279,19 @@ div.textHomePage {
         padding: 0 0 0 0;
     }
 }
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: $backgroundColor;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $hoverColor;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: $loginButtonHoverColor;
+}
