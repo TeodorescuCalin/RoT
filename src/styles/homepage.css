@@ -1,4 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #24252A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0088a9;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 136, 169, 0.5);
+}
+
 body {
   display: flex;
   justify-content: center;
@@ -35,7 +51,7 @@ body {
 }
 
 .mainBlock {
-  overflow: scroll;
+  overflow: hidden scroll;
   height: 600px;
   padding-top: 10px;
   margin-top: 220px;
@@ -48,21 +64,7 @@ body {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.tipBlock {
-  height: 100%;
-  padding-top: 10px;
-  margin-top: 320px;
-  width: 80%;
-  flex-basis: 20%;
-  margin-right: 30px;
-  margin-left: 30px;
-  border-radius: 8px;
-  border-style: double;
-  border-color: rgb(0, 136, 169);
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-.rankBlock {
+.tipBlock, .rankBlock {
   height: 100%;
   padding-top: 10px;
   margin-top: 320px;
