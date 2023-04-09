@@ -112,19 +112,19 @@ $selected-answer-color: light-blue;
   background: yellow;
 }
 
-@media only screen and(max-width: 840px) {
+@media only screen and (max-width: 840px) {
   .questionContainer {
     width: 625px;
   }
 }
 
-@media only screen and(max-width: 640px) {
+@media only screen and (max-width: 640px) {
   .questionContainer {
     width: 380px;
   }
 }
 
-@media only screen and(max-width: 400px) {
+@media only screen and (max-width: 400px) {
   .questionContainer {
     width: 280px;
   }

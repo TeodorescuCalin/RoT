@@ -83,7 +83,7 @@
   height: 80px;
 }
 
-@media only screen and(max-width: 840px) {
+@media only screen and (max-width: 840px) {
   #questionExplanation {
     font-size: 170%;
   }
@@ -106,7 +106,7 @@
     font-size: 20px;
   }
 }
-@media only screen and(max-width: 640px) {
+@media only screen and (max-width: 640px) {
   .formButtonsBlock__button {
     font-size: 10px;
   }
@@ -128,7 +128,7 @@
   }
 }
 
-@media only screen and(max-width: 400px) {
+@media only screen and (max-width: 400px) {
   .questionContainer__answerBlock__choiceAnswer {
     margin-left: 7px;
   }

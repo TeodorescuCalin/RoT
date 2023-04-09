@@ -21,7 +21,7 @@
   display: block;
 }
 
-@media only screen and(max-width: 1180px) {
+@media only screen and (max-width: 1180px) {
 
   .selectionTab {
     @include size-scale(650px);

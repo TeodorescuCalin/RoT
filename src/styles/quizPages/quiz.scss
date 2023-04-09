@@ -54,7 +54,7 @@
   text-align: center;
 }
 
-@media only screen and(max-width: 840px) {
+@media only screen and (max-width: 840px) {
   .quizInformationBlock__information {
     font-size: 20px;
   }
@@ -67,7 +67,7 @@
     width: 450px;
   }
 }
-@media only screen and(max-width: 640px) {
+@media only screen and (max-width: 640px) {
   .quizInformationBlock__information {
     font-size: 15px;
   }
@@ -85,7 +85,7 @@
   }
 }
 
-@media only screen and(max-width: 400px) {
+@media only screen and (max-width: 400px) {
   .formButtonsBlock__button {
     height: 20px;
     font-size: 8px;
