@@ -17,10 +17,6 @@ $selected-answer-color: light-blue;
 
 }
 
-body {
-  background-color: $backgroundColor;
-}
-
 .questionContainer {
   @include box-border(5px);
   border-style: solid;

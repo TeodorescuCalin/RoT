@@ -1,6 +1,6 @@
 @import "../navbar";
 
-$background-color: #24252A;
+$background-color: $backgroundColor;
 
 body {
   background-color: $background-color;

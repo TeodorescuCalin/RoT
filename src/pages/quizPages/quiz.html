@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Quiz</title>
 
-    <link rel="stylesheet" href="../styles/quiz.css">
+    <link rel="stylesheet" href="../../styles/quiz.css">
+    <script src="https://kit.fontawesome.com/3ec5bc2749.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <header id="navigationBar"></header>
@@ -31,20 +32,26 @@
         <div id="quizInformationBlock">
             <div class="quizInformationBlock__information">
                 Intrebari corecte
-                <div class="quizInformationCount" id="correctQuestions">0</div>
+                <div class="quizInformationCount" id="correctQuestions"></div>
             </div>
             <div class="quizInformationBlock__information">
                 Intrebari gresite
-                <div class="quizInformationCount" id="wrongQuestions">0</div>
+                <div class="quizInformationCount" id="wrongQuestions"></div>
             </div>
             <div class="quizInformationBlock__information">
                 Intrebari ramase
-                <div class="quizInformationCount" id="remainingQuestions">26</div>
+                <div class="quizInformationCount" id="remainingQuestions"></div>
             </div>
         </div>
     </div>
-    <script src="../scripts/navBar/loadNavbar.js"></script>
-    <script src="../scripts/quizPage/generatePage.js"></script>
-    <script src="../scripts/quizPage/buttonActions.js"></script>
+    <script src="../../scripts/navBar/loadNavbar.js"></script>
+    <script>
+        loadNavbar("../");
+    </script>
+    <script src="../../scripts/quizPage/generatePage.js"></script>
+    <script src="../../scripts/quizPage/buttonActions.js"></script>
+    <script>
+        completeQuestionDiv();
+    </script>
 </body>
 </html>

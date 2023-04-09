@@ -1,4 +1,4 @@
-@import "../navbar";
+@import "navbar";
 
 @mixin flex-display($justify: left){
   display: flex;
@@ -31,5 +31,5 @@
 }
 
 .flexBlock__container {
-  flex: 0 0 20%;
+  flex: 0 0 25%;
 }

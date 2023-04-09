@@ -1,17 +1,17 @@
-@import "flexBase";
+@import "../flexBase";
 @import "linkStyling";
 
 
 .countryBlock {
 
-  border-radius: 10px 10px 10px 10px;
+  border-radius: 10px;
   border-style: solid;
 
   text-align: center;
 
   font-size: 3vw;
 
-  height: 60%;
+  height: 70%;
   display: block;
 }
 
@@ -21,10 +21,7 @@
   display: block;
 }
 
-
-
-
-@media only screen and (max-width: 1180px) {
+@media only screen and(max-width: 1180px) {
 
   .selectionTab {
     @include size-scale(650px);

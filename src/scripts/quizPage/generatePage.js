@@ -1,16 +1,5 @@
-let questionQueue = [];
-let questionnaireFile = new XMLHttpRequest();
-questionnaireFile.overrideMimeType("application/json");
-questionnaireFile.open("GET", "../../../data/quiz/questionnaires.json", true);
-questionnaireFile.onreadystatechange = function() {
-    if ( questionnaireFile.readyState === 4 && questionnaireFile.status === 200 ) {
-        questionQueue = JSON.parse(questionnaireFile.responseText).questionList;
-        completeQuestionDiv();
-    }
-}
-questionnaireFile.send(null);
 let answerDivs = document.getElementsByClassName("questionContainer__answerBlock__answer");
-
+let questionQueue = JSON.parse(sessionStorage.getItem("questionQueue"));
 function completeQuestionDiv() {
     for (let index = 0; index < answerDivs.length; ++ index) {
         answerDivs[index].appendChild(document.createTextNode(""));
@@ -23,7 +12,9 @@ function completeQuestionDiv() {
         })
     }
 
-    document.getElementById("remainingQuestions").textContent = questionQueue.length;
+    document.getElementById("remainingQuestions").appendChild(document.createTextNode(questionQueue.length));
+    document.getElementById("correctQuestions").appendChild(document.createTextNode(0));
+    document.getElementById("wrongQuestions").appendChild(document.createTextNode(0));
     displayNewQuestion();
 
 }

@@ -20,6 +20,7 @@ function checkAnswers() {
             currentQuestion.answers[index].correct)
         ) {
             questionCorrect = false;
+            break;
         }
     }
     if (questionCorrect) {

@@ -18,6 +18,10 @@ $loginButtonHoverColor: rgba(0, 136, 169, 0.5);
     display: $display;
 }
 
+body {
+    background-color: $backgroundColor;
+}
+
 header, header * {
     box-sizing: border-box;
     margin: 0;

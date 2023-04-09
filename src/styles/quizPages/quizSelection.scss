@@ -1,0 +1,132 @@
+@import "../flexBase";
+@import url('https://fonts.googleapis.com/css2?family=Kurale&display=swap');
+
+.quizBlock {
+
+  border-radius: 10px;
+  border-style: solid;
+
+  text-align: center;
+
+  font-size: 20px;
+
+  height: 40%;
+
+  font-family: 'Kurale', serif;
+  color: white;
+  border-color: $primary-color;
+
+  display: block;
+}
+
+.quizBlock__start:hover {
+  cursor: pointer;
+}
+
+.quizBlock__title {
+  margin-bottom: 20px;
+  font-size: 100%;
+}
+
+.quizBlock__status {
+  width: 100%;
+  border-style: solid none solid;
+  border-color: $primary-color;
+
+  font-size: 90%;
+
+  background-color: #cfc50e;
+}
+
+.quizBlock__status--failed {
+  background-color: red;
+}
+
+.quizBlock__status--successful {
+  background-color: #39cf27;
+}
+
+.quizBlock__start {
+  border-radius: 5px;
+  border-color: $primary-color;
+  font-family: 'Kurale', serif;
+  font-size: 20px;
+
+  background-color: $backgroundColor;
+
+  color: white;
+
+  text-decoration: none;
+  display: block;
+  margin: 10% auto;
+
+  width: 30%;
+  height: 20%;
+  border-style: solid;
+
+  text-align: center;
+  padding: 0;
+}
+
+.quizBlock__start:hover{
+  text-decoration: none;
+  box-shadow: inset 0 0 5px 5px rgba(26,188,156,0.25);
+}
+
+
+
+@media only screen and(max-width: 1180px) {
+
+  .quizSelection {
+    @include size-scale(850px);
+  }
+}
+
+@media only screen and(max-width: 800px) {
+
+  .quizSelection {
+    @include size-scale(650px);
+  }
+
+  .quizBlock, .quizBlock__start {
+    font-size: 15px;
+  }
+}
+
+@media only screen and(max-width: 600px) {
+
+  .quizSelection {
+    @include size-scale(500px);
+    column-gap: 5px;
+    row-gap: 20px;
+  }
+
+  .quizBlock {
+    flex-basis: 30%;
+    height: 50%;
+  }
+
+  .quizBlock__start {
+    font-size: 10px;
+  }
+}
+
+@media only screen and(max-width: 500px) {
+  .quizSelection {
+    @include size-scale(350px);
+  }
+
+  .quizBlock {
+    height: 70%;
+  }
+}
+
+
+@media only screen and(min-width:1600px){
+  .quizBlock {
+    font-size: 30px;
+  }
+  .quizBlock__start {
+    margin-top: 0.1vh;
+  }
+}

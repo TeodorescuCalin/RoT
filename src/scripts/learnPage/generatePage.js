@@ -11,8 +11,7 @@ rawFile.send(null);
 
 function createNewQuestion(questionFileText){
     const jsonObj = JSON.parse(questionFileText);
-    // const questionId = Math.floor(Math.random() * jsonObj.questionList.length);
-    const questionId = 2;
+    const questionId = Math.floor(Math.random() * jsonObj.questionList.length);
     const currentQuestion = jsonObj.questionList[questionId];
 
     document.getElementById("questionTitle").innerText = currentQuestion.title;
@@ -187,7 +186,7 @@ function addTags(questionTags) {
     let imageData = document.getElementById("placeInformation");
     for (let index = 0; index < questionTags.length; ++ index) {
         let newMeta = document.createElement("meta");
-        newMeta.propety = questionTags[index].property;
+        newMeta.setAttribute('property', questionTags[index].property);
         newMeta.content = questionTags[index].value;
         imageData.appendChild(newMeta);
     }
