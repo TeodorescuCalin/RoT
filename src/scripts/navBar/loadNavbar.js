@@ -16,8 +16,8 @@ function loadNavbar(pathToRoot) {
             <li> <a href="` + pathToRoot + `legislation.html" id="highwayCodeButton"> Legislatie </a> </li>
             <li> <a href="` + pathToRoot + `streetSigns.html" id="roadSigns"> Semne de circulatie </a> </li>
             <li> <a href="` + pathToRoot + `quizSelection.html" id="testsButton"> Chestionare </a> </li>
-            <li> <a href="#" id="aboutButton"> Despre </a> </li>
-            <li> <a href="#" id="helpButton"> Ajutor </a> </li>
+            <li> <a href="` + pathToRoot + `about.html" id="aboutButton"> Despre </a> </li>
+            <li> <a href="` + pathToRoot + `help.html" id="helpButton"> Ajutor </a> </li>
         </ul>
     </nav>
     <button type="button" onclick = "window.location.href='` + pathToRoot + `login.html'" class="loginButton"> Login </button>`
