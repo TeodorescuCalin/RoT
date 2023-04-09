@@ -11,12 +11,22 @@ document.getElementById("navigationBar")
             <i class="fa-solid fa-bars"></i>
         </label>
         <ul class="navButtons">
-            <li> <a href="https://www.scoalarutiera.ro/curs-legislatie" target="_blank" id="learnButton"> Invata </a> </li>
-            <li> <a href="#" id="highwayCodeButton"> Legislatie </a> </li>
-            <li> <a href="streetSigns.html" id="roadSigns"> Semne de circulatie </a> </li>
+            <li> <a href="legislation.html" id="highwayCodeButton"> Legislație </a> </li>
+            <li> <a href="streetSigns.html" id="roadSigns"> Semne de circulație </a> </li>
+            <li> <a href="https://www.scoalarutiera.ro/curs-legislatie" target="_blank" id="learnButton"> Învață </a> </li>
             <li> <a href="#" id="testsButton"> Chestionare </a> </li>
             <li> <a href="#" id="aboutButton"> Despre </a> </li>
-            <li> <a href="#" id="helpButton"> Ajutor </a> </li>
+            <li> <a href="help.html" id="helpButton"> Ajutor </a> </li>
         </ul>
     </nav>
     <button type="button" onclick = "window.location.href='login.html'" class="loginButton"> Login </button>`
+
+const expandCheckBox = document.getElementById("checkNav");
+
+expandCheckBox.addEventListener('change', element => {
+    if ( element.target.checked === true ) {
+        document.getElementById("navigationBar").style.marginBottom = "500px";
+    } else {
+        document.getElementById("navigationBar").style.marginBottom = "0px";
+    }
+})

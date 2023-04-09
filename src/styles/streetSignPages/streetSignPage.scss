@@ -31,7 +31,7 @@
   }
 }
 
-@media only screen and(max-width: 600px) {
+@media only screen and (max-width: 600px) {
 
   .selectionTab {
     @include size-scale(300px);
@@ -39,7 +39,7 @@
   }
 }
 
-@media only screen and(max-width: 340px)
+@media only screen and (max-width: 340px)
 {
 
   .selectionTab {
@@ -50,7 +50,7 @@
   }
 }
 
-@media only screen and(max-width: 200px) {
+@media only screen and (max-width: 200px) {
 
   .selectionTab {
     @include size-scale(100px);
@@ -68,7 +68,7 @@
   }
 }
 
-@media only screen and(min-width: 2000px) {
+@media only screen and (min-width: 2000px) {
 
   .countryBlock {
     font-size: 70px;

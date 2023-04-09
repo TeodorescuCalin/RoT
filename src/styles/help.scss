@@ -1,0 +1,36 @@
+@import "userForms/formBase";
+
+h1 {
+    color: white;
+    text-align: center;
+}
+
+hr {
+    border: 1px solid $primary-color;
+}
+
+strong {
+    font-size: 20px;
+    line-height: 2;
+    margin-left: 3%;
+}
+
+.introduction {
+    color: white;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    font-size: 20px;
+    text-align: center;
+}
+
+.content {
+    width: 60%;
+    margin-top: 3%;
+    margin-left: 20%;
+    margin-right: 10%;
+    margin-bottom: 5%;
+    font-size: 20px;
+    color: white;
+    text-align: justify;
+}
