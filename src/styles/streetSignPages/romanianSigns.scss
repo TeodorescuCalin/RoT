@@ -39,7 +39,7 @@
   }
 }
 
-@media only screen and(max-width: 900px) {
+@media only screen and (max-width: 900px) {
 
   .signContainer {
     @include size-scale(500px);
@@ -51,7 +51,7 @@
   }
 }
 
-@media only screen and(max-width: 500px) {
+@media only screen and (max-width: 500px) {
 
   .signContainer {
     @include size-scale(300px);
@@ -74,7 +74,7 @@
   }
 }
 
-@media only screen and(max-width: 340px) {
+@media only screen and (max-width: 340px) {
 
   .signBlock {
     height: 150px;

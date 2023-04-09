@@ -20,7 +20,7 @@
   white-space: pre-line;
 }
 
-@media only screen and(max-width: 1180px) {
+@media only screen and (max-width: 1180px) {
 
   #signCategorySelection {
     @include size-scale(650px);
@@ -32,7 +32,7 @@
 }
 
 
-@media only screen and(max-width: 600px) {
+@media only screen and (max-width: 600px) {
 
   #signCategorySelection {
     @include size-scale(400px);
@@ -43,7 +43,7 @@
   }
 }
 
-@media only screen and(max-width: 400px) {
+@media only screen and (max-width: 400px) {
 
   #signCategorySelection {
     @include size-scale(300px);
