@@ -1,4 +1,4 @@
-@import "questionnaireBase";
+@import "../questionnaireBase";
 
 .questionContainer__description {
   img {
@@ -46,6 +46,12 @@
 
 .formButtonsBlock__button {
   height: 35px;
+}
+
+.finalAnswerDiv {
+  width: 100%;
+  @include font-style(50px);
+  text-align: center;
 }
 
 @media only screen and(max-width: 840px) {

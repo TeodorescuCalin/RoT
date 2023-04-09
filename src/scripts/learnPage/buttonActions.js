@@ -44,18 +44,10 @@ function compareAnswers(currentQuestion) {
         const divAnswers = document.getElementsByClassName("questionContainer__answerBlock__answer");
         for (let index = 0; index < divAnswers.length; ++ index) {
             const currentAnswerId = parseInt(divAnswers[index].id.slice(6));
-            if ( divAnswers[index].classList.contains("questionContainer__answerBlock__answer--choice--selected") ) {
-                if(currentQuestion.answers.includes(currentAnswerId)) {
-                    divAnswers[index].firstChild.style.backgroundColor = "green";
-                } else {
-                    divAnswers[index].firstChild.style.backgroundColor = "red";
-                }
+            if(currentQuestion.answers.includes(currentAnswerId)) {
+                divAnswers[index].firstChild.style.backgroundColor = "green";
             } else {
-                if(currentQuestion.answers.includes(currentAnswerId)) {
-                    divAnswers[index].firstChild.style.backgroundColor = "red";
-                } else {
-                    divAnswers[index].firstChild.style.backgroundColor = "green";
-                }
+                divAnswers[index].firstChild.style.backgroundColor = "red";
             }
         }
     }

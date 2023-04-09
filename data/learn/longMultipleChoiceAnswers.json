@@ -2,7 +2,7 @@
   "answerList": [
     {
       "id": 0,
-      "text": "Accelerez pentru a trece rapid prin intersectie"
+      "text": "Accelerez pentru a trece rapid prin intersecție"
     },
     {
       "id": 1,
@@ -10,7 +10,7 @@
     },
     {
       "id": 2,
-      "text": "Incep sa fac gogosi in mijlocul intersectiei(daca am cauciucuri de iarna)"
+      "text": "Încep sa fac gogoși in mijlocul intersecției(dacă am cauciucuri de iarnă)"
     },
     {
       "id": 3,
@@ -18,11 +18,11 @@
     },
     {
       "id": 4,
-      "text": "Ridic din schimbator ca masina sa pluteasca"
+      "text": "Ridic din schimbător ca mașina sa plutească"
     },
     {
       "id": 5,
-      "text": "Incep sa suflu in sistemul de aerisire ca sa se desfunde"
+      "text": "Încep să suflu în sistemul de aerisire ca să se desfunde"
     }
   ]
 }

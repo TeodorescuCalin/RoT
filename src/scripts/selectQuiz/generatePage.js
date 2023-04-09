@@ -23,7 +23,22 @@ function createPage(questionnaireList) {
 
         let questionnaireStatus = document.createElement("div");
         questionnaireStatus.classList.add("quizBlock__status");
-        questionnaireStatus.textContent = "Neîncercat";
+        switch(questionnaireList[index].type) {
+            case "not_tried": {
+                questionnaireStatus.textContent = "Neîncercat";
+                break;
+            }
+            case "failed": {
+                questionnaireStatus.textContent = "Esuat";
+                questionnaireStatus.classList.add("quizBlock__status--failed");
+                break;
+            }
+            case "successful": {
+                questionnaireStatus.textContent = "Promovat";
+                questionnaireStatus.classList.add("quizBlock__status--successful");
+                break;
+            }
+        }
 
         let questionnaireStatistic = createQuestionnaireStatistic();
 

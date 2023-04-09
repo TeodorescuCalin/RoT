@@ -9,7 +9,7 @@
         1
       ],
       "totalAnswerCount": 4,
-      "explanation": "<span class=\"emphasizeMessage\"> Ai grija </span> la semnul <a class=\"roadSignName\" href=\"romaniaPrioritySigns.html\">Stop</a>; el chiar daca nu este cu fata inspre tine poate fi recunoscut dupa forma particulara. <span class=\"emphasizeMessage\"> Ai grija </span> de asemenea la semnul <a class=\"roadSignName\" href=\"romaniaRestrictionSigns.html\">Oprirea interzisa</a> in contrast cu <a class=\"roadSignName\" href=\"romaniaRestrictionSigns.html\">Stationarea interzisa</a>",
+      "explanation": "<span class=\"emphasizeMessage\"> Ai grijă </span> la semnul <a class=\"roadSignName\" href=\"signPages/romanianSigns/romaniaPrioritySigns.html\">Stop</a>; el chiar dacă nu este cu fața înspre tine poate fi recunoscut după forma particulară. <span class=\"emphasizeMessage\"> Ai grijă </span> de asemenea la semnul <a class=\"roadSignName\" href=\"signPages/romanianSigns/romaniaRestrictionSigns.html\">Oprirea interzisă</a> în contrast cu <a class=\"roadSignName\" href=\"signPages/romanianSigns/romaniaRestrictionSigns.html\">Staționarea interzisă</a>",
       "tagList": [
         {
           "property": "latitude",
@@ -27,13 +27,13 @@
     },
     {
       "type": "multipleChoice_long",
-      "title": "Cum va comportati in urmatoarea intersectie?",
+      "title": "Cum vă comportați în următoarea intersecție?",
       "imagePath": "https://www.google.com/maps/embed?pb=!4v1680679268637!6m8!1m7!1s0BxyVxBR8bNwNv5CtJdbyA!2m2!1d47.16222492464944!2d27.59210920100176!3f64.33765819761379!4f-8.887095613636347!5f0.4200115384163643",
       "answers": [
         2
       ],
       "totalAnswerCount": 3,
-      "explanation": "Zona din imagine se afla in spate la sala Vivertine unde merg doar smecheri; asadar este necesar sa opresti sa-ti iei o cafea cand treci pe acolo",
+      "explanation": "Zona din imagine se află în spate la sala Vivertine unde merg doar șmecheri; așadar este necesar să oprești să-ți iei o cafea când treci pe acolo",
       "tagList": [
         {
           "property": "latitude",
@@ -51,7 +51,7 @@
     },
     {
       "type": "count",
-      "title": "Numarati cate semne rutiere de fiecare fel se vad in imagine",
+      "title": "Numărați câte semne rutiere de fiecare fel se văd în imagine",
       "imagePath": "https://www.google.com/maps/embed?pb=!4v1680679268637!6m8!1m7!1s0BxyVxBR8bNwNv5CtJdbyA!2m2!1d47.16222492464944!2d27.59210920100176!3f64.33765819761379!4f-8.887095613636347!5f0.4200115384163643",
       "answers": [
         {
@@ -60,7 +60,7 @@
         }
       ],
       "totalAnswerCount": 4,
-      "explanation": "In imagine exista doua semne de <a class=\"roadSignName\" href=\"romaniaPrioritySigns.html\">Drum cu prioritate</a>; <span class=\"emphasizeMessage\"> Ai grija! </span> Chiar daca semnul nu este cu fata inspre tine, el poate fi recunoscut dupa forma sa rectangulara",
+      "explanation": "În imagine există două semne de <a class=\"roadSignName\" href=\"signPages/romanianSigns/romaniaPrioritySigns.html\">Drum cu prioritate</a>; <span class=\"emphasizeMessage\"> Ai grijă! </span> Chiar dacă semnul nu este cu fața înspre tine, el poate fi recunoscut după forma sa rectangulară",
       "tagList": [
         {
           "property": "latitude",
