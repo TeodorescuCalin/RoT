@@ -44,7 +44,7 @@ function displayFinalResult() {
     document.body.children[1].remove();
     const newDiv = document.createElement("div");
     newDiv.classList.add("finalAnswerDiv");
-    newDiv.innerHTML = `Felicitari ai facut <span style="color:green">` + correctQuestions + ` </span> intrebari corecte
-        si <span style="color:red">` + wrongQuestions + `</span> intrebari gresite.`
+    newDiv.innerHTML = `Felicitări ai făcut <span style="color:green">` + correctQuestions + ` </span> întrebări corecte
+        și <span style="color:red">` + wrongQuestions + `</span> întrebări greșite.`
     document.body.appendChild(newDiv);
 }
