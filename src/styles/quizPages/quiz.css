@@ -1,0 +1,402 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap");
+body {
+  background-color: #24252A; }
+
+header, header * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-color: #24252A; }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  top: 0;
+  right: 0;
+  align-items: flex-start;
+  background: transparent;
+  padding: 20px 6%;
+  transition: all .50s ease; }
+
+.navButtons {
+  position: relative;
+  display: flex;
+  top: 38px;
+  list-style: none; }
+
+.navButtons a:hover {
+  color: #0088a9; }
+
+.navButtons a:active {
+  color: yellow; }
+
+.navButtons a, .loginButton {
+  text-align: center;
+  display: block;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  text-decoration: none;
+  padding: 5px 0;
+  margin: 0 20px; }
+
+.homeButton {
+  padding: 9px 25px; }
+
+.loginButton {
+  position: relative;
+  padding: 9px 25px;
+  border: none;
+  border-radius: 50px;
+  background-color: #0088a9;
+  cursor: pointer;
+  top: 34px;
+  transition: all .50s ease; }
+
+.loginButton:hover {
+  background-color: rgba(0, 136, 169, 0.5); }
+
+.subMenuHighwayCode {
+  position: relative;
+  background-color: #0088a9;
+  display: none;
+  list-style: none;
+  border: none;
+  top: 15px;
+  line-height: 50px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px; }
+
+nav ul li:hover ul {
+  display: block; }
+
+.subMenuHighwayCode a:hover {
+  color: #0088a9; }
+
+div.textHomePage {
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  text-decoration: none;
+  padding: 5px 0;
+  margin: 0 20px;
+  transition: all .50s ease; }
+
+.dropNav {
+  color: white;
+  font-size: 34px;
+  cursor: pointer;
+  display: none; }
+
+#checkNav {
+  display: none; }
+
+@media (max-width: 1304px) {
+  .navBar {
+    height: 100px; }
+
+  .navButtons {
+    text-align: center;
+    display: block;
+    position: relative;
+    width: 100%;
+    top: 60px;
+    visibility: hidden;
+    line-height: 80px;
+    padding: 0 0 0 0; }
+
+  .dropNav {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 20%;
+    left: 45%;
+    justify-content: center;
+    align-items: center;
+    line-height: 120px; }
+
+  .navButtons a {
+    font-size: 28px; }
+
+  .subMenuHighwayCode {
+    line-height: 50px;
+    margin-bottom: 20px; }
+
+  div.textHomePage {
+    align-content: flex-end; }
+
+  #checkNav:checked ~ .navButtons {
+    visibility: visible; } }
+@media (max-width: 800px) {
+  .homeButton svg {
+    height: 90px;
+    width: 90px; }
+
+  .navButtons a {
+    font-size: 20px;
+    padding: 0 0 0 0; }
+
+  .navButtons {
+    line-height: 60px;
+    padding: 0 0 0 0;
+    top: 50px; }
+
+  .navButtons ul {
+    padding: 0 0 0 0; } }
+@media (max-width: 600px) {
+  .homeButton svg {
+    height: 65px;
+    width: 65px;
+    margin-top: 14px; }
+
+  .dropNav {
+    font-size: 28px; }
+
+  .loginButton {
+    font-size: 18px; }
+
+  .navButtons a {
+    font-size: 18px;
+    padding: 0 0 0 0; }
+
+  .navButtons {
+    top: 45px;
+    line-height: 60px;
+    padding: 0 0 0 0; } }
+@media (max-width: 400px) {
+  .homeButton svg {
+    height: 60px;
+    width: 60px;
+    margin-top: 18px; }
+
+  .dropNav {
+    font-size: 24px;
+    line-height: 100px; }
+
+  .loginButton {
+    font-size: 16px; }
+
+  .navButtons a {
+    font-size: 18px;
+    padding: 0 0 0 0; }
+
+  .navButtons {
+    top: 40px;
+    line-height: 60px;
+    padding: 0 0 0 0; } }
+@media (max-width: 399px) {
+  .homeButton svg {
+    height: 30px;
+    width: 30px;
+    margin-top: 18px; }
+
+  .dropNav {
+    font-size: 10px;
+    line-height: 100px; }
+
+  .loginButton {
+    font-size: 12px; }
+
+  .navButtons a {
+    font-size: 18px;
+    padding: 0 0 0 0; }
+
+  .navButtons {
+    top: 40px;
+    line-height: 60px;
+    padding: 0 0 0 0; } }
+::-webkit-scrollbar {
+  width: 8px; }
+
+::-webkit-scrollbar-track {
+  background: #24252A; }
+
+::-webkit-scrollbar-thumb {
+  background: #0088a9; }
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 136, 169, 0.5); }
+
+.questionContainer {
+  border-width: 5px;
+  border-color: #0088a9;
+  border-style: solid;
+  width: 800px;
+  display: block;
+  margin: 50px auto 50px auto; }
+
+.questionContainer__description {
+  border-bottom: solid;
+  border-width: 5px;
+  border-color: #0088a9;
+  width: 100%; }
+
+.questionContainer__description__title {
+  height: 5%;
+  margin-bottom: 3%;
+  padding-top: 2%;
+  color: white;
+  font-family: 'Akaya Kanadaka', cursive;
+  font-size: 180%;
+  text-align: center; }
+
+#formButtonsBlock {
+  border-bottom: solid;
+  border-width: 5px;
+  border-color: #0088a9; }
+
+.questionContainer__answerBlock {
+  width: 50%;
+  margin-top: 10px;
+  float: left; }
+
+.questionContainer__answerBlock__answer {
+  color: white;
+  font-family: 'Akaya Kanadaka', cursive;
+  font-size: 200%;
+  user-select: none;
+  border: solid;
+  width: 90%;
+  border-width: 2px;
+  border-color: #0088a9;
+  border-radius: 5px 5px 5px 5px; }
+
+.answer__badge {
+  text-align: center;
+  border-right: solid;
+  border-bottom: solid;
+  border-width: 2px;
+  border-color: #0088a9;
+  margin-right: 10px; }
+
+.formButtonsBlock {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center; }
+
+.formButtonsBlock__button {
+  margin-bottom: 5px;
+  flex-basis: 35%;
+  border-radius: 10px;
+  color: white;
+  font-family: 'Akaya Kanadaka', cursive;
+  font-size: 120%;
+  color: black; }
+
+#sendAnswerButton:disabled {
+  cursor: default; }
+
+.formButtonsBlock__button:hover {
+  cursor: pointer; }
+
+.formButtonsBlock__button--green {
+  background: greenyellow; }
+
+.formButtonsBlock__button--yellow {
+  background: yellow; }
+
+@media only screen and (max-width: 840px) {
+  .questionContainer {
+    width: 625px; } }
+@media only screen and (max-width: 640px) {
+  .questionContainer {
+    width: 380px; } }
+@media only screen and (max-width: 400px) {
+  .questionContainer {
+    width: 280px; }
+
+  .questionContainer * {
+    border-width: 2px; }
+
+  .questionContainer__answerBlock {
+    margin-top: 2px; } }
+.questionContainer__description img {
+  width: 600px;
+  margin-left: 13%;
+  margin-bottom: 5px; }
+
+#questionAnswersBlock {
+  margin-top: 10px;
+  margin-left: 9%; }
+
+#quizInformationBlock {
+  color: white;
+  font-family: 'Akaya Kanadaka', cursive;
+  font-size: 200%;
+  display: flex;
+  justify-content: space-around; }
+  #quizInformationBlock #correctQuestions {
+    color: lightgreen; }
+  #quizInformationBlock #wrongQuestions {
+    color: red; }
+  #quizInformationBlock #remainingQuestions {
+    color: yellow; }
+
+.quizInformationCount {
+  text-align: center; }
+
+.questionContainer__answerBlock__answer {
+  margin-bottom: 10px; }
+
+.questionContainer__answerBlock__answer--selected {
+  background-color: #2df5ff; }
+
+.formButtonsBlock__button {
+  height: 35px; }
+
+.finalAnswerDiv {
+  width: 100%;
+  color: white;
+  font-family: 'Akaya Kanadaka', cursive;
+  font-size: 50px;
+  text-align: center; }
+
+@media only screen and (max-width: 840px) {
+  .quizInformationBlock__information {
+    font-size: 20px; }
+
+  .questionContainer__answerBlock__answer {
+    font-size: 20px; }
+
+  .questionContainer__description img {
+    width: 450px; } }
+@media only screen and (max-width: 640px) {
+  .quizInformationBlock__information {
+    font-size: 15px; }
+
+  .formButtonsBlock__button {
+    font-size: 12px; }
+
+  .questionContainer__answerBlock__answer {
+    font-size: 15px; }
+
+  .questionContainer__description img {
+    width: 280px; } }
+@media only screen and (max-width: 400px) {
+  .formButtonsBlock__button {
+    height: 20px;
+    font-size: 8px; }
+
+  .quizInformationBlock__information {
+    font-size: 8px; }
+
+  .questionContainer__answerBlock__answer {
+    margin-left: 5px;
+    margin-bottom: 5px; }
+
+  .questionContainer__answerBlock__answer {
+    font-size: 10px; }
+
+  .questionContainer__description img {
+    width: 200px; } }
+
+/*# sourceMappingURL=quiz.css.map */
