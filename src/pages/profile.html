@@ -6,6 +6,7 @@
   <title>RoT</title>
 
   <link rel="stylesheet" href="../styles/profile.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <script src="https://kit.fontawesome.com/3ec5bc2749.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -65,11 +66,31 @@
 				<li>Cel mai scurt timp de rezolvare: 20:15</li>
 				<li>Cel mai lung timp de rezolvare:</li>
 			</ul>
-		</div>
+		</div>   
+        
+        <div class="chartsBlock">
+            <h2>Progres</h2>
+            <h3>Progres întrebări</h3>
+            <canvas id="categoryChart"></canvas>
+            <p id="totalLearn"></p>
+            <canvas id="learnProgressChart"></canvas>
+            <p id="learnMean"></p>
+
+            <h3>Progres chestionare</h3>
+            <canvas id="quizProgressChart"></canvas>
+            <p id="quizMean"></p>
+
+            <canvas id="quizDurationChart"></canvas>
+            <p id="quizDuration"></p>
+        </div>
 	</div>
+
+    
+    
     <script src="../scripts/navBar/loadNavbar.js"></script>
     <script>
         loadNavbar("");
     </script>
+    <script src="../scripts/profile/charts.js"></script>
 </body>
 </html>

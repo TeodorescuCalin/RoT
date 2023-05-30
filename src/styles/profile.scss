@@ -66,7 +66,8 @@
 
 .aboutBlock,
 .learnStats,
-.quizStats {
+.quizStats,
+.chartsBlock {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -85,6 +86,27 @@
         text-align: center;
     }
     border-bottom: 3px solid $primary-color;
+}
+
+#categoryChart,
+#learnProgressChart,
+#quizProgressChart,
+#quizDurationChart {
+    width: 100%;
+    max-width: 700px;
+    // border-bottom: 3px solid $primary-color;
+}
+
+p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 10%;
+    width: 80%;
+    line-height: 1.5;
+    font-size: 25px;
+    color: white;
+    text-align:center;
 }
 
 .loginButton {
