@@ -1,0 +1,119 @@
+.flexBlock {
+  position: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  row-gap: 10vh;
+  column-gap: 100px;
+  width: 1200px;
+  height: 600px; }
+
+.flexBlock__container {
+  flex: 0 0 20%; }
+
+@media only screen and (max-width: 1180px) {
+  .flexBlock {
+    width: 600px;
+    height: 300px; } }
+@media only screen and (max-width: 600px) {
+  .flexBlock {
+    width: 400px;
+    height: 200px; } }
+@media only screen and (max-width: 340px) {
+  .flexBlock {
+    width: 200px;
+    height: 100px; } }
+@media only screen and (max-width: 200px) {
+  .flexBlock {
+    width: 100px;
+    height: 50px;
+    column-gap: 0; }
+
+  .flexBlock__container {
+    flex-basis: 100%; } }
+body {
+  margin: 0;
+  white-space: nowrap;
+  background-color: #24252A; }
+
+.barBlock {
+  font-size: 100px; }
+
+.topBarBlock {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  flex-wrap: wrap;
+  row-gap: 10vh;
+  column-gap: 100px;
+  gap: 1.5em;
+  background-color: #71c2ff;
+  height: 1em;
+  font-size: 5px; }
+
+.topBarBlock > * {
+  height: 1.25em;
+  font-size: 80%; }
+
+#homeButton {
+  margin-right: auto; }
+
+#loginButton {
+  margin-right: 1em; }
+
+.menuBarBlock {
+  gap: 1.5em;
+  height: 1em;
+  font-size: 70px;
+  background-color: #ff7948; }
+
+.menuBarBlock > * {
+  height: 1.25em;
+  font-size: 30%; }
+
+.flexBlock {
+  position: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  row-gap: 10vh;
+  column-gap: 100px;
+  width: 1200px;
+  height: 600px; }
+
+.flexBlock__container {
+  flex: 0 0 20%; }
+
+@media only screen and (max-width: 1180px) {
+  .flexBlock {
+    width: 600px;
+    height: 300px; } }
+@media only screen and (max-width: 600px) {
+  .flexBlock {
+    width: 400px;
+    height: 200px; } }
+@media only screen and (max-width: 340px) {
+  .flexBlock {
+    width: 200px;
+    height: 100px; } }
+@media only screen and (max-width: 200px) {
+  .flexBlock {
+    width: 100px;
+    height: 50px;
+    column-gap: 0; }
+
+  .flexBlock__container {
+    flex-basis: 100%; } }
+.signBlock {
+  color: white;
+  border-color: #0088a9; }
+
+/*# sourceMappingURL=signBase.css.map */
