@@ -12,6 +12,9 @@
 <body>
     <header id="navigationBar"></header>
 
+    <input type="number" min=1 max=4 placeholder=1 value=1 id="userId">
+    <button onclick="getUserInfo()">GET</button>
+
     <div class="profileBlock">
         <div class="profileHeader">
             <img class="profilePicture" src="https://www.kindpng.com/picc/m/404-4042814_facebook-no-profile-png-download-default-headshot-transparent.png" alt="Profile Picture">
@@ -21,15 +24,15 @@
                     <input type="file" style="display:none;" id="img" name="img" accept="image/*">
                 </form>
             </div>
-            <h1 class="profileName">Nume Prenume</h1>
+            <h1 id="nameSurname" class="profileName">Nume Prenume</h1>
         </div>
         <div class="profileGeneralStats">
             <div class="stat">
-                <h3 class="statsCount">5</h3>
+                <h3 id="solvedQuizzesStats" class="statsCount">5</h3>
                 <p>Chestionare rezolvate</p>
             </div>
             <div class="stat">
-                <h3 class="statsCount">50</h3>
+                <h3 id="solvedLearningQuestionsStats" class="statsCount">50</h3>
                 <p>Întrebări rezolvate</p>
             </div>
         </div>
@@ -38,10 +41,10 @@
     <div class="aboutBlock">
         <h2>Despre</h2>
         <ul vocab="https://schema.org/" typeof="Person" class="infoList">
-            <li property="familyName">Nume:</li>
-            <li property="givenName">Prenume:</li>
-            <li property="additionalName">Nume utilizator:</li>
-            <li>Dată înregistrare:</li>
+            <li id="userName" property="familyName">Nume:</li>
+            <li id="userSurname" property="givenName">Prenume:</li>
+            <li id="userUsername" property="additionalName">Nume utilizator:</li>
+            <li id="userRegisterDate">Dată înregistrare:</li>
         </ul>
     </div>
 

@@ -1,6 +1,6 @@
 let questionnaireFile = new XMLHttpRequest();
 questionnaireFile.overrideMimeType("application/json");
-questionnaireFile.open("GET", "../../../data/quiz/questionnaires.json", true);
+questionnaireFile.open("GET", "http://localhost:80/rot/data/quiz/questionnaires.json", true);
 questionnaireFile.onreadystatechange = function() {
     if ( questionnaireFile.readyState === 4 && questionnaireFile.status === 200 ) {
         createPage(JSON.parse(questionnaireFile.responseText).questionnaireList);

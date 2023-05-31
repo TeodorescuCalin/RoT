@@ -1,7 +1,7 @@
 
 let rawFile = new XMLHttpRequest();
 rawFile.overrideMimeType("application/json");
-rawFile.open("GET", "../../../data/learn/questions.json", true);
+rawFile.open("GET", "http://localhost:80/rot/data/learn/questions.json", true);
 rawFile.onreadystatechange = function() {
     if ( rawFile.readyState === 4 && rawFile.status === 200 ) {
         createNewQuestion(rawFile.responseText);
@@ -156,7 +156,7 @@ function generateAnswersArray(
 
     let answerFile = new XMLHttpRequest();
     answerFile.overrideMimeType("application/json");
-    answerFile.open("GET", "../../../data/learn/" + filename, true);
+    answerFile.open("GET", "http://localhost:80/rot/data/learn/" + filename, true);
     answerFile.onreadystatechange = function() {
         if ( answerFile.readyState === 4 && answerFile.status === 200 ) {
             const answerList = JSON.parse(answerFile.responseText).answerList;

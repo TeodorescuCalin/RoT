@@ -348,7 +348,8 @@ body {
 
 .aboutBlock,
 .learnStats,
-.quizStats {
+.quizStats,
+.chartsBlock {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -366,11 +367,32 @@ body {
   .learnStats .infoQuiz,
   .quizStats .infoList,
   .quizStats .infoLearn,
-  .quizStats .infoQuiz {
+  .quizStats .infoQuiz,
+  .chartsBlock .infoList,
+  .chartsBlock .infoLearn,
+  .chartsBlock .infoQuiz {
     margin-left: 0;
     padding-left: 0;
     list-style-type: none;
     text-align: center; }
+
+#categoryChart,
+#learnProgressChart,
+#quizProgressChart,
+#quizDurationChart {
+  width: 100%;
+  max-width: 700px; }
+
+p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10%;
+  width: 80%;
+  line-height: 1.5;
+  font-size: 25px;
+  color: white;
+  text-align: center; }
 
 .loginButton {
   visibility: hidden; }
