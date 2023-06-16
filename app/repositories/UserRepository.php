@@ -13,19 +13,24 @@ class UserRepository extends Repository {
         return 'users';
     }
 
-    public function getById($id) {
+    protected function createModel( array $fetchArray ) : UserModel | null
+    {
+        if ( empty ( $fetchArray ) ) {
+            return null;
+        }
 
-        $user = parent :: getById($id);
+        $id = $fetchArray['id'];
 
         $userModel = new UserModel();
-        $userModel->email = $user['email'];
-        $userModel->name = $user['name'];
-        $userModel->surname = $user['surname'];
-        $userModel->username = $user['username'];
-        $userModel->last_login_date = date('Y-m-d', strtotime($user['last_login_date']));
-        $userModel->logged = $user['logged'];
-        $userModel->created_at = date('Y-m-d H:i:s', strtotime($user['created_at']));
-        $userModel->updated_at = date('Y-m-d H:i:s', strtotime($user['updated_at']));
+        $userModel->id = $id;
+        $userModel->email = $fetchArray['email'];
+        $userModel->name = $fetchArray['name'];
+        $userModel->surname = $fetchArray['surname'];
+        $userModel->username = $fetchArray['username'];
+        $userModel->password = $fetchArray['password'];
+        $userModel->last_login_date = date('Y-m-d', strtotime($fetchArray['last_login_date']));
+        $userModel->created_at = date('Y-m-d H:i:s', strtotime($fetchArray['created_at']));
+        $userModel->updated_at = date('Y-m-d H:i:s', strtotime($fetchArray['updated_at']));
         $userModel->statistics = new UserStatistics();
         $userModel->statistics->learnProgress = $this->getLearnProgress($id);
         $userModel->statistics->quizProgress = $this->getQuizProgress($id);
@@ -116,5 +121,75 @@ class UserRepository extends Repository {
             $rezArray[] = $rez;
         }
         return $rezArray;
+    }
+
+
+    public function signup ( string $email, string $name, string $surname, string $username, string $password ) : array {
+        $statement = $this->pdo->prepare(
+            "INSERT INTO users (email, name, surname, username, password ) ".
+                        "VALUES (:email, :name, :surname, :username, :password)");
+        try {
+            $statement->execute(
+                [
+                    ":email" => $email,
+                    ":name" => $name,
+                    ":surname" => $surname,
+                    ":username" => $username,
+                    ":password" => $password
+                ]
+            );
+        } catch ( PDOException $exception ) {
+            if ( $exception->getCode() == 23505 ) {
+                if ( str_contains ( $exception->getMessage(), "email") ) {
+                    return [
+                        "ok" => false,
+                        "error" => "The email already exists"
+                    ];
+                } else {
+                    if ( str_contains ( $exception->getMessage(), "username") ) {
+                        return [
+                            "ok" => false,
+                            "internal" => false,
+                            "error" => "The username already exists"
+                        ];
+                    }
+                }
+            }
+            return [
+                "ok" => false,
+                "internal" => true
+            ];
+        }
+
+        return ["ok" => true];
+    }
+
+
+    public function login ( string $username) : array {
+        $statement = $this->pdo->prepare("SELECT * FROM users WHERE username=:username");
+        try {
+            $statement->execute(
+                [
+                    ":username" => $username
+                ]
+            );
+        } catch ( PDOException $exception ) {
+            return [
+                "ok" => false,
+                "error" => "Internal server error"
+            ];
+        }
+        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+        if ( ! $fetchArray ) {
+            return [
+                "ok" => true,
+                "user" => null
+            ];
+        }
+
+        return [
+            "ok" => true,
+            "user" => $this->createModel($fetchArray)
+        ];
     }
 }

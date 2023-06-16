@@ -1,5 +1,11 @@
 <?php
 
 class Model {
-    public $id;
+    public int $id;
+
+    public function __toString(): string
+    {
+        return "id={$this->id}";
+    }
+
 }

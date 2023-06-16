@@ -16,9 +16,9 @@ class UserStatistics implements Stringable, JsonSerializable {
         quizProgress={$this->quizProgress},
         learnCountWeekly={$this->learnCountWeekly},
         quizCountWeekly={$this->quizCountWeekly},
-        statsByCategory=".implode($this->categoryStats).
-        "learWeeklyStats=".implode($this->learnWeeklyStats).
-        "quizWeeklyStats=".implode($this->quizWeeklyStats);
+        statsByCategory=".json_encode($this->categoryStats).
+        "learWeeklyStats=".json_encode($this->learnWeeklyStats).
+        "quizWeeklyStats=".json_encode($this->quizWeeklyStats);
     }
 
     public function jsonSerialize(): array
