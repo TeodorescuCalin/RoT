@@ -6,18 +6,14 @@ class Request {
     public array $headers;
     public array $query;
     public string $body;
+    public array $cookies;
+    public array $pathVariables;
 
     public function __construct () {
         $this->headers = getallheaders();
         $this->query = $_GET;
         $this->body = file_get_contents('php://input');
-    }
-
-    public function __toString(): string
-    {
-        return "Header:".implode("<br>", $this->headers)
-            ."<br>Query:".implode("<br>", $this->query)
-            ."<br>Body:".$this->body;
+        $this->cookies = $_COOKIE;
     }
 
     public function contentTypeIsJSON () : bool {

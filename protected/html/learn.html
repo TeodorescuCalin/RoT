@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Learn</title>
+
+    <script src="https://kit.fontawesome.com/a4b0c75974.js" crossorigin="anonymous"></script>
+
+    <script src="/public/javascript/learn/buttonActions.js"></script>
+    <link rel="stylesheet" href="/public/css/learn.css">
+</head>
+<body>
+    <header id="navigationBar"></header>
+    <div id="questionContainer" class="questionContainer">
+        <input id="questionId" type="hidden">
+        <div id="questionDescription" class="questionContainer__description">
+            <div id="questionTitle" class="questionContainer__description__title"></div>
+            <div id="placeInformation" class="questionContainer__description__image" vocab="https://schema.org/" typeof="Place">
+                <iframe id="questionImage"> </iframe>
+            </div>
+        </div>
+        <div id="questionAnswersBlock">
+        </div>
+        <div id="formButtonsBlock" class="formButtonsBlock">
+            <button id="nextQuestionButton" class="formButtonsBlock__button formButtonsBlock__button--yellow" onclick="nextQuestion()"> ➔ Urmatoarea intrebare </button>
+            <button id="sendAnswerButton" class="formButtonsBlock__button formButtonsBlock__button--green" onclick="checkAnswers()"> ☑ Trimite raspunsul </button>
+        </div>
+        <div id="questionExplanation"></div>
+    </div>
+
+
+    <script src="/public/javascript/navBar/loadNavbar.js"></script>
+    <script>
+        loadNavbar("");
+    </script>
+    <script src="/public/javascript/learn/generatePage.js"> </script>
+</body>
+</html>

@@ -165,7 +165,7 @@ class UserRepository extends Repository {
     }
 
 
-    public function login ( string $username) : array {
+    public function getByUsername ( string $username ) : UserModel | null {
         $statement = $this->pdo->prepare("SELECT * FROM users WHERE username=:username");
         try {
             $statement->execute(
@@ -173,23 +173,21 @@ class UserRepository extends Repository {
                     ":username" => $username
                 ]
             );
-        } catch ( PDOException $exception ) {
-            return [
-                "ok" => false,
-                "error" => "Internal server error"
-            ];
-        }
-        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
-        if ( ! $fetchArray ) {
-            return [
-                "ok" => true,
-                "user" => null
-            ];
+        } catch ( PDOException ) {
+            return null;
         }
 
-        return [
-            "ok" => true,
-            "user" => $this->createModel($fetchArray)
-        ];
+        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ( ! $fetchArray ) {
+            return null;
+        }
+
+        return $this->createModel($fetchArray);
+    }
+
+
+    public function updateLoginStatus ( UserModel $userModel ) : void {
+        $this->pdo->exec("UPDATE users SET last_login_date=current_date WHERE id=".$userModel->id);
     }
 }

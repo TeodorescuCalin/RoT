@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+	<meta charset="UTF-8">
+
+	<title> Înregistrare </title>
+
+	<link rel="stylesheet" type="text/css" href="/public/css/userForms/register.css">
+	<script src="https://kit.fontawesome.com/a4b0c75974.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	<header id="navigationBar"></header>
+	<div class="registerBlock formBlock">
+		<h1>Înregistrare</h1>
+
+			<div class="form-container">
+                <div class="inputContainer">
+					<label for="email"><b>Email</b></label>
+					<i class ="fas fa-envelope"></i>
+					<input type="text" placeholder="Introdu adresa de mail" id="email" required>
+				</div>
+
+				<div class="inputContainer">
+					<label for="surname"><b>Nume</b></label>
+					<i class ="fas fa-user"></i>
+					<input type="text" placeholder="Introdu numele" id="surname" required>
+				</div>
+
+				<div class="inputContainer">
+					<label for="name"><b>Prenume</b></label>
+					<i class ="fas fa-user"></i>
+					<input type="text" placeholder="Introdu prenumele" id="name" required>
+				</div>
+
+				<div class="inputContainer">
+					<label for="uname"><b>Nume utilizator</b></label>
+					<i class ="fas fa-signature"></i>
+					<input type="text" placeholder="Introdu numele de utilizator" id="uname" required>
+				</div>
+
+				<div class="inputContainer">
+					<label for="psw"><b>Parolă</b></label>
+					<i class ="fas fa-lock"></i>
+					<input type="password" placeholder="Introdu parola" id="psw" required>
+				</div>
+				<button type="submit">Înregistrare</button>
+			</div>
+			<div class="oldAccount">Ai deja un cont? <a href="login"> Autentifică-te</a></div>
+	</div>
+
+	<script src="/public/javascript/navBar/loadNavbar.js"></script>
+	<script>
+		loadNavbar("");
+	</script>
+</body>
+</html>

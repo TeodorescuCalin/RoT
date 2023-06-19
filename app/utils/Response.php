@@ -34,7 +34,7 @@ class Response {
             $this->body = json_encode(
                 [
                     "ok" => true,
-                    "results" => $fields
+                    "data" => $fields
                 ]
             );
         } else {
