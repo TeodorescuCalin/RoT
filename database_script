@@ -1,0 +1,572 @@
+CREATE TABLE users(
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(64) UNIQUE NOT NULL,
+    name VARCHAR(32) NOT NULL,
+    surname VARCHAR(32) NOT NULL,
+    username VARCHAR(32) UNIQUE NOT NULL,
+    password VARCHAR(512) NOT NULL,
+    created_at timestamp DEFAULT current_timestamp,
+    updated_at timestamp DEFAULT current_timestamp,
+    last_login_date DATE DEFAULT current_date,
+    logged BOOLEAN NOT NULL DEFAULT false,
+    admin BOOLEAN NOT NULL DEFAULT false
+);
+CREATE TRIGGER refresh_updated_at_users AFTER UPDATE ON users FOR EACH ROW EXECUTE FUNCTION updated_at_trigger_function();
+
+CREATE TYPE question_type AS ENUM ( 'multipleChoice', 'count');
+CREATE TYPE question_category AS ENUM ( 'mechanics', 'firstAid', 'signs', 'police', 'speed', 'priority', 'fines', 'general');
+CREATE TABLE learn_questions(
+    id SERIAL PRIMARY KEY,
+    text VARCHAR(512) NOT NULL,
+    image_path VARCHAR(512),
+    answer_count SMALLINT NOT NULL,
+    explanation VARCHAR(1024),
+    type question_type NOT NULL,
+    category question_category NOT NULL DEFAULT 'general',
+
+    CONSTRAINT positive_answer_count CHECK ( answer_count > 0)
+);
+
+
+CREATE TABLE quiz_questions(
+    id SERIAL PRIMARY KEY,
+    text VARCHAR(512) NOT NULL,
+    image_path VARCHAR(512)
+);
+
+
+CREATE TABLE quiz(
+    id SERIAL PRIMARY KEY
+);
+
+
+CREATE TABLE answers(
+    id SERIAL PRIMARY KEY,
+    text VARCHAR(512) UNIQUE NOT NULL
+);
+
+
+CREATE TABLE learn_questions_answers (
+    id_question INTEGER,
+    id_answer INTEGER,
+    count SMALLINT,
+
+    CONSTRAINT mixed_id_learn_question_answers_pk PRIMARY KEY ( id_question, id_answer ),
+    CONSTRAINT id_question_ref_learn_question FOREIGN KEY ( id_question ) REFERENCES learn_questions(id) ON DELETE CASCADE,
+    CONSTRAINT id_answer_ref_learn_answer FOREIGN KEY ( id_answer ) REFERENCES answers(id) ON DELETE CASCADE,
+    CONSTRAINT positive_answer_count CHECK ( count IS NULL OR count > 0 )
+);
+ALTER TABLE learn_questions_answers ADD COLUMN category question_category NOT NULL DEFAULT 'general';
+
+
+CREATE TABLE quiz_questions_answers (
+    id_quiz INTEGER,
+    id_question INTEGER,
+    id_answer INTEGER,
+    correct BOOLEAN NOT NULL,
+
+    CONSTRAINT mixed_id_quiz_question_answers_pk PRIMARY KEY ( id_quiz, id_question, id_answer ),
+    CONSTRAINT id_question_ref_quiz_question FOREIGN KEY ( id_question ) REFERENCES quiz_questions(id) ON DELETE CASCADE,
+    CONSTRAINT id_answer_ref_quiz_answer FOREIGN KEY ( id_answer ) REFERENCES answers(id) ON DELETE CASCADE
+);
+
+
+CREATE TYPE learn_question_status AS ENUM ( 'failed', 'passed', 'skipped' );
+CREATE TABLE user_learn_questions (
+    id_user INTEGER,
+    id_question INTEGER,
+    status learn_question_status NOT NULL,
+    updated_at timestamp DEFAULT current_timestamp,
+
+    CONSTRAINT mixed_id_user_learn_questions_pk PRIMARY KEY ( id_user, id_question ),
+    CONSTRAINT id_user_ref_users FOREIGN KEY ( id_user ) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT id_question_ref_learn_question FOREIGN KEY ( id_question ) REFERENCES learn_questions(id) ON DELETE CASCADE
+);
+CREATE TRIGGER refresh_updated_at_user_learn_question AFTER UPDATE ON user_learn_questions EXECUTE FUNCTION updated_at_trigger_function();
+
+
+CREATE TYPE quiz_status AS ENUM ( 'passed', 'failed', 'perfect' );
+CREATE TABLE user_quizzes (
+    id_user INTEGER,
+    id_quiz INTEGER,
+    status quiz_status NOT NULL,
+    duration INTEGER,
+    correct_answers INTEGER,
+    updated_at timestamp DEFAULT current_timestamp,
+
+    CONSTRAINT mixed_id_user_quiz_pk PRIMARY KEY ( id_user, id_quiz ),
+    CONSTRAINT id_user_ref_users FOREIGN KEY ( id_user ) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT id_quiz_ref_quiz FOREIGN KEY ( id_quiz ) REFERENCES quiz(id) ON DELETE CASCADE
+);
+CREATE TRIGGER refresh_updated_at_user_quizzes AFTER UPDATE ON user_quizzes EXECUTE FUNCTION updated_at_trigger_function();
+
+
+CREATE TABLE tips (
+    id_tip SERIAL PRIMARY KEY,
+    text VARCHAR(512) NOT NULL
+);
+
+
+CREATE OR REPLACE FUNCTION updated_at_trigger_function() RETURNS TRIGGER AS
+$$
+    BEGIN
+        new.updated_at = current_timestamp;
+        RETURN new;
+    END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION get_top_learning_users() RETURNS SETOF users AS
+$BODY$
+BEGIN
+    RETURN QUERY SELECT *
+                 FROM users
+                WHERE id IN (
+                SELECT id_user
+                    FROM user_learn_questions
+                    WHERE status='passed'
+                    GROUP BY id_user
+                    ORDER BY COUNT(*)
+                    LIMIT 5
+                );
+    RETURN;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION get_top_quizzing_users() RETURNS SETOF users AS
+$BODY$
+BEGIN
+    RETURN QUERY SELECT *
+                 FROM users
+                WHERE id IN (
+                        SELECT id_user
+                        FROM user_quizzes
+                        WHERE status='passed' OR status='perfect'
+                        GROUP BY id_user
+                        ORDER BY COUNT(*)
+                        LIMIT 5
+                    );
+    RETURN;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE TYPE learn_question_with_answer AS (
+    id INTEGER,
+    text VARCHAR(512),
+    image_path VARCHAR(512),
+    explanation VARCHAR(1024),
+    type question_type,
+    answer_list answers ARRAY
+);
+
+CREATE OR REPLACE FUNCTION get_user_learning_question(p_user_id users.id%TYPE) RETURNS learn_questions.id%TYPE AS
+$BODY$
+DECLARE
+    v_result learn_questions.id%TYPE;
+BEGIN
+    SELECT id INTO v_result
+            FROM learn_questions
+            WHERE id NOT IN (
+                SELECT id_question
+                FROM user_learn_questions
+                WHERE id_user=p_user_id
+            )
+            LIMIT 1;
+    IF NOT FOUND THEN
+        SELECT id_question INTO v_result
+            FROM user_learn_questions
+            WHERE id_user=p_user_id AND status='failed' OR status='skipped'
+            ORDER BY updated_at
+            LIMIT 1;
+        IF NOT FOUND THEN
+            SELECT id_question INTO v_result
+                    FROM user_learn_questions
+                    WHERE id_user=p_user_id
+                    ORDER BY updated_at
+                    LIMIT 1;
+        END IF;
+    END IF;
+
+    RETURN v_result;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_wrong_answers_for_learn_question(p_question_id learn_questions.id%TYPE) RETURNS SETOF answers AS
+$BODY$
+DECLARE
+    v_correct_answer_count SMALLINT;
+    v_total_answer_count SMALLINT;
+BEGIN
+    SELECT COUNT(*) INTO v_correct_answer_count FROM learn_questions_answers WHERE id_question=p_question_id;
+    SELECT answer_count INTO v_total_answer_count FROM learn_questions WHERE id=p_question_id;
+    RETURN QUERY SELECT * FROM answers
+    WHERE id NOT IN ( SELECT id_answer FROM learn_questions_answers WHERE id_question=p_question_id )
+    ORDER BY random()
+    LIMIT (v_total_answer_count - v_correct_answer_count);
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+INSERT INTO learn_questions_answers(id_question, id_answer) VALUES (71, 31);
+INSERT INTO learn_questions_answers(id_question, id_answer) VALUES (71, 35);
+
+CREATE OR REPLACE FUNCTION get_random_tip() RETURNS tips.text%TYPE AS
+$BODY$
+DECLARE
+    random_tip tips.text%TYPE;
+BEGIN
+    SELECT text INTO random_tip
+    FROM tips
+    ORDER BY random()
+    LIMIT 1;
+
+    RETURN random_tip;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_learn_progress(p_user_id users.id%TYPE) RETURNS FLOAT AS
+$BODY$
+DECLARE
+    passed INTEGER;
+    total INTEGER;
+    progress FLOAT;
+BEGIN
+    SELECT COUNT(*) INTO total
+    FROM learn_questions;
+
+    SELECT COUNT(*) INTO passed
+    FROM user_learn_questions
+    WHERE id_user = p_user_id AND status = 'passed';
+
+    IF ( total = 0 ) THEN
+        total = 1;
+    END IF;
+    progress := passed * 100 / total;
+
+    RETURN progress;
+END;
+$BODY$ language plpgsql;
+
+SELECT get_learn_progress(1);
+
+
+
+
+CREATE OR REPLACE FUNCTION get_quizzes_progress(p_user_id users.id%TYPE) RETURNS FLOAT AS
+$BODY$
+DECLARE
+    passed INTEGER;
+    total INTEGER;
+    progress FLOAT;
+BEGIN
+    SELECT COUNT(*) INTO total
+    FROM quiz;
+
+    SELECT COUNT(*) INTO passed
+    FROM user_quizzes
+    WHERE id_user = p_user_id AND status in ('passed', 'perfect');
+
+
+    IF ( total = 0 ) THEN
+        total = 1;
+    END IF;
+    progress := passed * 100 / total;
+
+    RETURN progress;
+END;
+$BODY$ language plpgsql;
+
+
+CREATE TYPE user_question_category_stats AS (
+    passed INT,
+    failed INT,
+    progress INT
+);
+
+
+CREATE OR REPLACE FUNCTION get_question_category_stats(p_user_id users.id%TYPE, p_category learn_questions.category%TYPE) RETURNS user_question_category_stats AS
+$BODY$
+DECLARE
+    passed INTEGER;
+    failed INTEGER;
+    total INTEGER;
+    progress INTEGER;
+    user_stats user_question_category_stats;
+BEGIN
+    SELECT COUNT(*) INTO total
+    FROM learn_questions
+    WHERE category = p_category;
+
+    SELECT COUNT(*) INTO passed
+    FROM user_learn_questions u JOIN learn_questions l on u.id_question = l.id
+    WHERE u.id_user = p_user_id and u.status = 'passed' and l.category = p_category;
+
+    SELECT COUNT(*) INTO failed
+    FROM user_learn_questions u JOIN learn_questions l on u.id_question = l.id
+    WHERE u.id_user = p_user_id and u.status = 'failed' and l.category = p_category;
+
+    IF ( total = 0 ) THEN
+        total = 1;
+    END IF;
+    progress := (failed + passed) * 100 / total;
+
+    SELECT passed, failed, progress INTO user_stats;
+    RETURN user_stats;
+END;
+$BODY$ language plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_stats_on_all_categories(p_user_id users.id%TYPE) RETURNS TABLE(count BIGINT, category question_category) AS
+$BODY$
+BEGIN
+    RETURN QUERY SELECT COUNT(*), lq.category
+        FROM user_learn_questions
+        JOIN learn_questions lq on lq.id = user_learn_questions.id_question
+        WHERE user_learn_questions.id_user = p_user_id
+        GROUP BY (lq.category);
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_user_learn_count_last_week(p_user_id users.id%TYPE) RETURNS INTEGER AS
+$BODY$
+DECLARE
+    count INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO count
+    FROM user_learn_questions
+    WHERE id_user = p_user_id AND status != 'skipped' AND updated_at >= CURRENT_TIMESTAMP - INTERVAL '7 days';
+
+    RETURN count;
+END;
+$BODY$ language plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_user_quiz_count_last_week(p_user_id users.id%TYPE) RETURNS INTEGER AS
+$BODY$
+DECLARE
+    count INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO count
+    FROM user_quizzes
+    WHERE id_user = p_user_id AND updated_at >= CURRENT_TIMESTAMP - INTERVAL '7 days';
+
+    RETURN count;
+END;
+$BODY$ language plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION insert_random_learn_questions() RETURNS void AS
+$BODY$
+DECLARE
+    v_id INTEGER;
+    v_text VARCHAR(512);
+    v_image_path VARCHAR(512);
+    v_answer_count INTEGER;
+    v_explanation VARCHAR(512);
+    v_type question_type;
+    v_category question_category;
+BEGIN
+    FOR i IN 1..100 LOOP
+        v_id := i;
+        v_text := 'Intrebarea ' || i;
+        v_explanation := 'Explicatia pentru intrebarea ' || i;
+        v_type := 'multipleChoice';
+        SELECT CASE(i - 1) % 8
+            WHEN 0 THEN 'mechanics'
+            WHEN 1 THEN 'firstAid'
+            WHEN 2 THEN 'signs'
+            WHEN 3 THEN 'police'
+            WHEN 4 THEN 'speed'
+            WHEN 5 THEN 'priority'
+            WHEN 6 THEN 'fines'
+            WHEN 7 THEN 'general'
+        END INTO v_category;
+        v_answer_count := 1;
+
+        INSERT INTO learn_questions(id, text, image_path, answer_count, explanation, type, category)
+        VALUES (v_id, v_text, v_image_path, v_answer_count, v_explanation, v_type, v_category);
+    END LOOP;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insert_random_quizzes() RETURNS void AS
+$BODY$
+DECLARE
+BEGIN
+    FOR i IN 1..25 LOOP
+
+        INSERT INTO quiz VALUES(i);
+    END LOOP;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION insert_random_answers() RETURNS void AS
+$BODY$
+DECLARE
+BEGIN
+    FOR i IN 1..30 LOOP
+
+        INSERT INTO answers(text) VALUES('Raspunsul' || i);
+    END LOOP;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION insert_learn_questions_for_user_with_probability(p_user_id users.id%TYPE, p_probability FLOAT, p_question_count INT) RETURNS void AS
+$BODY$
+DECLARE
+    v_status learn_question_status;
+    v_updated_at TIMESTAMP;
+    v_start_date TIMESTAMP;
+BEGIN
+    FOR i IN 1..p_question_count LOOP
+        if (random() < p_probability) then
+            v_status := 'passed';
+        else
+            v_status := 'failed';
+        end if;
+
+        v_start_date := CURRENT_TIMESTAMP - INTERVAL '28 DAYS';
+        v_updated_at := v_start_date + random() * (CURRENT_TIMESTAMP - v_start_date);
+
+        INSERT INTO user_learn_questions(id_user, id_question, status, updated_at)
+        VALUES (p_user_id, i, v_status, v_updated_at);
+    END LOOP;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION insert_quizzes_for_user_with_probability(p_user_id users.id%TYPE, p_probability FLOAT, p_quiz_count INT) RETURNS void AS
+$BODY$
+DECLARE
+    v_status quiz_status;
+    v_updated_at TIMESTAMP;
+    v_start_date TIMESTAMP;
+BEGIN
+    FOR i IN 1..p_quiz_count LOOP
+        if (random() < p_probability) then
+            v_status := 'passed';
+        else
+            v_status := 'failed';
+        end if;
+
+        v_start_date := CURRENT_TIMESTAMP - INTERVAL '28 DAYS';
+        v_updated_at := v_start_date + random() * (CURRENT_TIMESTAMP - v_start_date);
+
+        INSERT INTO user_quizzes(id_user, id_quiz, status, updated_at, duration, correct_answers)
+        VALUES (p_user_id, i, v_status, v_updated_at, 90, 20);
+    END LOOP;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION message_learn_quiz(p_user_id users.id%TYPE) RETURNS VARCHAR AS
+$BODY$
+DECLARE
+    v_learn_passed_count INTEGER;
+    v_quiz_passed_count INTEGER;
+    v_message VARCHAR(512) := 'Progresul tau este unul constant. Tine-o tot asa';
+    v_low_learn INTEGER;
+    v_high_learn INTEGER;
+    v_low_quiz INTEGER;
+    v_high_quiz INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO v_learn_passed_count
+    FROM user_learn_questions
+    WHERE id_user = p_user_id AND status = 'passed';
+
+    SELECT COUNT(*) INTO v_quiz_passed_count
+    FROM user_quizzes
+    WHERE id_user = p_user_id AND status in ('passed', 'perfect');
+
+    v_low_learn := 30;
+    v_high_learn := 75;
+    v_low_quiz := 5;
+    v_high_quiz := 15;
+
+    if (v_learn_passed_count < v_low_learn) then
+        if (v_quiz_passed_count < v_low_quiz) then
+            v_message := 'Trebuie sa inveti mai mult daca vrei sa obtii permisul. Revizuieste legislatia si semnele de circulatie, apoi rezolva mai multe intrebari.';
+        else
+            if (v_quiz_passed_count > v_high_quiz) then
+                v_message := 'Te descurci destul de bine la chestionare. Totusi, ar fi bine sa parcurgi mai multe intrebari inainte de a incepe chsetionarele.';
+            end if;
+        end if;
+    else
+        if (v_learn_passed_count > v_high_learn) then
+            if (v_quiz_passed_count < v_low_quiz) then
+                v_message := 'Ai rezolvat o mare parte din intrebari, ar trebui sa te apuci sa rezolvi si chestionarele.';
+            else
+                if (v_quiz_passed_count > v_high_quiz) then
+                    v_message := 'Esti foarte bine pregatit. Poti sta relax, permisul te asteapta!';
+                end if;
+            end if;
+        end if;
+    end if;
+    RETURN v_message;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE TYPE weekly_stat AS (
+    week INT,
+    count BIGINT
+);
+
+
+CREATE OR REPLACE FUNCTION get_learn_question_stats_by_week(p_user_id users.id%TYPE) RETURNS SETOF weekly_stat AS
+$BODY$
+DECLARE
+    v_record weekly_stat;
+BEGIN
+    SELECT 1, COUNT(*) INTO v_record FROM user_learn_questions
+    WHERE id_user=p_user_id AND user_learn_questions.updated_at >= current_timestamp - INTERVAL '28 DAYS' AND user_learn_questions.updated_at <= current_timestamp - INTERVAL '21 DAYS';
+    RETURN NEXT v_record;
+
+    SELECT 2, COUNT(*) INTO v_record FROM user_learn_questions
+    WHERE id_user=p_user_id AND user_learn_questions.updated_at >= current_timestamp - INTERVAL '21 DAYS' AND user_learn_questions.updated_at <= current_timestamp - INTERVAL '14 DAYS';
+    RETURN NEXT v_record;
+
+    SELECT 3, COUNT(*) INTO v_record FROM user_learn_questions
+    WHERE id_user=p_user_id AND user_learn_questions.updated_at >= current_timestamp - INTERVAL '14 DAYS' AND user_learn_questions.updated_at <= current_timestamp - INTERVAL '7 DAYS';
+    RETURN NEXT v_record;
+
+    SELECT 4, COUNT(*) INTO v_record FROM user_learn_questions
+    WHERE id_user=p_user_id AND user_learn_questions.updated_at >= current_timestamp - INTERVAL '7 DAYS' AND user_learn_questions.updated_at <= current_timestamp;
+    RETURN NEXT v_record;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_quiz_stats_by_week(p_user_id users.id%TYPE) RETURNS SETOF weekly_stat AS
+$BODY$
+DECLARE
+    v_record weekly_stat;
+BEGIN
+    SELECT 1, COUNT(*) INTO v_record FROM user_quizzes
+    WHERE id_user=p_user_id AND user_quizzes.updated_at >= current_timestamp - INTERVAL '28 DAYS' AND user_quizzes.updated_at <= current_timestamp - INTERVAL '21 DAYS';
+    RETURN NEXT v_record;
+
+    SELECT 2, COUNT(*) INTO v_record FROM user_quizzes
+    WHERE id_user=p_user_id AND user_quizzes.updated_at >= current_timestamp - INTERVAL '21 DAYS' AND user_quizzes.updated_at <= current_timestamp - INTERVAL '14 DAYS';
+    RETURN NEXT v_record;
+
+    SELECT 3, COUNT(*) INTO v_record FROM user_quizzes
+    WHERE id_user=p_user_id AND user_quizzes.updated_at >= current_timestamp - INTERVAL '14 DAYS' AND user_quizzes.updated_at <= current_timestamp - INTERVAL '7 DAYS';
+    RETURN NEXT v_record;
+
+    SELECT 4, COUNT(*) INTO v_record FROM user_quizzes
+    WHERE id_user=p_user_id AND user_quizzes.updated_at >= current_timestamp - INTERVAL '7 DAYS' AND user_quizzes.updated_at <= current_timestamp;
+    RETURN NEXT v_record;
+END;
+$BODY$ LANGUAGE plpgsql;

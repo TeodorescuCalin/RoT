@@ -3,7 +3,7 @@
 require_once 'Database.php';
 abstract class Repository extends Database {
 
-    abstract protected function getTableName();
+    abstract protected function getTableName() : string;
 
     public function __construct() {
         parent :: __construct();

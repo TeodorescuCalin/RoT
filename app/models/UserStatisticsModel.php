@@ -1,6 +1,8 @@
 <?php
 
-class UserStatistics implements Stringable, JsonSerializable {
+require_once('Model.php');
+
+class UserStatisticsModel extends Model implements Stringable, JsonSerializable {
 
     public float $learnProgress;
     public float $quizProgress;

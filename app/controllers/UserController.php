@@ -1,6 +1,7 @@
 <?php
 
 require_once ( __DIR__."/../repositories/UserRepository.php" );
+require_once ( __DIR__."/../repositories/UserStatisticRepository.php" );
 require_once ( __DIR__."/AuthController.php" );
 
 class UserController extends Controller {
@@ -166,6 +167,9 @@ class UserController extends Controller {
 
         $userRepository = new UserRepository();
         $userModel = $userRepository->getByUsername($username);
+
+        $userStatisticsRepository = new UserStatisticRepository();
+        $userStatisticModel = $userStatisticsRepository->getById($userModel->id);
         if ( $userModel == null ) {
             $response->encodeError(404, "User does not exist");
             return $response;
@@ -176,7 +180,7 @@ class UserController extends Controller {
                 200,
                 [
                     'username' => $userModel->username,
-                    'statistics' => $userModel->statistics
+                    'statistics' => $userStatisticModel
                 ]
             );
         } else {

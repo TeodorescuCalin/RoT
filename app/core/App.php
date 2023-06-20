@@ -28,6 +28,7 @@ class App {
         $this->addRoute ( "GET", "profile/{username}", "UserController@getProfile" );
         $this->addRoute ( "GET", "user_info", "UserController@getUserInfo" );
         $this->addRoute ( "GET", "learn", "LearnController@getPage" );
+        $this->addRoute ( "GET", "learn/question", "LearnController@getQuestion" );
     }
 
     public function parseURL() : void {
