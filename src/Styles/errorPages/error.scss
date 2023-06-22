@@ -1,0 +1,34 @@
+@import "../userForms/formBase";
+
+.errorContainer {
+    position: relative;
+    margin: 200px auto auto;
+
+    h1,
+    h2,
+    p {
+        color: white;
+        text-align: center;
+    }
+
+    p {
+        font-size: 20px;
+    }
+
+    i {
+        font-size: 100px;
+    }
+
+    a:link {
+        color: $primary-color;
+        text-decoration: none;
+      }
+    
+      a:hover {
+        text-decoration: underline;
+      }
+    
+      a:visited {
+        color: $primary-color;
+      }
+}
