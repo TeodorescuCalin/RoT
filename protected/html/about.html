@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Scholarly HTML</title>
+    <link rel="stylesheet" href="/public/css/about.css">
+</head>
+<body prefix="schema: https://schema.org">
+<header id="navigationBar"></header>
+<section id="introduction" role="doc-introduction">
+    <h2>Introducere</h2>
+    <p>
+        Romanian traffic signs tutor este un website destinat învățării legislației și a semnelor rutiere din România.
+        Pe lângă acestea, utilizatorului îi sunt disponibile semnele rutiere din 5 alte țări:
+        Anglia, Franța, Italia, Turcia și Islanda
+    </p>
+</section>
+<section id="utilizedTechnologies" role="doc-chapter">
+    <h2>Tehnologii utilizate</h2>
+    <p>
+        Pentru realizarea proiectului au fost utilizate SCSS și JavaScript pentru realizarea design-ului responsiv.
+        Proiectul a fost realizat conform metodologiei BEM. Majoritatea imaginilor utilizate sunt în format vectorizat
+        pentru a asigura păstrarea calității.
+    </p>
+    <p>
+        Paginile cu conținut masiv(paginile pentru semnele rutiere) au fost generate prin utilizarea unui scrip de Python
+        care a extras informațiile de pe site-urile oficiale într-un JSON, iar apoi acestea au fost transformate în
+        HTML-uri prin folosirea unui program Java.
+    </p>
+</section>
+<section id="authorList" typeof="sa:AuthorList">
+    <h2>Autori</h2>
+    <ul>
+        <li typeof="sa:ContributorRole" property="schema:author">
+            <span typeof="schema:Person" resource="https://www.facebook.com/adrian.aprofirei">
+                <meta property="schema:givenName" content="Adrian">
+                <meta property="schema:additionalName" content="Mihai">
+                <meta property="schema:familyName" content="Aprofirei">
+                <a property="schema:name" href="https://github.com/adrianaprofirei">Aprofirei Adrian-Mihai</a>
+            </span>
+        </li>
+        <li typeof="sa:ContributorRole" property="schema:author">
+            <a typeof="schema:Person" resource="https://www.facebook.com/TeodorescuCalin">
+                <meta property="schema:givenName" content="Călin">
+                <meta property="schema:additionalName" content="Ioan">
+                <meta property="schema:familyName" content="Teodorescu">
+                <a property="schema:name" href="https://github.com/TeodorescuCalin">Teodorescu Călin-Ioan</a>
+            </a>
+        </li>
+        <li typeof="sa:ContributorRole" property="schema:author">
+            <span typeof="schema:Person" resource="https://www.facebook.com/StefanPaulet">
+                <meta property="schema:givenName" content="Ștefan">
+                <meta property="schema:additionalName" content="Tudor">
+                <meta property="schema:familyName" content="Păuleț">
+                <a property="schema:name" href="http://github.com/StefanPaulet">Păuleț Tudor-Ștefan</a>
+            </span>
+        </li>
+    </ul>
+</section>
+<section id="bibliography" role="doc-bibliography">
+    <h2>Bibliografie</h2>
+    <ul>
+        <li><a href="https://stackoverflow.com/">Stack overflow</a></li>
+        <li><a href="https://www.w3schools.com/">W3Schools</a></li>
+        <li><a href="https://victorvlad19.github.io/web/">Site Web laborator</a></li>
+        <li><a href="https://profs.info.uaic.ro/~busaco/teach/courses/web/">Site Web curs</a></li>
+        <li><a href="https://w3c.github.io/scholarly-html/">HTML Scholarly</a></li>
+        <li><a href="https://ro.wikipedia.org/wiki/Indicatoarele_rutiere_din_Rom%C3%A2nia">Semne de circulație</a></li>
+        <li><a href="https://schema.org/">Schema org</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">Mozilla developer</a></li>
+        <li><a href="https://www.google.com/maps">Google maps</a></li>
+    </ul>
+</section>
+<script src="/public/javascript/navBar/load.js"></script>
+<script>
+    loadNavbar();
+</script>
+</body>
+</html>

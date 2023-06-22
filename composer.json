@@ -1,0 +1,17 @@
+{
+    "require": {
+        "firebase/php-jwt": "^6.7",
+      "ext-pdo": "*"
+    },
+    "autoload": {
+        "files": [
+            "vendor/firebase/php-jwt/src/BeforeValidException.php",
+            "vendor/firebase/php-jwt/src/CachedKeySet.php",
+            "vendor/firebase/php-jwt/src/ExpiredException.php",
+            "vendor/firebase/php-jwt/src/JWK.php",
+            "vendor/firebase/php-jwt/src/JWT.php",
+            "vendor/firebase/php-jwt/src/Key.php",
+            "vendor/firebase/php-jwt/src/SignatureInvalidException.php"
+        ]
+    }
+}

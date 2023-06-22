@@ -3,7 +3,7 @@
 require_once 'Database.php';
 abstract class Repository extends Database {
 
-    abstract protected function getTableName();
+    abstract protected function getTableName() : string;
 
     public function __construct() {
         parent :: __construct();
@@ -13,7 +13,11 @@ abstract class Repository extends Database {
 
     public function getAll() : array {
         $statement = $this->pdo->prepare("SELECT * FROM {$this->getTableName()}");
-        $statement->execute();
+        try {
+            $statement->execute();
+        } catch ( PDOException ) {
+            return [];
+        }
 
         $resultArray = [];
         foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $fetchArray ) {
@@ -25,9 +29,13 @@ abstract class Repository extends Database {
 
     public function getById($id) : Model | null {
         $statement = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE id = (:id)");
-        $statement->execute(
-            ['id' => $id]
-        );
+        try {
+            $statement->execute(
+                ['id' => $id]
+            );
+        } catch ( PDOException ) {
+            return null;
+        }
 
         return $this->createModel( $statement->fetch(PDO::FETCH_ASSOC) );
     }
