@@ -1,0 +1,64 @@
+@import "userForms/formBase";
+
+.loginButton {
+    visibility: hidden;
+}
+
+.buttonsContainer,
+.userButtonContainer {
+    display: flex;
+    align-items: center;
+    height: 100px;
+
+    #quizButton,
+    #learnButton,
+    #userButton {
+        width: 20%;
+        height: 100%;
+
+        background-color: $backgroundColor;
+        color: $primary-color;
+        padding: 14px 20px;
+        margin: 15px 0;
+        border: 4px solid $primary-color;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+
+        &:hover {
+            background-color: darken($background-color, 3%);
+        }
+    }
+
+    i {
+        vertical-align: auto;
+        font-size: 70px;
+    }
+    
+    #aLearn {
+        margin-right: 5%;
+        margin-left: 20%;
+        width: 100%;
+    }
+
+    #aQuiz {
+        margin-left: 5%;
+        margin-right: 20%;
+        width: 100%;
+    }
+
+    #aUser {
+        width: 25%;
+        margin: 50px auto auto;
+    }
+}
+
+h1 {
+    width: 60%;
+    margin-left: 20%;
+    text-align: center;
+    color: $primary-color;
+    margin-top: 10%;
+    margin-bottom: 5%;
+}
+

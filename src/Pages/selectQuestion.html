@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+	<meta charset="UTF-8">
+
+	<title> Recuperare parolă </title>
+
+	<link rel="stylesheet" type="text/css" href="../Styles/selectQuestion.css">
+	<script src="https://kit.fontawesome.com/a4b0c75974.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	<header id="navigationBar"></header>
+	<div class="formBlock">
+		<h1>Actualizare întrebare</h1>
+		<h2>Introdu numărul întrebării pe care dorești să o modifici</h2>
+		<div class="form-container">
+			<div class="inputContainer">
+				<label><b>Numărul întrebării</b></label>
+				<i class ="fa fa-question-circle"></i>
+				<input type="text" placeholder="Introdu numărul corespunzător" id="questionNumber" required>
+			</div>
+
+			<button onclick="loadQuestionNumber('modifyQuestion.html')">Caută</button>
+		</div>
+		<div><a href="learnAdminMainPage.html">Înapoi la meniul principal</a></div>
+	</div>
+
+    <script src="../scripts/adminLearn.js"></script>
+	<script src="../scripts/navBar/loadNavbar.js"></script>
+	<script>
+		loadNavbar("");
+	</script>
+</body>
+</html>
