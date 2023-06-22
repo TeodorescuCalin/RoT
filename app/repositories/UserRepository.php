@@ -34,7 +34,14 @@ class UserRepository extends Repository {
     }
 
 
-    public function signup ( string $email, string $name, string $surname, string $username, string $password ) : array {
+    public function create ( UserModel $userModel ) : array {
+
+        $email = $userModel->email;
+        $name = $userModel->name;
+        $surname = $userModel->surname;
+        $username = $userModel->username;
+        $password = $userModel->password;
+
         $statement = $this->pdo->prepare(
             "INSERT INTO users (email, name, surname, username, password ) ".
                         "VALUES (:email, :name, :surname, :username, :password)");

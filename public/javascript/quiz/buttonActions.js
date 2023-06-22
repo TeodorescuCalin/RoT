@@ -7,37 +7,55 @@ function nextQuestion() {
     questionQueue.push(currentQuestion);
     displayNewQuestion();
 }
-function checkAnswers() {
-    const currentQuestion = questionQueue[0];
-    let questionCorrect = true;
-    for (let index = 0; index < currentQuestion.answers.length; ++ index) {
-        if (
-            (answerDivs[index].classList
-                .contains("questionContainer__answerBlock__answer--selected") &&
-            ! currentQuestion.answers[index].correct) ||
-            (! answerDivs[index].classList
-                .contains("questionContainer__answerBlock__answer--selected") &&
-            currentQuestion.answers[index].correct)
-        ) {
-            questionCorrect = false;
-            break;
-        }
-    }
-    if (questionCorrect) {
-        correctQuestions ++;
-    } else {
-        wrongQuestions ++;
-    }
-    questionQueue.shift();
+async function checkAnswers() {
+    const quizId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    const questionDiv = document.getElementsByClassName("questionContainer__answerBlock__answer");
+    await fetch (
+        new Request(HOST_URL + "quiz/" + quizId + "/" + document.getElementById("questionId").value + "/check",
+            {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify(
+                    {
+                        "first_answer_id" : questionDiv[0].childNodes[2].id.substring(6),
+                        "first_answer_selected" : answerDivs[0].classList.contains("questionContainer__answerBlock__answer--selected"),
+                        "second_answer_id" : questionDiv[1].childNodes[2].id.substring(6),
+                        "second_answer_selected" : answerDivs[1].classList.contains("questionContainer__answerBlock__answer--selected"),
+                        "third_answer_id" : questionDiv[2].childNodes[2].id.substring(6),
+                        "third_answer_selected" : answerDivs[2].classList.contains("questionContainer__answerBlock__answer--selected"),
+                    }
+                )
+            }
+        )
+    ).then( response => response.json() )
+        .then(
+            response => {
 
-    document.getElementById("correctQuestions").innerText = correctQuestions + "";
-    document.getElementById("wrongQuestions").innerText = wrongQuestions + "";
-    document.getElementById("remainingQuestions").innerText = questionQueue.length + "";
-    if(questionQueue.length === 0){
-        displayFinalResult();
-    } else {
-        displayNewQuestion();
-    }
+                if ( ! response.ok ) {
+                    alert(response.error);
+                    return;
+                }
+
+                if ( response['data'].solved ) {
+                    correctQuestions ++;
+                } else {
+                    wrongQuestions ++;
+                }
+
+                questionQueue.shift();
+
+                document.getElementById("correctQuestions").innerText = correctQuestions + "";
+                document.getElementById("wrongQuestions").innerText = wrongQuestions + "";
+                document.getElementById("remainingQuestions").innerText = questionQueue.length + "";
+                if(questionQueue.length === 0){
+                    displayFinalResult();
+                } else {
+                    displayNewQuestion();
+                }
+            }
+        )
 }
 
 function displayFinalResult() {

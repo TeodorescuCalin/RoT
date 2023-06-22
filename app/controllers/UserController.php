@@ -110,7 +110,16 @@ class UserController extends Controller {
         $password = password_hash( $password, PASSWORD_DEFAULT );
 
         $userRepository = new UserRepository();
-        $status = $userRepository->signup($email, $name, $surname, $username, $password);
+
+        $userModel = new UserModel();
+        $userModel->email = $email;
+        $userModel->name = $name;
+        $userModel->surname = $surname;
+        $userModel->username = $username;
+        $userModel->password = $password;
+
+
+        $status = $userRepository->create($userModel);
 
         if ( ! $status['ok'] ) {
             if ( $status['internal'] ) {

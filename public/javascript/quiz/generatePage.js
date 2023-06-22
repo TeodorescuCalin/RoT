@@ -1,5 +1,24 @@
 let answerDivs = document.getElementsByClassName("questionContainer__answerBlock__answer");
-let questionQueue = JSON.parse(sessionStorage.getItem("questionQueue"));
+let questionQueue;
+
+getQuestions();
+async function getQuestions() {
+    const quizId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    await fetch ( HOST_URL + "quiz/" + quizId + "/questions" )
+        .then(response => response.json() )
+        .then(
+            response => {
+                if ( ! response.ok ) {
+                    alert(response.error);
+                    return;
+                }
+
+                questionQueue = response['data'];
+                completeQuestionDiv();
+            }
+        )
+}
+
 function completeQuestionDiv() {
     for (let index = 0; index < answerDivs.length; ++ index) {
         answerDivs[index].appendChild(document.createTextNode(""));
@@ -21,14 +40,15 @@ function completeQuestionDiv() {
 function displayNewQuestion() {
     clearOldQuestion();
     const currentQuestion = questionQueue[0];
-    document.getElementById("questionTitle").innerText = currentQuestion.title;
+    document.getElementById("questionId").value = currentQuestion.id;
+    document.getElementById("questionTitle").innerText = currentQuestion.text;
     const currentQuestionImage = document.getElementById("questionImage");
-    if ( currentQuestion.img !== undefined ) {
+    if ( currentQuestion.image_path ) {
         if ( currentQuestionImage !== null ) {
-            currentQuestionImage.src = currentQuestionImage.img;
+            currentQuestionImage.src = currentQuestionImage.image_path;
         } else {
             const questionImage = document.createElement("img");
-            questionImage.src = currentQuestion.img;
+            questionImage.src = currentQuestion.image_path;
             questionImage.id = "questionImage";
             document.getElementById("questionDescription")
                 .appendChild(questionImage);
@@ -39,9 +59,13 @@ function displayNewQuestion() {
         }
     }
     let questionDiv = document.getElementsByClassName("questionContainer__answerBlock__answer");
-    for(let index = 0; index < currentQuestion.answers.length; ++ index) {
-        questionDiv[index].childNodes[2].textContent = currentQuestion.answers[index].text;
-    }
+
+    questionDiv[0].childNodes[2].textContent = currentQuestion.first_answer_text;
+    questionDiv[0].childNodes[2].id = "answer" + currentQuestion.first_answer_id;
+    questionDiv[1].childNodes[2].textContent = currentQuestion.second_answer_text;
+    questionDiv[1].childNodes[2].id = "answer" + currentQuestion.second_answer_id;
+    questionDiv[2].childNodes[2].textContent = currentQuestion.third_answer_text;
+    questionDiv[2].childNodes[2].id = "answer" + currentQuestion.third_answer_id;
 }
 
 function clearOldQuestion() {

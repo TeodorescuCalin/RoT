@@ -1,5 +1,9 @@
 <?php
 
+require_once "Repository.php";
+require_once __DIR__."/../models/QuizModel.php";
+require_once __DIR__."/../models/UserQuizModel.php";
+require_once __DIR__."/../models/QuizQuestionModel.php";
 class QuizRepository extends Repository
 {
 
@@ -10,7 +14,15 @@ class QuizRepository extends Repository
 
     protected function createModel(array $fetchArray): Model|null
     {
-        // TODO: Implement createModel() method.
+        if ( empty ( $fetchArray ) ) {
+            return null;
+        }
+
+        $quizModel = new QuizModel();
+        $quizModel->id = $fetchArray['id'];
+        $quizModel->questions = $fetchArray['questions'];
+
+        return $quizModel;
     }
 
     public function getAll() : array {
@@ -23,14 +35,15 @@ class QuizRepository extends Repository
 
         $resultArray = [];
         foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $fetchArray ) {
-            $answersStatement = $this->pdo->prepare("SELECT answers.id, answers.text, qqa.correct 
-                FROM answers 
-                    JOIN quiz_questions_answers qqa ON answers.id = qqa.id_answer 
-                WHERE la.id_question = (:id_question)" );
-            $answersStatement->execute(
-                ['id_question' => $fetchArray['id']]
+
+            $questionsStatement = $this->pdo->prepare("SELECT DISTINCT id_question FROM quiz_questions_answers WHERE id_quiz = (:id_quiz)" );
+            $questionsStatement->execute(
+                ['id_quiz' => $fetchArray['id']]
             );
-            $fetchArray['answers'] = $answersStatement->fetchAll(PDO::FETCH_ASSOC);
+            $fetchArray['questions'] = [];
+            foreach ( $questionsStatement->fetchAll(PDO::FETCH_ASSOC) as $question ) {
+                $fetchArray['questions'][] = $this->getQuizQuestion($fetchArray['id'], $question['id']);
+            }
 
             $resultArray[] = $this->createModel($fetchArray);
         }
@@ -49,15 +62,72 @@ class QuizRepository extends Repository
 
         $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
 
-        $answersStatement = $this->pdo->prepare("SELECT answers.id, answers.text, la.count 
-                FROM answers 
-                    JOIN learn_questions_answers la ON answers.id = la.id_answer 
-                WHERE la.id_question = (:id_question)" );
-        $answersStatement->execute(
-            ['id_question' => $id]
+        $questionsStatement = $this->pdo->prepare("SELECT DISTINCT id_question FROM quiz_questions_answers WHERE id_quiz = (:id_quiz)" );
+        $questionsStatement->execute(
+            ['id_quiz' => $id]
         );
-        $fetchArray['answers'] = $answersStatement->fetchAll(PDO::FETCH_ASSOC);
+        $fetchArray['questions'] = [];
+        foreach ( $questionsStatement->fetchAll(PDO::FETCH_ASSOC) as $question ) {
+            $fetchArray['questions'][] = $this->getQuizQuestion($id, $question['id_question']);
+        }
 
         return $this->createModel($fetchArray);
+    }
+
+    public function getQuizQuestion($quizId, $questionId) : QuizQuestionModel | null {
+        $statement = $this->pdo->prepare("SELECT * FROM get_quiz_question(:quizId, :questionId)");
+        $statement->execute(
+            [
+                'quizId' => $quizId,
+                'questionId' => $questionId
+            ]
+        );
+
+        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ( ! $fetchArray ) {
+            return null;
+        }
+
+        $quizQuestionModel = new QuizQuestionModel();
+        $quizQuestionModel->id = $fetchArray['id'];
+        $quizQuestionModel->text = $fetchArray['text'];
+        $quizQuestionModel->image_path = $fetchArray['image_path'];
+        $quizQuestionModel->first_answer_id = $fetchArray['first_answer_id'];
+        $quizQuestionModel->second_answer_id = $fetchArray['second_answer_id'];
+        $quizQuestionModel->third_answer_id = $fetchArray['third_answer_id'];
+        $quizQuestionModel->first_answer_correct = $fetchArray['first_answer_correct'];
+        $quizQuestionModel->second_answer_correct = $fetchArray['second_answer_correct'];
+        $quizQuestionModel->third_answer_correct = $fetchArray['third_answer_correct'];
+        $quizQuestionModel->first_answer_text = $fetchArray['first_answer_text'];
+        $quizQuestionModel->second_answer_text = $fetchArray['second_answer_text'];
+        $quizQuestionModel->third_answer_text = $fetchArray['third_answer_text'];
+
+        return $quizQuestionModel;
+    }
+
+
+    public function getAllQuizzesForUser ($userId) : array {
+        $statement = $this->pdo->prepare("SELECT id, status, duration, correct_answers FROM quiz LEFT OUTER JOIN user_quizzes uq on quiz.id = uq.id_quiz WHERE uq.id_user=(:userId) OR uq.id_user IS NULL ORDER BY id");
+        $statement->execute(
+            [
+                'userId' => $userId
+            ]
+        );
+        $fetchArray = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $result = [];
+        foreach ( $fetchArray as $item ) {
+            $userQuizModel = new UserQuizModel();
+            $userQuizModel->userId = $userId;
+            $userQuizModel->quizId = $item['id'];
+            $userQuizModel->status = $item['status'];
+            $userQuizModel->correctAnswerCount = $item['correct_answers'];
+            $userQuizModel->duration = $item['duration'];
+
+            $result[] = $userQuizModel;
+        }
+
+        return $result;
     }
 }

@@ -38,6 +38,9 @@ class App {
 
         $this->addRoute ( "GET", "quizSelection", "QuizController@getSelectionPage" );
         $this->addRoute ( "GET", "quiz/{quizId}", "QuizController@getQuizPage" );
+        $this->addRoute ( "GET", "user_quiz", "QuizController@getQuizzesForUser" );
+        $this->addRoute ( "GET", "quiz/{quizId}/questions", "QuizController@getQuiz" );
+        $this->addRoute ( "POST", "quiz/{quizId}/{questionId}/check", "QuizController@checkQuizAnswer" );
     }
 
     public function parseURL() : void {
