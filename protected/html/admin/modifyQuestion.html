@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <title>RoT</title>
     
-    <link rel="stylesheet" href="../styles/addNewQuestion.css">
+    <link rel="stylesheet" href="/public/css/addNewQuestion.css">
     <script src="https://kit.fontawesome.com/3ec5bc2749.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header id="navigationBar"></header>
         
     <div id="createContainer" class="quizBlock formBlock">
-		<h1>Creare întrebare</h1>
+		<h1>Actualizare întrebare</h1>
 		<div class="form-container" id="form-container">
+
 			<div class="inputContainer">
 				<label for="questionText"><b>Întrebarea</b></label>
 				<i class ="fa fa-question-circle"></i>
@@ -69,16 +70,15 @@
 			</div>
 
 			<div class="buttonsContainer">
-				<button id="addButton" onclick="toJSON()">Adaugă</button>
+				<button id="addButton" onclick="">Salvează</button>
 			</div>
 		</div>
 	</div>
 	
-    <script src="../scripts/adminQuiz.js"></script>
-    <script src="../scripts/adminLearn.js"></script>
-  	<script src="../scripts/navBar/loadNavbar.js"></script>
+    <script src="/public/javascript/adminQuiz.js"></script>
+  	<script src="/public/javascript/navBar/load.js"></script>
     <script>
-        loadNavbar("");
+        loadNavbar();
     </script>
 </body>
 </html>

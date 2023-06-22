@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang = "en">
 <head>
     <meta charset="UTF-8">
-    <title>Error 401 </title>
+
+    <title> Autentificare </title>
+
+    <link rel="stylesheet" type="text/css" href="/public/css/userForms/login.css">
+    <script src="https://kit.fontawesome.com/a4b0c75974.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <p> Not authorized </p>
+<header id="navigationBar"></header>
+<h1>Pentru a accesa această pagină, trebuie sa fii autentificat:</h1>
+<div class="loginBlock formBlock">
+    <h1>Autentificare</h1>
+    <div class="form-container">
+        <div class="inputContainer">
+            <label for="username"><b>Nume cont</b></label>
+            <i class ="fas fa-user"></i>
+            <input type="text" placeholder="Introdu nume" id="username" required>
+        </div>
+
+        <div class="inputContainer">
+            <label for="password"><b>Parolă</b></label>
+            <i class ="fas fa-lock"></i>
+            <input type="password" placeholder="Introdu parola" id="password" required>
+            <div class="forgotPassword"><a href="/public/forgotPassword"> Ai uitat parola?</a></div>
+        </div>
+        <button type="submit" onclick="login()">Autentificare</button>
+    </div>
+    <div class="newAccount"><a href="/public/register">Creează un cont nou</a></div>
+</div>
+
+<script src="/public/javascript/navBar/load.js"></script>
+<script src="/public/javascript/login/login.js"></script>
+<script>
+    loadNavbar();
+</script>
 </body>
 </html>

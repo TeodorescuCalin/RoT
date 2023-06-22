@@ -311,10 +311,24 @@ body {
     .formBlock {
       max-width: 100%; } }
 
-.registerBlock {
-  margin: 100px auto auto;
-  height: 570px; }
-  .registerBlock .oldAccount {
-    color: white; }
+.errorContainer {
+  position: relative;
+  margin: 200px auto auto; }
+  .errorContainer h1,
+  .errorContainer h2,
+  .errorContainer p {
+    color: white;
+    text-align: center; }
+  .errorContainer p {
+    font-size: 20px; }
+  .errorContainer i {
+    font-size: 100px; }
+  .errorContainer a:link {
+    color: #0088a9;
+    text-decoration: none; }
+  .errorContainer a:hover {
+    text-decoration: underline; }
+  .errorContainer a:visited {
+    color: #0088a9; }
 
-/*# sourceMappingURL=register.css.map */
+/*# sourceMappingURL=error.css.map */

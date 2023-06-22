@@ -108,4 +108,19 @@ class UserRepository extends Repository {
     public function updateLoginStatus ( UserModel $userModel ) : void {
         $this->pdo->exec("UPDATE users SET last_login_date=current_date WHERE id=".$userModel->id);
     }
+
+
+    public function checkAdmin ( $userId ) : bool {
+        $statement = $this->pdo->prepare("SELECT * FROM users WHERE id=(:userId) AND admin=true");
+        $statement->execute(
+            [
+                "userId" => $userId
+            ]
+        );
+        if ( ! $statement->fetch() ) {
+            return false;
+        }
+
+        return true;
+    }
 }
