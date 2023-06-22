@@ -53,6 +53,7 @@ class UserRepository extends Repository {
                 if ( str_contains ( $exception->getMessage(), "email") ) {
                     return [
                         "ok" => false,
+                        "internal" => false,
                         "error" => "The email already exists"
                     ];
                 } else {

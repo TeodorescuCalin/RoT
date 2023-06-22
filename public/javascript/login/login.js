@@ -24,7 +24,6 @@ async function login () {
 
                 localStorage['username'] = response['data']['username'];
                 window.location.href = HOST_URL;
-                // window.location.reload();
             }
         );
 }

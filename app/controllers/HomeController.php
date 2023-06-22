@@ -73,5 +73,31 @@ class HomeController extends Controller  {
         return $response;
     }
     
-    
+    public function getSpecificStreetSignsPage () : Response {
+        $response = new Response();
+        $response->setHeader("Content-Type", "text/html");
+        if ( empty ( $this->request->pathVariables['regionType'] ) ) {
+            $response->code = 404;
+            $response->body = file_get_contents(__DIR__."/../../protected/html/error/404.html");
+            return $response;
+        }
+
+        $regionType = $this->request->pathVariables['regionType'];
+        if ( $regionType != 'romanian' && $regionType != 'foreign' ) {
+            $response->code = 404;
+            $response->body = file_get_contents(__DIR__."/../../protected/html/error/404.html");
+            return $response;
+        }
+
+        $signPage = $this->request->pathVariables['signPage'];
+        $response->code = 200;
+        $response->body = file_get_contents(__DIR__."/../../protected/html/signPages/".$regionType."/".$signPage.".html");
+        if ( ! $response->body ) {
+            $response->code = 404;
+            $response->body = file_get_contents(__DIR__."/../../protected/html/error/404.html");
+            return $response;
+        }
+
+        return $response;
+    }
 }

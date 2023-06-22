@@ -1,20 +1,116 @@
-function nextQuestion() {
-    location.reload();
+async function nextQuestion() {
+    if ( document.getElementById("sendAnswerButton").disabled ) {
+        location.reload();
+    } else {
+        await fetch (
+            new Request (
+                HOST_URL + "learn/questions/" + document.getElementById("questionId").value + "/status",
+                {
+                    method : "PUT",
+                    headers : {
+                        "Content-Type" : "application/json"
+                    },
+                    body : JSON.stringify({
+                        "skipped" : true
+                    })
+                }
+            )
+        ).then( response => response.json() )
+            .then(
+                response => {
+                    if ( ! response.ok ) {
+                        alert ( response.error );
+                    }
+                    location.reload();
+                }
+            )
+    }
 }
 
-function checkAnswers() {
+async function checkAnswers() {
     document.getElementById("sendAnswerButton").disabled = "disabled";
 
-    let questionRequest = new XMLHttpRequest();
-    questionRequest.overrideMimeType("application/json");
-    questionRequest.open("GET", "../../../data/learn/questions.json", true);
-    questionRequest.onreadystatechange = function() {
-        if ( questionRequest.readyState === 4 && questionRequest.status === 200 ) {
-            const currentQuestion = JSON.parse(questionRequest.responseText).questionList[parseInt(document.getElementById("questionId").value)];
-            compareAnswers(currentQuestion);
+    const answers = getQuestionAnswers();
+
+    await fetch (
+        new Request (
+            HOST_URL + "learn/questions/" + document.getElementById("questionId").value + "/status",
+            {
+                    method : "PUT",
+                    headers : {
+                        "Content-Type" : "application/json"
+                    },
+                    body : JSON.stringify({
+                        "answers" : answers
+                    })
+                }
+        )
+    ).then( response => response.json() )
+        .then(
+            response => {
+                if ( ! response.ok ) {
+                    alert ( response.error );
+                    return;
+                }
+                displayResult(response.data);
+            }
+        )
+}
+
+function getQuestionAnswers() {
+    let result = [];
+
+    if ( document.getElementById("questionType").value === 'count' ) {
+        const divAnswers = document.getElementsByClassName("questionContainer__answerBlock__answer");
+        for (let index = 0; index < divAnswers.length; ++ index) {
+            const currentAnswerId = parseInt(divAnswers[index].id.slice(6));
+            const currentAnswerValue = parseInt(divAnswers[index].children[1].value);
+            result.push(
+                {
+                    "id" : currentAnswerId,
+                    "count" : currentAnswerValue
+                }
+            );
+        }
+    } else {
+        const divAnswers = document.getElementsByClassName("questionContainer__answerBlock__answer");
+        for (let index = 0; index < divAnswers.length; ++ index) {
+            const currentAnswerId = parseInt(divAnswers[index].id.slice(6));
+            if ( divAnswers[index].classList.contains("questionContainer__answerBlock__answer--choice--selected") ) {
+                result.push(
+                    {
+                        "id" : currentAnswerId,
+                        "selected" : true
+                    }
+                );
+            } else {
+                result.push(
+                    {
+                        "id" : currentAnswerId,
+                        "selected" : false
+                    }
+                );
+            }
         }
     }
-    questionRequest.send(null);
+
+    return result;
+}
+
+function displayResult(answers) {
+
+    for ( let index = 0; index < answers.length; ++ index ) {
+        const answer = answers[index];
+        let element = document.getElementById('answer' + answer['id']);
+        if (answer['correct']) {
+            element.style.backgroundColor = "green";
+        } else {
+            element.style.backgroundColor = "red";
+        }
+
+    }
+
+    document.getElementById("questionExplanation").innerText = document.getElementById('questionExplanationHidden').value;
 }
 
 function compareAnswers(currentQuestion) {

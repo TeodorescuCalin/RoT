@@ -60,7 +60,7 @@ class UserController extends Controller {
         return $response;
     }
 
-    public function signup () : Response {
+    public function register () : Response {
 
         $response = new Response();
         $response->setHeader ( "Content-Type", "application/json" );
@@ -186,6 +186,7 @@ class UserController extends Controller {
         } else {
             $dataArray = (array)$userModel;
             unset($dataArray['password']);
+            $dataArray['statistics'] = $userStatisticModel;
             $response->encodeSuccess(
                 200,
                     $dataArray

@@ -2,7 +2,7 @@
 
 require_once('Model.php');
 
-class UserStatisticsModel extends Model implements Stringable, JsonSerializable {
+class UserStatisticsModel extends Model {
 
     public float $learnProgress;
     public float $quizProgress;

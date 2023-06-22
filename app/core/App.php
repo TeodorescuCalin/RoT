@@ -22,13 +22,22 @@ class App {
         $this->addRoute ( "GET", "forgotPassword", "HomeController@forgotPassword" );
         $this->addRoute ( "GET", "about", "HomeController@about" );
         $this->addRoute ( "GET", "streetSigns", "HomeController@streetSigns" );
+        $this->addRoute ( "GET", "streetSigns/{regionType}/{signPage}", "HomeController@getSpecificStreetSignsPage" );
         $this->addRoute ( "GET", "help", "HomeController@help" );
+
         $this->addRoute ( "POST", "login", "UserController@login" );
-        $this->addRoute ( "POST", "signup", "UserController@signup" );
+        $this->addRoute ( "POST", "register", "UserController@register" );
+
         $this->addRoute ( "GET", "profile/{username}", "UserController@getProfile" );
         $this->addRoute ( "GET", "user_info", "UserController@getUserInfo" );
+
         $this->addRoute ( "GET", "learn", "LearnController@getPage" );
-        $this->addRoute ( "GET", "learn/question", "LearnController@getQuestion" );
+        $this->addRoute ( "GET", "learn/questions", "LearnController@getQuestion" );
+//        $this->addRoute ( "GET", "learn/questions/{questionId}/answers", "LearnController@getQuestionAnswers" );
+        $this->addRoute ( "PUT", "learn/questions/{questionId}/status", "LearnController@updateQuestionStatus" );
+
+        $this->addRoute ( "GET", "quizSelection", "QuizController@getSelectionPage" );
+        $this->addRoute ( "GET", "quiz/{quizId}", "QuizController@getQuizPage" );
     }
 
     public function parseURL() : void {

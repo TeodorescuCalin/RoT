@@ -3,12 +3,13 @@
 
 require_once('Model.php');
 
-class LearnQuestionModel extends Model implements Stringable, JsonSerializable {
+class LearnQuestionModel extends Model {
 
     public string $text;
     public string | null $image_path;
     public string $type;
     public array $answers;
+    public string $explanation;
 
     public function __toString(): string
     {
@@ -27,7 +28,8 @@ class LearnQuestionModel extends Model implements Stringable, JsonSerializable {
             'text' => $this->text,
             'image_path' => $this->image_path,
             'type' => $this->type,
-            'answers' => $this->answers
+            'answers' => $this->answers,
+            'explanation' => $this->explanation
         ];
     }
 }

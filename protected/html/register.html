@@ -33,24 +33,25 @@
 				</div>
 
 				<div class="inputContainer">
-					<label for="uname"><b>Nume utilizator</b></label>
+					<label for="username"><b>Nume utilizator</b></label>
 					<i class ="fas fa-signature"></i>
-					<input type="text" placeholder="Introdu numele de utilizator" id="uname" required>
+					<input type="text" placeholder="Introdu numele de utilizator" id="username" required>
 				</div>
 
 				<div class="inputContainer">
-					<label for="psw"><b>Parolă</b></label>
+					<label for="password"><b>Parolă</b></label>
 					<i class ="fas fa-lock"></i>
-					<input type="password" placeholder="Introdu parola" id="psw" required>
+					<input type="password" placeholder="Introdu parola" id="password" required>
 				</div>
-				<button type="submit">Înregistrare</button>
+				<button type="submit" onclick="register()">Înregistrare</button>
 			</div>
-			<div class="oldAccount">Ai deja un cont? <a href="login"> Autentifică-te</a></div>
+			<div class="oldAccount">Ai deja un cont? <a href="/public/login"> Autentifică-te</a></div>
 	</div>
 
-	<script src="/public/javascript/navBar/loadNavbar.js"></script>
+	<script src="/public/javascript/navBar/load.js"></script>
+	<script src="/public/javascript/signup/register.js"></script>
 	<script>
-		loadNavbar("");
+		loadNavbar();
 	</script>
 </body>
 </html>

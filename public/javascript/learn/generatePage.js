@@ -1,57 +1,38 @@
 
-let rawFile = new XMLHttpRequest();
-rawFile.overrideMimeType("application/json");
-rawFile.open("GET", "http://localhost:80/rot/data/learn/questions.json", true);
-rawFile.onreadystatechange = function() {
-    if ( rawFile.readyState === 4 && rawFile.status === 200 ) {
-        createNewQuestion(rawFile.responseText);
-    }
-}
-rawFile.send(null);
+loadPage();
 
-function createNewQuestion(questionFileText){
-    const jsonObj = JSON.parse(questionFileText);
-    const questionId = Math.floor(Math.random() * jsonObj.questionList.length);
-    const currentQuestion = jsonObj.questionList[questionId];
+async function loadPage () {
+    await fetch ( HOST_URL + "learn/questions" )
+        .then( response => response.json() )
+        .then(
+            response => {
 
-    document.getElementById("questionTitle").innerText = currentQuestion.title;
-    document.getElementById("questionImage").src = currentQuestion.imagePath;
-    document.getElementById("questionId").value = questionId;
-    addTags(currentQuestion.tagList);
-    switch (currentQuestion.type) {
-        case "multipleChoice": {
-            generateAnswersArray(
-                "multipleChoiceAnswers.json",
-                currentQuestion.totalAnswerCount,
-                currentQuestion.answers,
-                createNewMultipleChoiceDiv
-            );
-            break;
-        }
-        case "multipleChoice_long": {
-            generateAnswersArray("longMultipleChoiceAnswers.json",
-                currentQuestion.totalAnswerCount
-                , currentQuestion.answers
-                , createNewLongMultipleChoiceDiv
-            );
-            break;
-        }
-        case "count": {
-            generateAnswersArray("countAnswers.json"
-                , currentQuestion.totalAnswerCount
-                , currentQuestion.answers
-                    .map(e => e.id),
-                createNewCountDiv
-            );
-            break;
-        }
-    }
+                if ( ! response.ok ) {
+                    alert ( response.error );
+                    return;
+                }
+
+                const data = response['data'];
+                document.getElementById('questionTitle').innerText = data['text'];
+                if ( data['image_path'] ) {
+                    document.getElementById("questionImage").src = data['image_path'];
+                }
+                document.getElementById("questionId").value = data['id'];
+                document.getElementById("questionType").value = data['type'];
+                document.getElementById("questionExplanationHidden").value = data['explanation'];
+                if ( data['type'] === "multipleChoice" ) {
+                    createNewMultipleChoiceDiv(data['answers']);
+                } else {
+                    createNewCountDiv(data['answers']);
+                }
+            }
+        )
 }
 
 function newMultipleChoiceAnswer(answer, answerDivIndex) {
 
     let newAnswerDiv = document.createElement("div");
-    newAnswerDiv.id = "answer" + answer.id;
+    newAnswerDiv.id = "answer" + answer['id'];
     newAnswerDiv.classList.add("questionContainer__answerBlock__answer");
     newAnswerDiv.classList.add("questionContainer__answerBlock__answer--choice");
     newAnswerDiv.addEventListener('click', () => {
@@ -68,7 +49,7 @@ function newMultipleChoiceAnswer(answer, answerDivIndex) {
 
 
     newAnswerDiv.appendChild(span);
-    newAnswerDiv.appendChild(document.createTextNode(answer.text));
+    newAnswerDiv.appendChild(document.createTextNode(answer['text']));
 
     return newAnswerDiv;
 }
@@ -117,13 +98,13 @@ function createNewCountDiv(answers) {
 
     for(let index = 0; index < answers.length; ++ index ) {
         let answer = document.createElement("div");
-        answer.id = "answer" + answers[index].id;
+        answer.id = "answer" + answers[index]['id'];
         answer.classList.add("questionContainer__answerBlock__answer");
         answer.classList.add("questionContainer__answerBlock__answer--count");
 
         let label = document.createElement("label");
         label.for = "answer" + index + "Count";
-        label.innerText = answers[index].text;
+        label.innerText = answers[index]['text'];
 
         let input = document.createElement("input");
         input.type = "number";
@@ -145,49 +126,4 @@ function createNewCountDiv(answers) {
 
     document.getElementById("questionAnswersBlock").appendChild(leftSideDiv);
     document.getElementById("questionAnswersBlock").appendChild(rightSideDiv);
-}
-
-function generateAnswersArray(
-    filename,
-    answerCount,
-    correctAnswers,
-    callback
-) {
-
-    let answerFile = new XMLHttpRequest();
-    answerFile.overrideMimeType("application/json");
-    answerFile.open("GET", "http://localhost:80/rot/data/learn/" + filename, true);
-    answerFile.onreadystatechange = function() {
-        if ( answerFile.readyState === 4 && answerFile.status === 200 ) {
-            const answerList = JSON.parse(answerFile.responseText).answerList;
-
-            let responseArray = answerList.filter(element => correctAnswers.includes(element.id));
-
-            let groupSize = Math.floor(answerList.length / answerCount);
-            let responseGroupArray = responseArray.map(element => Math.floor(element.id/groupSize));
-
-            for(let group = 0; group < answerCount && responseArray.length !== answerCount; ++ group) {
-                if(responseGroupArray.includes(group)) {
-                    continue;
-                }
-                if ( Math.random() < 0.5 )
-                    responseArray.push(answerList[Math.floor((Math.random() * groupSize)) + group * groupSize]);
-                else
-                    responseArray.unshift(answerList[Math.floor((Math.random() * groupSize)) + group * groupSize]);
-            }
-
-            callback(responseArray);
-        }
-    }
-    answerFile.send(null);
-}
-
-function addTags(questionTags) {
-    let imageData = document.getElementById("placeInformation");
-    for (let index = 0; index < questionTags.length; ++ index) {
-        let newMeta = document.createElement("meta");
-        newMeta.setAttribute('property', questionTags[index].property);
-        newMeta.content = questionTags[index].value;
-        imageData.appendChild(newMeta);
-    }
 }

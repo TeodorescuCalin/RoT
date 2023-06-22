@@ -2,7 +2,7 @@
 
 require_once('Model.php');
 
-class UserModel extends Model implements Stringable, JsonSerializable {
+class UserModel extends Model {
     public string $email;
     public string $name;
     public string $surname;

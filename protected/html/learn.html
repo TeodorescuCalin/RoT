@@ -13,6 +13,8 @@
     <header id="navigationBar"></header>
     <div id="questionContainer" class="questionContainer">
         <input id="questionId" type="hidden">
+        <input id="questionType" type="hidden">
+        <input id="questionExplanationHidden" type="hidden">
         <div id="questionDescription" class="questionContainer__description">
             <div id="questionTitle" class="questionContainer__description__title"></div>
             <div id="placeInformation" class="questionContainer__description__image" vocab="https://schema.org/" typeof="Place">
@@ -29,9 +31,9 @@
     </div>
 
 
-    <script src="/public/javascript/navBar/loadNavbar.js"></script>
+    <script src="/public/javascript/navBar/load.js"></script>
     <script>
-        loadNavbar("");
+        loadNavbar();
     </script>
     <script src="/public/javascript/learn/generatePage.js"> </script>
 </body>

@@ -21,7 +21,7 @@ class AuthController extends Controller {
         $date = new DateTimeImmutable();
         $iat = $date->getTimestamp();
         $nbf = $iat;
-        $exp = $date->modify('+1 hour')->getTimestamp();
+        $exp = $date->modify('+6 hours')->getTimestamp();
         $data = [
             'iat' => $iat,
             'nbf' => $nbf,

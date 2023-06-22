@@ -1,7 +1,7 @@
 HOST_URL = 'http://localhost/public/';
-
 function loadNavbar() {
     let navbarButton;
+
     if ( ! localStorage['username'] ) {
         navbarButton = `<button type="button" onClick="window.location.href='` + HOST_URL + `login'" class="loginButton"> Login </button>`;
     } else {
@@ -25,7 +25,7 @@ function loadNavbar() {
             <li> <a href="` + HOST_URL + `learn" id="learnButton"> Invata </a> </li>
             <li> <a href="` + HOST_URL + `legislation" id="highwayCodeButton"> Legislatie </a> </li>
             <li> <a href="` + HOST_URL + `streetSigns" id="roadSigns"> Semne de circulatie </a> </li>
-            <li> <a href="` + HOST_URL + `quiz" id="testsButton"> Chestionare </a> </li>
+            <li> <a href="` + HOST_URL + `quizSelection" id="testsButton"> Chestionare </a> </li>
             <li> <a href="` + HOST_URL + `about" id="aboutButton"> Despre </a> </li>
             <li> <a href="` + HOST_URL + `help" id="helpButton"> Ajutor </a> </li>
         </ul>
