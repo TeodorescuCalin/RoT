@@ -1,0 +1,27 @@
+@import "userForms/formBase";
+
+.loginButton {
+    visibility: hidden;
+}
+
+.formBlock {
+    margin: 100px auto auto;
+}
+
+.buttonsContainer {
+    display: flex;
+    align-items: center;
+
+    #incrementButton,
+    #decrementButton {
+        width: 40%;
+    }
+
+    #incrementButton {
+        margin-left: 10%;
+    }
+
+    #decrementButton {
+        margin-right: 10%;
+    }
+}

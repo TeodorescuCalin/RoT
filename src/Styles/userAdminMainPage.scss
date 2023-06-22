@@ -1,0 +1,29 @@
+@import "userForms/formBase";
+
+.loginButton {
+    visibility: hidden;
+}
+
+.usersTable {
+    margin: 30px 10% auto 10%;
+    width: 80%;
+    border-collapse: collapse;
+    text-align: center;
+    color: white;
+    
+    td {
+        padding: 10px;
+        border: 3px solid $primary-color;
+    }
+
+    button {
+        background-color: $primary-color;
+        cursor: pointer;
+        border: 1px solid $primary-color;
+        border-radius: 4px;
+        
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+}

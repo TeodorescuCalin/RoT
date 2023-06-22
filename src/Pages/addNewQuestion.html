@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RoT</title>
+    
+    <link rel="stylesheet" href="../styles/addNewQuestion.css">
+    <script src="https://kit.fontawesome.com/3ec5bc2749.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header id="navigationBar"></header>
+        
+    <div id="createContainer" class="quizBlock formBlock">
+		<h1>Creare întrebare</h1>
+		<div class="form-container" id="form-container">
+			<div class="inputContainer">
+				<label for="questionText"><b>Întrebarea</b></label>
+				<i class ="fa fa-question-circle"></i>
+				<input type="text" placeholder="Introdu textul" id="questionText" required>
+			</div>
+
+			<div class="inputContainer">
+				<label for="questionImage"><b>Imaginea (opțional)</b></label>
+				<i class ="fas fa-route"></i>
+				<input type="text" placeholder="Introdu calea către imagine" id="questionImage" required>
+			</div>
+
+            <div class="inputContainer">
+				<label for="questionImage"><b>Explicație</b></label>
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <input type="text" placeholder="Introdu explicația" id="questionExplanation" required>
+			</div>
+
+            <div class="inputContainer">
+				<label for="questionCategory"><b>Categoria</b></label>
+				<i class ="fa-solid fa-keyboard"></i>
+				<select id="questionCategory">
+					<option value="notSelected" disabled selected hidden>Selectează categoria potrivită</option>
+					<option value="mechanics">Mecanică</option>
+					<option value="firstAid">Prim ajutor</option>
+					<option value="signs">Semne de circulație</option>
+					<option value="police">Poliție</option>
+					<option value="speed">Limite de viteză</option>
+					<option value="priority">Reguli de prioritate</option>
+					<option value="fines">Amenzi, sancțiuni</option>
+					<option value="general">General</option>
+				</select>
+			</div>
+
+            <div class="inputContainer">
+				<label for="questionType"><b>Tipul întrebării</b></label>
+				<i class="fa-solid fa-thumbtack"></i>
+				<select id="questionType" onchange="deleteNewDivs(); selectAnswersWithType();">
+					<option value="notSelected" disabled selected hidden>Selecteaza tipul întrebării</option>
+					<option value="multipleChoice">Variante multiple</option>
+					<option value="count">Numărare</option>
+				</select>
+			</div>
+
+			<div class="selectAnswer inputContainer">
+				<label for="correctAnswersNumber"><b>Număr răspunsuri corecte</b></label>
+				<i class ="fas fa-filter"></i>
+				<select id="correctAnswersNumber" onchange="createCorrectAnswerBoxesQuestionType()">
+					<option value="notSelected" disabled selected hidden>Selectează numărul corespunzător</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+				</select>
+			</div>
+
+			<div class="buttonsContainer">
+				<button id="addButton" onclick="toJSON()">Adaugă</button>
+			</div>
+		</div>
+	</div>
+	
+    <script src="../scripts/adminQuiz.js"></script>
+    <script src="../scripts/adminLearn.js"></script>
+  	<script src="../scripts/navBar/loadNavbar.js"></script>
+    <script>
+        loadNavbar("");
+    </script>
+</body>
+</html>

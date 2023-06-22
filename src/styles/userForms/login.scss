@@ -1,5 +1,10 @@
 @import "formBase";
 
+h1 {
+  display: flex;
+  justify-content: center;
+  color: white;
+}
 
 .loginButton {
   visibility: hidden;
@@ -7,7 +12,7 @@
 
 .loginBlock {
   height: 350px;
-
+  margin: 50px auto auto;
   .forgotPassword {
     text-align: left;
     color: $primary-color;

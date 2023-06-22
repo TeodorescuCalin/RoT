@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RoT</title>
+    
+    <link rel="stylesheet" href="../styles/addNewQuiz.css">
+    <script src="https://kit.fontawesome.com/3ec5bc2749.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header id="navigationBar"></header>
+        
+    <div id="createContainer" class="quizBlock formBlock">
+		<h1>Creare chestionar</h1>
+		<div class="form-container" id="form-container">
+			<div class="inputContainer">
+				<label id="questionNumber" for="questionText"><b>Intrebarea numarul 1</b></label>
+				<i class ="fa fa-question-circle"></i>
+				<input type="text" placeholder="Introdu textul" id="questionText" required>
+			</div>
+
+			<div class="inputContainer">
+				<label for="questionImage"><b>Imaginea (optional)</b></label>
+				<i class ="fas fa-route"></i>
+				<input type="text" placeholder="Introdu calea catre imagine" id="questionImage" required>
+			</div>
+
+			<div class="inputContainer">
+				<label for="correctAnswersNumber"><b>Numar raspunsuri corecte</b></label>
+				<i class ="fas fa-filter"></i>
+				<select id="correctAnswersNumber" onchange="createCorrectAnswerBoxes(); createWrongAnswerBoxes();">
+					<option value="notSelected" disabled selected hidden>Selecteaza numarul corespunzator</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+				</select>
+			</div>
+			<div class="buttonsContainer">
+				<button id="decrementButton" onclick="loadFunctionsDecrement();">Inapoi</button>
+				<!-- <button id="addButton" onclick="incrementQuestionNumber()">Continua</button> -->
+				<button id="incrementButton" onclick="loadFunctionsIncrement()">Inainte</button>
+
+			</div>
+		</div>
+	</div>
+	
+    <script src="../scripts/adminQuiz.js"></script>
+  	<script src="../scripts/navBar/loadNavbar.js"></script>
+    <script>
+        loadNavbar("");
+    </script>
+</body>
+</html>
