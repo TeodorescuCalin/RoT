@@ -24,6 +24,7 @@ class LearnQuestionRepository extends Repository
         $learnQuestionModel->type = $fetchArray['type'];
         $learnQuestionModel->answers = $fetchArray['answers'];
         $learnQuestionModel->explanation = $fetchArray['explanation'];
+        $learnQuestionModel->category = $fetchArray['category'];
 
         return $learnQuestionModel;
     }

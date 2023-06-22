@@ -1,6 +1,9 @@
 <?php
 
 require_once ( __DIR__."/../repositories/LearnQuestionRepository.php" );
+require_once ( __DIR__."/../repositories/UserRepository.php" );
+require_once ( __DIR__."/../repositories/AnswerRepository.php" );
+require_once ( __DIR__."/../models/AnswerModel.php" );
 require_once (__DIR__."/AuthController.php");
 
 class LearnController extends Controller {
@@ -243,5 +246,60 @@ class LearnController extends Controller {
 
         $response->encodeSuccess(200, ["answers" => $questionModel->answers]);
         return $response;
+    }
+
+
+    public function postQuestion () : Response {
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/json");
+
+
+        $authController = new AuthController($this->request);
+        $decodedToken = $authController->checkJWT();
+        if ( ! $decodedToken['ok'] ) {
+            $response->encodeError(401, "You are not authenticated");
+            return $response;
+        }
+
+        $userRepository = new UserRepository();
+        if ( ! $userRepository->checkAdmin($decodedToken['id'] ) ) {
+            $response->encodeError(401, "You are not an admin");
+            return $response;
+        }
+
+        if ( ! $this->request->contentTypeIsJSON() ) {
+            $response->encodeError(400, "Must provide JSON as Content-Type");
+            return $response;
+        }
+
+        $json_body = json_decode($this->request->body, true);
+        if ( $json_body == null ) {
+            $response->encodeError(400, "Bad JSON body");
+            return $response;
+        }
+
+        $questionModel = new LearnQuestionModel();
+        $questionModel->text = $json_body['text'];
+        $questionModel->explanation = $json_body['explanation'];
+        $questionModel->image_path = $json_body['image_path'];
+        $questionModel->type = $json_body['type'];
+        $questionModel->category = $json_body['category'];
+
+        $answerList = [];
+
+        $answerRepository = new AnswerRepository();
+        foreach ( $json_body['answers'] as $answer ) {
+            $answerModel = $answerRepository->getByText($answer['text']);
+            if ( $answerModel == null ) {
+                $answerModel = new AnswerModel();
+                $answerModel->text = $answer['text'];
+                $answerRepository->create($answerModel);
+
+            }
+            $answerList[] = $answerModel->id;
+        }
+        $questionModel->answers = $answerList;
+
+
     }
 }

@@ -10,6 +10,7 @@ class LearnQuestionModel extends Model {
     public string $type;
     public array $answers;
     public string $explanation;
+    public string $category;
 
     public function __toString(): string
     {
@@ -18,6 +19,7 @@ class LearnQuestionModel extends Model {
         text={$this->text},
         image_path={$this->image_path},
         type={$this->type},
+        category={$this->category},
         answers=".json_encode($this->answers);
     }
 
@@ -29,7 +31,8 @@ class LearnQuestionModel extends Model {
             'image_path' => $this->image_path,
             'type' => $this->type,
             'answers' => $this->answers,
-            'explanation' => $this->explanation
+            'explanation' => $this->explanation,
+            'category' => $this->category
         ];
     }
 }

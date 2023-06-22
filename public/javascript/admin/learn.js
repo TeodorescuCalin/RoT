@@ -5,8 +5,8 @@ function loadQuestionNumber(url) {
     window.location.href = url;
 }
 
-function toJSON() {
-    textElement = document.getElementById('questionText');
+async function toJSON() {
+    textElement = document.getElementById('questionText')
     imageElement = document.getElementById('questionImage');
     explanationElement = document.getElementById('questionExplanation');
     categoryElement = document.getElementById('questionCategory');
@@ -28,14 +28,26 @@ function toJSON() {
 
     var values = {
         text: text,
-        image: image,
+        image_path: image,
         explanation: explanation,
         category: category,
         type: type,
-        answersNumber: answersNumber,
-        answersIds: answersIds
+        answerCount: answersNumber,
+        answers: answersIds
     };
 
     var json = JSON.stringify(values);
-    console.log(json);
+
+    await fetch (
+        new Request (
+            "",
+            {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : json
+            }
+        )
+    )
 }

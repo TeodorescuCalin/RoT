@@ -37,6 +37,11 @@ abstract class Repository extends Database {
             return null;
         }
 
-        return $this->createModel( $statement->fetch(PDO::FETCH_ASSOC) );
+        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+        if ( ! $fetchArray ) {
+            return null;
+        }
+
+        return $this->createModel( $statement->fetch($fetchArray ) );
     }
 }
