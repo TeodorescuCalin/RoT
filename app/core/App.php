@@ -33,6 +33,8 @@ class App {
         $this->addRoute ( "GET", "user_info", "UserController@getUserInfo" );
         $this->addRoute ( "GET", "ranking", "UserController@getRanking" );
         $this->addRoute ( "GET", "ranking_rss", "UserController@getRSSRanking" );
+        $this->addRoute("GET", "users", "UserController@getAllUsers");
+        $this->addRoute("DELETE", "users", "UserController@deleteUser");
 
         $this->addRoute ( "GET", "learn", "LearnController@getPage" );
         $this->addRoute ( "GET", "learn/questions", "LearnController@getQuestion" );

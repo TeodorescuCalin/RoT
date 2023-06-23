@@ -10,25 +10,16 @@
 <body>
     <header id="navigationBar"></header>
     
-    <table class="usersTable">
+    <table id="allUsers" class="usersTable">
         <tr>
             <td>ID</td>
             <td>Nume utilizator</td>
             <td>Ultima activitate</td>
             <td>Stergere</td>
         </tr>
-        <tr>
-            <td>123</td>
-            <td>L33T</td>
-            <td>12.05.2002</td>
-            <td>
-                <button id="deleteUserButton">
-                    <i class="fas fa-check"></i>
-                </button>
-            </td>
-        </tr>
     </table>
 
+    <script src="/public/javascript/admin/users.js"></script>
     <script src="/public/javascript/navBar/load.js"></script>
     <script>
         loadNavbar();

@@ -229,6 +229,56 @@ class UserController extends Controller {
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"></rss>');
         $channel = $xml->addChild('channel');
         $channel->addChild('title', 'ROT ranking feed');
-        $channel->addChild('description', 'The top users of Romanian')
+        $channel->addChild('description', 'The top users of Romanian');
+        return $response;
+    }
+
+    public function getAllUsers () : Response {
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/json");
+
+        $authController = new AuthController($this->request);
+        $decodedToken = $authController->checkJWT();
+        if ( ! $decodedToken['ok'] ) {
+            $response->encodeError("401", "You are not authorized.");
+            return $response;
+        }
+
+        $userRepository = new UserRepository();
+        if ( ! $userRepository->checkAdmin($decodedToken['id'] ) ) {
+            $response->code = 401;
+            $response->body = file_get_contents(__DIR__."/../../protected/html/error/401.html");
+            return $response;
+        }
+
+        $response->encodeSuccess(200, $userRepository->getAll());
+
+        return $response;
+    }
+
+    public function deleteUser () : Response {
+        echo ("aici");
+
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/json");
+
+        $authController = new AuthController($this->request);
+        $decodedToken = $authController->checkJWT();
+        if ( ! $decodedToken['ok'] ) {
+            $response->encodeError("401", "You are not authorized.");
+            return $response;
+        }
+
+        $userRepository = new UserRepository();
+        if ( ! $userRepository->checkAdmin($decodedToken['id'] ) ) {
+            $response->code = 401;
+            $response->body = file_get_contents(__DIR__."/../../protected/html/error/401.html");
+            return $response;
+        }
+
+        $json_body = json_decode($this->request->body, true);
+        $userRepository->deleteUser($json_body['userId']);
+        $response->encodeSuccess(200);
+        return $response;
     }
 }

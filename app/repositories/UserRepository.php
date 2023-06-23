@@ -33,7 +33,6 @@ class UserRepository extends Repository {
         return $userModel;
     }
 
-
     public function create ( UserModel $userModel ) : array {
 
         $email = $userModel->email;
@@ -132,5 +131,14 @@ class UserRepository extends Repository {
         $result['quiz'] = $this->pdo->query("SELECT * FROM get_quiz_users_ranking()" )->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
+    }
+
+    public function deleteUser ( $userId ) : void {
+        $statement = $this->pdo->prepare("DELETE FROM users WHERE id=(:userId)");
+        $statement->execute(
+            [
+                "userId" => $userId
+            ]
+        );
     }
 }

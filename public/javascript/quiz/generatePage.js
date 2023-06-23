@@ -77,6 +77,8 @@ function clearOldQuestion() {
 }
 
 let remainingTime = 1800;
+console.log(remainingTime);
+
 
 const timerFunc = setInterval( () => {
     remainingTime --;
