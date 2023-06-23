@@ -230,3 +230,5 @@ new Chart("quizDurationChart", {
         }
     }
 });
+
+
