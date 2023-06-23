@@ -20,11 +20,7 @@
 
         <div class="tipBlock">
             <h1> Sfaturile zilei </h1> <br>
-            <ul class="tipList">
-                <li> • Respectați regulile din trafic </li>
-                <li> • Purtați centură de siguranță </li>
-                <li> • Fiți pregătiți pentru orice </li>
-                <li> • Conduceți sub influența băuturilor alcoolice </li>
+            <ul class="tipList" id="tipList">
 
             </ul>
         </div>
@@ -49,29 +45,23 @@
             <h1> Clasament </h1>
 
             <p class="firstTop"> Întrebări parcurse în ultima săptămâna: </p>
-            <ol class="learningRanks">
-                <li> stefanel2000: 524 </li>
-                <li> kalynelboss: 306 </li>
-                <li> imapache: 298 </li>
-                <li> yeti-dll: 213 </li>
-                <li> skelyanMbappe: 149 </li>
+            <ol class="learningRanks" id="learningRanks">
             </ol>
 
             <br>
-            <p class="secondTop"> Rată de rezolvare a chestionarelor: </p>
-            <ol class="learningRanks">
-                <li> stefanel2000: 84% </li>
-                <li> harastefan: 77% </li>
-                <li> l33t: 75% </li>
-                <li> adrian1234: 66% </li>
-                <li> raresika: 49% </li>
+            <p class="secondTop"> Număr de chestionare rezolvate în ultima săpătmână: </p>
+            <ol class="learningRanks" id="quizRanks">
             </ol>
 
+            <button> RSS </button>
         </div>
     </div>
     <script src="/public/javascript/navBar/load.js"></script>
+    <script src="/public/javascript/home/loadPage.js"></script>
     <script>
         loadNavbar();
+        getTips();
+        getRanking();
     </script>
 </body>
 </html>

@@ -123,4 +123,14 @@ class UserRepository extends Repository {
 
         return true;
     }
+
+
+    public function getRanking () : array {
+
+        $result = [];
+        $result['learn'] = $this->pdo->query("SELECT * FROM get_learn_users_ranking()" )->fetchAll(PDO::FETCH_ASSOC);
+        $result['quiz'] = $this->pdo->query("SELECT * FROM get_quiz_users_ranking()" )->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 }

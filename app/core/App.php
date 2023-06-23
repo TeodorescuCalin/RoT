@@ -18,6 +18,7 @@ class App {
 
         $this->addRoute ( "GET", "", "HomeController@index" );
         $this->addRoute ( "GET", "legislation", "HomeController@legislation" );
+        $this->addRoute ( "GET", "tip", "HomeController@getTip" );
         $this->addRoute ( "GET", "login", "HomeController@login" );
         $this->addRoute ( "GET", "register", "HomeController@register" );
         $this->addRoute ( "GET", "forgotPassword", "HomeController@forgotPassword" );
@@ -28,9 +29,10 @@ class App {
 
         $this->addRoute ( "POST", "login", "UserController@login" );
         $this->addRoute ( "POST", "register", "UserController@register" );
-
         $this->addRoute ( "GET", "profile/{username}", "UserController@getProfile" );
         $this->addRoute ( "GET", "user_info", "UserController@getUserInfo" );
+        $this->addRoute ( "GET", "ranking", "UserController@getRanking" );
+        $this->addRoute ( "GET", "ranking_rss", "UserController@getRSSRanking" );
 
         $this->addRoute ( "GET", "learn", "LearnController@getPage" );
         $this->addRoute ( "GET", "learn/questions", "LearnController@getQuestion" );

@@ -314,9 +314,6 @@ class LearnController extends Controller {
         $questionRepository = new LearnQuestionRepository();
         $questionRepository->create($questionModel);
 
-        
-
-    //    $response->code = 200;
 
        $response->encodeSuccess(200);
 

@@ -204,4 +204,31 @@ class UserController extends Controller {
         }
         return $response;
     }
+
+
+    public function getRanking () : Response {
+
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/json");
+
+        $userRepository = new UserRepository();
+        $response->encodeSuccess(200, $userRepository->getRanking());
+
+        return $response;
+    }
+
+
+    public function getRSSRanking () : Response {
+
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/rss+xml");
+
+        $userRepository = new UserRepository();
+        $data = $userRepository->getRanking();
+
+        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"></rss>');
+        $channel = $xml->addChild('channel');
+        $channel->addChild('title', 'ROT ranking feed');
+        $channel->addChild('description', 'The top users of Romanian')
+    }
 }

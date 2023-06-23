@@ -1,6 +1,7 @@
 <?php
 
 require_once (__DIR__."/Controller.php");
+require_once (__DIR__."/../repositories/TipRepository.php");
 
 class HomeController extends Controller  {
 
@@ -98,6 +99,19 @@ class HomeController extends Controller  {
             return $response;
         }
 
+        return $response;
+    }
+
+
+    public function getTip () : Response {
+
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/json");
+
+        $tipRepository = new TipRepository();
+        $result = $tipRepository->getRandomTips();
+
+        $response->encodeSuccess(200, $result);
         return $response;
     }
 }
