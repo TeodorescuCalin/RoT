@@ -182,6 +182,52 @@ class QuizRepository extends Repository
                 "correct_answers" => $userQuizModel->correctAnswerCount,
             ]
         );
+    }
 
+
+    public function getQuestionByText ( $text ) : int | null {
+        $statement = $this->pdo->prepare("SELECT id FROM quiz_questions WHERE text=(:text)");
+        $statement->execute(
+            [
+                "text" => $text
+            ]
+        );
+
+        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ( ! $fetchArray ) {
+            return null;
+        }
+
+        return $fetchArray['id'];
+    }
+
+
+    public function createQuestion ( $text, $image_path ) : int {
+        $statement = $this->pdo->prepare("INSERT INTO quiz_questions(text, image_path) VALUES((:text),(:image_path))");
+        $statement->execute(
+            [
+                'text' => $text,
+                'image_path' => $image_path
+            ]
+        );
+        return $this->pdo->lastInsertId();
+    }
+
+
+    public function create ( QuizModel $quizModel ) : void {
+        $this->pdo->prepare("INSERT INTO quiz DEFAULT VALUES")->execute();
+        $quizId = $this->pdo->lastInsertId();
+
+        foreach ( $quizModel->questions as $question ) {
+            foreach ( $question['answers'] as $answer ) {
+                $statement = $this->pdo->prepare("INSERT INTO quiz_questions_answers VALUES((:quizId),(:questionId),(:answerId),(:correct))");
+                $statement->bindParam(":correct", $answer['correct'], PDO::PARAM_BOOL);
+                $statement->bindParam(":quizId", $quizId);
+                $statement->bindParam(":questionId", $question['id']);
+                $statement->bindParam(":answerId", $answer['id']);
+                $statement->execute();
+            }
+        }
     }
 }

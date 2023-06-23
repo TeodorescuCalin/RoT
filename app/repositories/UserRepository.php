@@ -129,7 +129,9 @@ class UserRepository extends Repository {
 
         $result = [];
         $result['learn'] = $this->pdo->query("SELECT * FROM get_learn_users_ranking()" )->fetchAll(PDO::FETCH_ASSOC);
+        $result['learn_update'] = $this->pdo->query("SELECT updated_at FROM user_learn_questions GROUP BY id_user, updated_at ORDER BY COUNT(id_user) LIMIT 5")->fetch(PDO::FETCH_ASSOC)['updated_at'];
         $result['quiz'] = $this->pdo->query("SELECT * FROM get_quiz_users_ranking()" )->fetchAll(PDO::FETCH_ASSOC);
+        $result['quiz_update'] = $this->pdo->query("SELECT updated_at FROM user_quizzes GROUP BY id_user, updated_at ORDER BY COUNT(id_user) LIMIT 5")->fetch(PDO::FETCH_ASSOC)['updated_at'];
 
         return $result;
     }

@@ -45,6 +45,7 @@ class App {
         $this->addRoute ( "GET", "quiz/{quizId}/questions", "QuizController@getQuiz" );
         $this->addRoute ( "POST", "quiz/{quizId}/{questionId}/check", "QuizController@checkQuizAnswer" );
         $this->addRoute ( "PUT", "quiz/{quizId}", "QuizController@updateUserQuizStatus" );
+        $this->addRoute ( "POST", "quiz", "QuizController@postQuiz" );
 
         $this->addRoute ( "GET", "admin", "AdminController@getPage" );
         $this->addRoute ( "GET", "learnAdminMainPage", "AdminController@getLearnPage" );

@@ -3,9 +3,6 @@ function incrementQuestionNumber() {
     var currentText = element.innerText;
     var number = parseInt(currentText.match(/\d+/)[0]);
 
-    if (number == 2)
-        toJSON();
-
     if (number < 25) {
         var incremented = currentText.replace(number, number + 1);
         element.style.fontWeight = 'bold';
@@ -19,7 +16,8 @@ function incrementQuestionNumber() {
         button.innerText = "Creeaza chestionar";
     }
     else if (number == 26) {
-        toJSON();
+
+        createQuestion();
     }
 
     deleteNewDivs();
@@ -407,19 +405,22 @@ function selectAnswersWithType() {
     }
 }
 
-function toJSON() {
+async function createQuestion() {
     for (let i = 0; i < savedQuestions.length; i++) {
-        firstAnswer = savedNewDivs[i * 3 + 0].text;
-        secondAnswer = savedNewDivs[i * 3 + 1].text;
-        thirdAnswer = savedNewDivs[i * 3 + 2].text;
+        const firstAnswer = savedNewDivs[i * 3 + 0].text;
+        const secondAnswer = savedNewDivs[i * 3 + 1].text;
+        const thirdAnswer = savedNewDivs[i * 3 + 2].text;
 
-        correct = savedCorectAnswersNumber[i].value;
-        if (correct == 1) {
+        let firstAnswerCorrect;
+        let secondAnswerCorrect;
+        let thirdAnswerCorrect;
+        const correct = savedCorectAnswersNumber[i].value;
+        if (correct === 1) {
             firstAnswerCorrect = true;
             secondAnswerCorrect = false;
             thirdAnswerCorrect = false;
         }
-        else if (correct == 2) {
+        else if (correct === 2) {
             firstAnswerCorrect = true;
             secondAnswerCorrect = true;
             thirdAnswerCorrect = false;
@@ -430,21 +431,46 @@ function toJSON() {
             thirdAnswerCorrect = true;
         }
 
-        var data = {
-            text: savedQuestions[i].text,
-            image: savedPaths[i].text,
-            firstAnswer: firstAnswer,
-            firstAnswerCorrect: firstAnswerCorrect,
-            secondAnswer: secondAnswer,
-            secondAnswerCorrect: secondAnswerCorrect,
-            thirdAnswer: thirdAnswer,
-            thirdAnswerCorrect: thirdAnswerCorrect
+        let array = [];
+        array.push(
+            {
+                "text" : firstAnswer,
+                "correct" : firstAnswerCorrect
+            }
+        )
+        array.push(
+            {
+                "text" : secondAnswer,
+                "correct" : secondAnswerCorrect
+            }
+        )
+        array.push(
+            {
+                "text" : thirdAnswer,
+                "correct" : thirdAnswerCorrect
+            }
+        )
+
+        const data = {
+            text : savedQuestions[i].text,
+            image_path : savedPaths[i].text,
+            answers : array
         };
 
         questionsData.push(data);
     }
-    json = JSON.stringify(questionsData);
-    console.log(json);
+
+    await fetch (
+        new Request( HOST_URL + "quiz",
+            {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify({"questions" : questionsData})
+            }
+        )
+    )
 }
 
 // window.addEventListener('beforeunload', function(event) {
