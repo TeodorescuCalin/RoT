@@ -11,7 +11,8 @@ CREATE TABLE users(
     logged BOOLEAN NOT NULL DEFAULT false,
     admin BOOLEAN NOT NULL DEFAULT false
 );
-CREATE TRIGGER refresh_updated_at_users AFTER UPDATE ON users FOR EACH ROW EXECUTE FUNCTION updated_at_trigger_function();
+CREATE OR REPLACE TRIGGER refresh_updated_at_users AFTER UPDATE ON users FOR EACH ROW EXECUTE FUNCTION updated_at_trigger_function();
+
 
 CREATE TYPE question_type AS ENUM ( 'multipleChoice', 'count');
 CREATE TYPE question_category AS ENUM ( 'mechanics', 'firstAid', 'signs', 'police', 'speed', 'priority', 'fines', 'general');
@@ -69,6 +70,7 @@ CREATE TABLE quiz_questions_answers (
     CONSTRAINT id_question_ref_quiz_question FOREIGN KEY ( id_question ) REFERENCES quiz_questions(id) ON DELETE CASCADE,
     CONSTRAINT id_answer_ref_quiz_answer FOREIGN KEY ( id_answer ) REFERENCES answers(id) ON DELETE CASCADE
 );
+ALTER TABLE quiz_questions_answers ADD CONSTRAINT id_quiz_ref_quiz FOREIGN KEY ( id_quiz ) REFERENCES quiz(id) ON DELETE CASCADE;
 
 
 CREATE TYPE learn_question_status AS ENUM ( 'failed', 'passed', 'skipped' );
@@ -82,7 +84,8 @@ CREATE TABLE user_learn_questions (
     CONSTRAINT id_user_ref_users FOREIGN KEY ( id_user ) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT id_question_ref_learn_question FOREIGN KEY ( id_question ) REFERENCES learn_questions(id) ON DELETE CASCADE
 );
-CREATE TRIGGER refresh_updated_at_user_learn_question AFTER UPDATE ON user_learn_questions EXECUTE FUNCTION updated_at_trigger_function();
+CREATE OR REPLACE TRIGGER refresh_updated_at_user_learn_question BEFORE UPDATE ON user_learn_questions FOR EACH ROW EXECUTE FUNCTION updated_at_trigger_function();
+
 
 
 CREATE TYPE quiz_status AS ENUM ( 'passed', 'failed', 'perfect' );
@@ -98,11 +101,11 @@ CREATE TABLE user_quizzes (
     CONSTRAINT id_user_ref_users FOREIGN KEY ( id_user ) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT id_quiz_ref_quiz FOREIGN KEY ( id_quiz ) REFERENCES quiz(id) ON DELETE CASCADE
 );
-CREATE TRIGGER refresh_updated_at_user_quizzes AFTER UPDATE ON user_quizzes EXECUTE FUNCTION updated_at_trigger_function();
+CREATE OR REPLACE TRIGGER refresh_updated_at_user_quizzes AFTER UPDATE ON user_quizzes FOR EACH ROW EXECUTE FUNCTION updated_at_trigger_function();
 
 
 CREATE TABLE tips (
-    id_tip SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     text VARCHAR(512) NOT NULL
 );
 
@@ -110,7 +113,7 @@ CREATE TABLE tips (
 CREATE OR REPLACE FUNCTION updated_at_trigger_function() RETURNS TRIGGER AS
 $$
     BEGIN
-        new.updated_at = current_timestamp;
+        new.updated_at := now();
         RETURN new;
     END;
 $$ LANGUAGE plpgsql;
@@ -163,6 +166,7 @@ CREATE TYPE learn_question_with_answer AS (
     answer_list answers ARRAY
 );
 
+
 CREATE OR REPLACE FUNCTION get_user_learning_question(p_user_id users.id%TYPE) RETURNS learn_questions.id%TYPE AS
 $BODY$
 DECLARE
@@ -201,31 +205,29 @@ $BODY$
 DECLARE
     v_correct_answer_count SMALLINT;
     v_total_answer_count SMALLINT;
+    v_question_category learn_questions.category%TYPE;
 BEGIN
     SELECT COUNT(*) INTO v_correct_answer_count FROM learn_questions_answers WHERE id_question=p_question_id;
-    SELECT answer_count INTO v_total_answer_count FROM learn_questions WHERE id=p_question_id;
-    RETURN QUERY SELECT * FROM answers
-    WHERE id NOT IN ( SELECT id_answer FROM learn_questions_answers WHERE id_question=p_question_id )
+    SELECT answer_count, category INTO v_total_answer_count, v_question_category FROM learn_questions WHERE id=p_question_id;
+    RETURN QUERY SELECT answers.id AS id, answers.text AS text FROM learn_questions_answers
+    JOIN answers ON learn_questions_answers.id_answer = answers.id
+    WHERE answers.id NOT IN ( SELECT id_answer FROM learn_questions_answers WHERE id_question=p_question_id )
+        AND learn_questions_answers.category = v_question_category
     ORDER BY random()
     LIMIT (v_total_answer_count - v_correct_answer_count);
 END;
 $BODY$ LANGUAGE plpgsql;
 
 
-INSERT INTO learn_questions_answers(id_question, id_answer) VALUES (71, 31);
-INSERT INTO learn_questions_answers(id_question, id_answer) VALUES (71, 35);
+SELECT * FROM get_random_tips();
 
-CREATE OR REPLACE FUNCTION get_random_tip() RETURNS tips.text%TYPE AS
+CREATE OR REPLACE FUNCTION get_random_tips() RETURNS SETOF tips AS
 $BODY$
-DECLARE
-    random_tip tips.text%TYPE;
 BEGIN
-    SELECT text INTO random_tip
+    RETURN QUERY SELECT *
     FROM tips
     ORDER BY random()
-    LIMIT 1;
-
-    RETURN random_tip;
+    LIMIT 3;
 END;
 $BODY$ LANGUAGE plpgsql;
 
@@ -252,10 +254,6 @@ BEGIN
     RETURN progress;
 END;
 $BODY$ language plpgsql;
-
-SELECT get_learn_progress(1);
-
-
 
 
 CREATE OR REPLACE FUNCTION get_quizzes_progress(p_user_id users.id%TYPE) RETURNS FLOAT AS
@@ -288,8 +286,6 @@ CREATE TYPE user_question_category_stats AS (
     failed INT,
     progress INT
 );
-
-
 CREATE OR REPLACE FUNCTION get_question_category_stats(p_user_id users.id%TYPE, p_category learn_questions.category%TYPE) RETURNS user_question_category_stats AS
 $BODY$
 DECLARE
@@ -397,12 +393,31 @@ BEGIN
 END;
 $BODY$ LANGUAGE plpgsql;
 
+
+
+CREATE OR REPLACE FUNCTION insert_random_quiz_questions() RETURNS void AS
+$BODY$
+DECLARE
+    v_id INTEGER;
+    v_text VARCHAR(512);
+    v_image_path VARCHAR(512);
+BEGIN
+    FOR i IN 1..100 LOOP
+        v_id := i;
+        v_text := 'Intrebarea ' || i;
+
+        INSERT INTO quiz_questions(id, text, image_path)
+        VALUES (v_id, v_text, v_image_path);
+    END LOOP;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
 CREATE OR REPLACE FUNCTION insert_random_quizzes() RETURNS void AS
 $BODY$
 DECLARE
 BEGIN
     FOR i IN 1..25 LOOP
-
         INSERT INTO quiz VALUES(i);
     END LOOP;
 END;
@@ -414,7 +429,6 @@ $BODY$
 DECLARE
 BEGIN
     FOR i IN 1..30 LOOP
-
         INSERT INTO answers(text) VALUES('Raspunsul' || i);
     END LOOP;
 END;
@@ -522,8 +536,6 @@ CREATE TYPE weekly_stat AS (
     week INT,
     count BIGINT
 );
-
-
 CREATE OR REPLACE FUNCTION get_learn_question_stats_by_week(p_user_id users.id%TYPE) RETURNS SETOF weekly_stat AS
 $BODY$
 DECLARE
@@ -570,3 +582,1408 @@ BEGIN
     RETURN NEXT v_record;
 END;
 $BODY$ LANGUAGE plpgsql;
+
+
+CREATE TYPE quiz_question_answer_type AS (
+    id INT,
+    text VARCHAR(512),
+    image_path VARCHAR(512),
+    first_answer_id INT,
+    second_answer_id INT,
+    third_answer_id INT,
+    first_answer_correct BOOLEAN,
+    second_answer_correct BOOLEAN,
+    third_answer_correct BOOLEAN,
+    first_answer_text VARCHAR(512),
+    second_answer_text VARCHAR(512),
+    third_answer_text VARCHAR(512)
+);
+CREATE TYPE question_answer_type AS (
+    id INT,
+    correct BOOLEAN,
+    text VARCHAR(512)
+);
+
+
+CREATE OR REPLACE FUNCTION get_quiz_question(p_id_quiz quiz.id%TYPE, p_id_question quiz.id%TYPE) RETURNS quiz_question_answer_type AS
+$BODY$
+DECLARE
+    v_result quiz_question_answer_type;
+    v_array_results question_answer_type ARRAY;
+BEGIN
+    v_result.id := p_id_question;
+    SELECT text, image_path INTO v_result.text, v_result.image_path FROM quiz_questions WHERE id=p_id_question;
+    v_array_results := ARRAY ( SELECT (qqa.id_answer, qqa.correct, a.text)::question_answer_type
+                               FROM quiz_questions_answers qqa JOIN answers a on qqa.id_answer = a.id
+                               WHERE qqa.id_question=p_id_question AND qqa.id_quiz=p_id_quiz);
+    v_result.first_answer_id := v_array_results[1].id;
+    v_result.first_answer_correct := v_array_results[1].correct;
+    v_result.first_answer_text := v_array_results[1].text;
+    v_result.second_answer_id := v_array_results[2].id;
+    v_result.second_answer_correct := v_array_results[2].correct;
+    v_result.second_answer_text := v_array_results[2].text;
+    v_result.third_answer_id := v_array_results[3].id;
+    v_result.third_answer_correct := v_array_results[3].correct;
+    v_result.third_answer_text := v_array_results[3].text;
+
+    RETURN v_result;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE TYPE ranking_type AS (
+    username VARCHAR(32),
+    result BIGINT
+);
+CREATE OR REPLACE FUNCTION get_learn_users_ranking() RETURNS SETOF ranking_type AS
+$BODY$
+BEGIN
+    RETURN QUERY SELECT username, COUNT(id_user)
+                 FROM users JOIN user_learn_questions ulq on users.id = ulq.id_user
+                 WHERE ulq.status != 'skipped'
+                  GROUP BY username
+                   ORDER BY COUNT(id_user)
+                    LIMIT 5;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_quiz_users_ranking() RETURNS SETOF ranking_type AS
+$BODY$
+BEGIN
+    RETURN QUERY SELECT username, COUNT(id_user)
+                 FROM users JOIN user_quizzes uq on users.id = uq.id_user
+                 WHERE uq.status != 'failed'
+                  GROUP BY username
+                   ORDER BY COUNT(id_user)
+                    LIMIT 5;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+
+
+
+SELECT DISTINCT qqa.id_question, qq.text, qq.image_path FROM quiz_questions_answers qqa JOIN quiz_questions qq on qqa.id_question = qq.id
+WHERE qqa.id_quiz = 1;
+
+SELECT * FROM get_quiz_question(1, 1);
+
+SELECT ARRAY ( SELECT (id_answer, correct)::question_answer_type FROM quiz_questions_answers WHERE id_question=1 AND id_quiz=1);
+
+SELECT * FROM quiz_questions_answers;
+
+DELETE FROM quiz_questions_answers WHERE id_quiz!=1 OR id_question!=1;
+
+INSERT INTO learn_questions_answers VALUES (20, 70, null, 'general');
+
+SELECT id, status, duration, correct_answers FROM quiz LEFT OUTER JOIN user_quizzes uq on quiz.id = uq.id_quiz WHERE uq.id_user = 4 OR uq.id_user IS NULL;
+
+SELECT * FROM learn_questions;
+SELECT * FROM answers;
+
+SELECT * FROM learn_questions_answers;
+
+INSERT INTO tips (text) VALUES ('Nu conduce sub influența băuturilor alcoolice');
+INSERT INTO tips (text) VALUES ('Nu uita să-ți aprinzi luminile în zonele fără luminozitate');
+INSERT INTO tips (text) VALUES ('Ai grijă în interecțiile cu drumuri comunale');
+
+
+TRUNCATE TABLE quiz_questions CASCADE;
+TRUNCATE TABLE answers CASCADE;
+TRUNCATE TABLE quiz CASCADE;
+
+ALTER SEQUENCE quiz_questions_id_seq RESTART WITH 7;
+ALTER SEQUENCE answers_id_seq RESTART WITH 17;
+
+
+INSERT INTO quiz VALUES(1);
+INSERT INTO quiz_questions(text, image_path) VALUES ('Neeliberarea completă a frânei de staţionare determină:', NULL);
+INSERT INTO answers(text) VALUES('zgomote în zona manetei frânei de mână');
+INSERT INTO quiz_questions_answers VALUES (1, 7, 17, FALSE);
+INSERT INTO answers(text) VALUES('un consum suplimentar de carburant');
+INSERT INTO quiz_questions_answers VALUES (1, 7, 18, TRUE);
+INSERT INTO answers(text) VALUES('încălzirea excesivă a butucilor roţilor din spate');
+INSERT INTO quiz_questions_answers VALUES (1, 7, 19, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum trebuie să fie nivelul corect al uleiului din baie?', NULL);
+INSERT INTO answers(text) VALUES('cu aproximativ 1 cm sub reperul MIN');
+INSERT INTO quiz_questions_answers VALUES (1, 8, 20, FALSE);
+INSERT INTO answers(text) VALUES('între reperele MIN-MAX, însemnate pe joja de ulei');
+INSERT INTO quiz_questions_answers VALUES (1, 8, 21, TRUE);
+INSERT INTO answers(text) VALUES('cu aproximativ 1 cm deasupra reperului MAX');
+INSERT INTO quiz_questions_answers VALUES (1, 8, 22, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce vă indică, de regulă, faptul că bateria de acumulatori este descărcată?', NULL);
+INSERT INTO answers(text) VALUES('la aprinderea farurilor, intensitatea luminoasă a acestora scade progresiv');
+INSERT INTO quiz_questions_answers VALUES (1, 9, 23, TRUE);
+INSERT INTO answers(text) VALUES('acţionând claxonul, acesta emite un sunet slab, întrerupt');
+INSERT INTO quiz_questions_answers VALUES (1, 9, 24, TRUE);
+INSERT INTO answers(text) VALUES('demontând bateria, constatăm că aceasta este mai uşoară decât de obicei');
+INSERT INTO quiz_questions_answers VALUES (1, 9, 25, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care sunt factorii care fac ca motorul Diesel al unui autoturism să emită fum excesiv?', NULL);
+INSERT INTO answers(text) VALUES('lipsa combustibilului');
+INSERT INTO quiz_questions_answers VALUES (1, 10, 26, FALSE);
+INSERT INTO answers(text) VALUES('buşonul rezervorului închis la maximum');
+INSERT INTO quiz_questions_answers VALUES (1, 10, 27, FALSE);
+INSERT INTO answers(text) VALUES('defecţiuni la instalaţia de injecţie');
+INSERT INTO quiz_questions_answers VALUES (1, 10, 28, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Pentru întreţinerea sistemului de ungere, trebuie să efectuaţi:', NULL);
+INSERT INTO answers(text) VALUES('verificarea şi completarea nivelului uleiului din baie');
+INSERT INTO quiz_questions_answers VALUES (1, 11, 29, TRUE);
+INSERT INTO answers(text) VALUES('înlocuirea uleiului după expirarea termenului de utilizare');
+INSERT INTO quiz_questions_answers VALUES (1, 11, 30, TRUE);
+INSERT INTO answers(text) VALUES('desfundarea orificiilor de aerisire ale radiatorului');
+INSERT INTO quiz_questions_answers VALUES (1, 11, 31, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce indică semnalul agentului de circulaţie?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1175.jpg');
+INSERT INTO answers(text) VALUES('reduceţi viteza');
+INSERT INTO quiz_questions_answers VALUES (1, 12, 32, FALSE);
+INSERT INTO answers(text) VALUES('oprire');
+INSERT INTO quiz_questions_answers VALUES (1, 12, 33, TRUE);
+INSERT INTO answers(text) VALUES('măriţi viteza');
+INSERT INTO quiz_questions_answers VALUES (1, 12, 34, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce semnifică semnalul poliţistului aflat într-o intersecţie, cu braţul drept întins orizontal?', NULL);
+INSERT INTO answers(text) VALUES('oprire pentru vehiculele şi pietonii care vin din faţa acestuia');
+INSERT INTO quiz_questions_answers VALUES (1, 13, 35, FALSE);
+INSERT INTO answers(text) VALUES('oprire pentru vehiculele şi pietonii care vin din spatele acestuia');
+INSERT INTO quiz_questions_answers VALUES (1, 13, 36, TRUE);
+INSERT INTO answers(text) VALUES('oprire pentru vehiculele şi pietonii care vin din faţa şi din spatele acestuia');
+INSERT INTO quiz_questions_answers VALUES (1, 13, 37, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce semnificaţie are, după coborârea braţelor, poziţia corpului unui poliţist care dirijează circulaţia, pentru participanţii la trafic care circulă din faţa şi spatele său?', NULL);
+INSERT INTO answers(text) VALUES('nicio semnificaţie');
+INSERT INTO quiz_questions_answers VALUES (1, 14, 38, FALSE);
+INSERT INTO answers(text) VALUES('permisiunea de a circula');
+INSERT INTO quiz_questions_answers VALUES (1, 14, 39, FALSE);
+-- INSERT INTO answers(text) VALUES('oprire');
+INSERT INTO quiz_questions_answers VALUES (1, 14, 33, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În cazul unui accident în care victima şi-a pierdut cunoştinţa, prima măsură va fi:', NULL);
+INSERT INTO answers(text) VALUES('să administraţi medicamente din trusa de prim ajutor');
+INSERT INTO quiz_questions_answers VALUES (1, 15, 40, FALSE);
+INSERT INTO answers(text) VALUES('să imobilizaţi eventualele fracturi');
+INSERT INTO quiz_questions_answers VALUES (1, 15, 41, FALSE);
+INSERT INTO answers(text) VALUES('să controlaţi respiraţia şi bătăile inimii');
+INSERT INTO quiz_questions_answers VALUES (1, 15, 42, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Hemoragia nazală se poate opri dacă accidentatul:', NULL);
+INSERT INTO answers(text) VALUES('stă culcat cu capul pe spate');
+INSERT INTO quiz_questions_answers VALUES (1, 16, 43, FALSE);
+INSERT INTO answers(text) VALUES('stă în picioare şi îşi strânge ambele nări timp de aproximativ 5-10 minute');
+INSERT INTO quiz_questions_answers VALUES (1, 16, 44, TRUE);
+INSERT INTO answers(text) VALUES('ridică mâna dreaptă');
+INSERT INTO quiz_questions_answers VALUES (1, 16, 45, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Imobilizarea unui braţ fracturat se face:', NULL);
+INSERT INTO answers(text) VALUES('în dreptul osului fracturat');
+INSERT INTO quiz_questions_answers VALUES (1, 17, 46, FALSE);
+INSERT INTO answers(text) VALUES('cuprinzând osul fracturat şi articulaţia superioară');
+INSERT INTO quiz_questions_answers VALUES (1, 17, 47, FALSE);
+INSERT INTO answers(text) VALUES('cuprinzând osul fracturat şi cele două articulaţii, respectiv cea superioară şi inferioară');
+INSERT INTO quiz_questions_answers VALUES (1, 17, 48, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Nu este permis unui autovehicul să circule atunci când:', NULL);
+INSERT INTO answers(text) VALUES('poluează fonic, în timpul mersului sau staţionării, peste pragul admis de lege');
+INSERT INTO quiz_questions_answers VALUES (1, 18, 49, TRUE);
+INSERT INTO answers(text) VALUES('nu este dotat cu roată de rezervă');
+INSERT INTO quiz_questions_answers VALUES (1, 18, 50, FALSE);
+INSERT INTO answers(text) VALUES('plăcuţele cu numărul de înmatriculare sunt deteriorate');
+INSERT INTO quiz_questions_answers VALUES (1, 18, 51, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Vă puteţi apropia de vehiculul din faţă?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_904.jpg');
+INSERT INTO answers(text) VALUES('da');
+INSERT INTO quiz_questions_answers VALUES (1, 19, 52, FALSE);
+INSERT INTO answers(text) VALUES('nu, pentru că astfel blocaţi intersecţia');
+INSERT INTO quiz_questions_answers VALUES (1, 19, 53, TRUE);
+INSERT INTO answers(text) VALUES('legea nu prevede obligaţii în această situaţie');
+INSERT INTO quiz_questions_answers VALUES (1, 19, 54, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Inspecția tehnică periodică a autovehiculelor / tractoarelor agricole sau forestiere și a remorcilor trebuie efectuată:', NULL);
+INSERT INTO answers(text) VALUES('anual, la orice service auto');
+INSERT INTO quiz_questions_answers VALUES (1, 20, 55, FALSE);
+INSERT INTO answers(text) VALUES('periodic, conform legii');
+INSERT INTO quiz_questions_answers VALUES (1, 20, 56, TRUE);
+INSERT INTO answers(text) VALUES('la cel mult doi ani, la o staţie de inspecţie tehnică autorizată');
+INSERT INTO quiz_questions_answers VALUES (1, 20, 57, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Viteza maximă cu care pot să conducă un autoturism, pe drumurile naţionale, altele decât cele europene (E), persoanele care au mai puţin de un an de practică de conducere, este de:', NULL);
+INSERT INTO answers(text) VALUES('70 km/h');
+INSERT INTO quiz_questions_answers VALUES (1, 21, 58, TRUE);
+INSERT INTO answers(text) VALUES('90 km/h');
+INSERT INTO quiz_questions_answers VALUES (1, 21, 59, FALSE);
+INSERT INTO answers(text) VALUES('80 km/h');
+INSERT INTO quiz_questions_answers VALUES (1, 21, 60, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre următoarele situaţii sunteţi obligat să circulaţi cu o viteză care să nu depăşească 30 km/h în localităţi?', NULL);
+INSERT INTO answers(text) VALUES('la trecerile pentru pietoni semaforizate');
+INSERT INTO quiz_questions_answers VALUES (1, 22, 61, FALSE);
+INSERT INTO answers(text) VALUES('la circulaţia pe poduri');
+INSERT INTO quiz_questions_answers VALUES (1, 22, 62, FALSE);
+INSERT INTO answers(text) VALUES('pe drumurile cu denivelări semnalizate ca atare');
+INSERT INTO quiz_questions_answers VALUES (1, 22, 63, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre următoarele situaţii sunteţi obligat să circulaţi cu viteză redusă?', NULL);
+INSERT INTO answers(text) VALUES('când sunteţi obosit şi autovehiculul are sistemul de frânare defect');
+INSERT INTO quiz_questions_answers VALUES (1, 23, 64, FALSE);
+INSERT INTO answers(text) VALUES('la trecerea la nivel cu calea ferată curentă');
+INSERT INTO quiz_questions_answers VALUES (1, 23, 65, TRUE);
+INSERT INTO answers(text) VALUES('pe drumurile judeţene şi comunale');
+INSERT INTO quiz_questions_answers VALUES (1, 23, 66, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În ce situaţie este sancţionat conducătorul unui vehicul cu amendă contravenţională şi suspendarea dreptului de a conduce?
+', NULL);
+INSERT INTO answers(text) VALUES('la depăşirea cu 20 km/h a vitezei maxime admise');
+INSERT INTO quiz_questions_answers VALUES (1, 24, 67, FALSE);
+INSERT INTO answers(text) VALUES('la depăşirea cu mai mult de 30 km/h a vitezei maxime admise');
+INSERT INTO quiz_questions_answers VALUES (1, 24, 68, FALSE);
+INSERT INTO answers(text) VALUES('la depăşirea cu mai mult de 50 km/h a vitezei maxime admise');
+INSERT INTO quiz_questions_answers VALUES (1, 24, 69, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre situaţiile de mai jos se suspendă exercitarea dreptului de a conduce?', NULL);
+INSERT INTO answers(text) VALUES('depăşirea vitezei maxime admise cu peste 20 km/h');
+INSERT INTO quiz_questions_answers VALUES (1, 25, 70, FALSE);
+INSERT INTO answers(text) VALUES('nerespectarea regulilor privind depăşirea');
+INSERT INTO quiz_questions_answers VALUES (1, 25, 71, TRUE);
+INSERT INTO answers(text) VALUES('nefolosirea luminilor de ceaţă după lăsarea serii');
+INSERT INTO quiz_questions_answers VALUES (1, 25, 72, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre următoarele cazuri, pe lângă amenda contravenţională, se reţine şi permisul de conducere?', NULL);
+INSERT INTO answers(text) VALUES('neoprirea la semnalul persoanelor autorizate din zona de lucrări la drumul public');
+INSERT INTO quiz_questions_answers VALUES (1, 26, 73, FALSE);
+INSERT INTO answers(text) VALUES('nerespectarea semnalelor poliţiştilor la trecerea coloanelor oficiale');
+INSERT INTO quiz_questions_answers VALUES (1, 26, 74, TRUE);
+INSERT INTO answers(text) VALUES('neoprirea la semnalul agentului de cale ferată');
+INSERT INTO quiz_questions_answers VALUES (1, 26, 75, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Schimbarea direcției de mers la dreapta sau la stânga nu este permisă la întâlnirea:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1021.jpg');
+INSERT INTO answers(text) VALUES('indicatorului 1');
+INSERT INTO quiz_questions_answers VALUES (1, 27, 76, FALSE);
+INSERT INTO answers(text) VALUES('indicatorului 2');
+INSERT INTO quiz_questions_answers VALUES (1, 27, 77, TRUE);
+INSERT INTO answers(text) VALUES('ambelor indicatoare');
+INSERT INTO quiz_questions_answers VALUES (1, 27, 78, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Panoul de sub indicator permite:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1035.jpg');
+INSERT INTO answers(text) VALUES('staționarea mijloacelor de transport public de persoane în intervalul menționat');
+INSERT INTO quiz_questions_answers VALUES (1, 28, 79, FALSE);
+INSERT INTO answers(text) VALUES('staționarea în timpul orelor menționate');
+INSERT INTO quiz_questions_answers VALUES (1, 28, 80, FALSE);
+INSERT INTO answers(text) VALUES('staționarea în afara intervalului orar menționat');
+INSERT INTO quiz_questions_answers VALUES (1, 28, 81, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care dintre indicatoare te avertizează că urmează să intersectezi un drum fără prioritate?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_978.jpg');
+INSERT INTO answers(text) VALUES('ambele');
+INSERT INTO quiz_questions_answers VALUES (1, 29, 82, FALSE);
+INSERT INTO answers(text) VALUES('indicatorul 1');
+INSERT INTO quiz_questions_answers VALUES (1, 29, 83, TRUE);
+INSERT INTO answers(text) VALUES('indicatorul 2');
+INSERT INTO quiz_questions_answers VALUES (1, 29, 84, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În ce ordine vor trece autovehiculele prin intersecţia prezentată?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_507.jpg');
+INSERT INTO answers(text) VALUES('tramvaiul 1, tramvaiul 2, autoturismul');
+INSERT INTO quiz_questions_answers VALUES (1, 30, 85, TRUE);
+INSERT INTO answers(text) VALUES('tramvaiul 2, tramvaiul 1, autoturismul');
+INSERT INTO quiz_questions_answers VALUES (1, 30, 86, FALSE);
+INSERT INTO answers(text) VALUES('tramvaiul 1, autoturismul, tramvaiul 2');
+INSERT INTO quiz_questions_answers VALUES (1, 30, 87, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În ce ordine vor trece prin intersecţie cele trei autovehicule?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_554.jpg');
+INSERT INTO answers(text) VALUES('autobuzul, autocamionul, autoturismul');
+INSERT INTO quiz_questions_answers VALUES (1, 31, 88, FALSE);
+INSERT INTO answers(text) VALUES('autocamionul, autobuzul, autoturismul');
+INSERT INTO quiz_questions_answers VALUES (1, 31, 89, FALSE);
+INSERT INTO answers(text) VALUES('autoturismul, autobuzul, autocamionul');
+INSERT INTO quiz_questions_answers VALUES (1, 31, 90, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În ce ordine vor trece autovehiculele prin intersecţie?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_876.jpg');
+INSERT INTO answers(text) VALUES('motocicleta, tramvaiul 1, tramvaiul 2, autocamionul');
+INSERT INTO quiz_questions_answers VALUES (1, 32, 91, FALSE);
+INSERT INTO answers(text) VALUES('motocicleta, autocamionul, tramvaiul 2, tramvaiul 1');
+INSERT INTO quiz_questions_answers VALUES (1, 32, 92, TRUE);
+INSERT INTO answers(text) VALUES('tramvaiul 1, tramvaiul 2, motocicleta, autocamionul');
+INSERT INTO quiz_questions_answers VALUES (1, 32, 93, FALSE);
+
+
+-- quisz 2
+INSERT INTO quiz VALUES(2);
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum este corect să procedaţi dacă semafoarele funcţionează cu lumina galbenă intermitentă?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_873.jpg');
+INSERT INTO answers(text) VALUES('reduceţi viteza şi traversaţi intersecţia');
+UPDATE answers SET id=95 WHERE id=94;
+ALTER SEQUENCE answers_id_seq RESTART WITH 96;
+INSERT INTO quiz_questions_answers VALUES (2, 33, 95, TRUE);
+INSERT INTO answers(text) VALUES('reduceţi viteza şi cedaţi trecerea');
+INSERT INTO quiz_questions_answers VALUES (2, 33, 96, FALSE);
+INSERT INTO answers(text) VALUES('opriţi şi cedaţi trecerea');
+INSERT INTO quiz_questions_answers VALUES (2, 33, 97, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce semnificaţie are lumina de culoare roşie a semaforului, atât pentru conducătorii de vehicule, cât şi pentru pietoni?', NULL);
+INSERT INTO answers(text) VALUES('îi obligă atât pe conducători, cât şi pe pietoni să se oprească');
+INSERT INTO quiz_questions_answers VALUES (2, 34, 98, TRUE);
+INSERT INTO answers(text) VALUES('îi obligă pe conducători să oprească, iar pe pietoni să traverseze cu prudenţă');
+INSERT INTO quiz_questions_answers VALUES (2, 34, 99, FALSE);
+INSERT INTO answers(text) VALUES('permite vehiculelor să vireze la dreapta, cu respectarea priorităţii');
+INSERT INTO quiz_questions_answers VALUES (2, 34, 100, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Autovehiculul din faţa dvs. traversează intersecţia. Cum veţi proceda?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_64.jpg');
+INSERT INTO answers(text) VALUES('executaţi aceeaşi manevră, dacă nu sunt alte obligaţii');
+INSERT INTO quiz_questions_answers VALUES (2, 35, 101, TRUE);
+INSERT INTO answers(text) VALUES('opriţi, deoarece trebuie să vă asiguraţi');
+INSERT INTO quiz_questions_answers VALUES (2, 35, 102, FALSE);
+INSERT INTO answers(text) VALUES('cedaţi trecerea autovehiculelor care vin din dreapta');
+INSERT INTO quiz_questions_answers VALUES (2, 35, 103, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum veţi proceda corect dacă, la apropierea de o trecere la nivel cu calea ferată curentă fără bariere, luminile roşii şi semnalele sonore sunt în funcţiune?', NULL);
+INSERT INTO answers(text) VALUES('reduceţi viteza şi opriţi, dacă trenul se apropie');
+INSERT INTO quiz_questions_answers VALUES (2, 36, 104, FALSE);
+INSERT INTO answers(text) VALUES('grăbiţi trecerea, dacă observaţi că trenul nu se apropie');
+INSERT INTO quiz_questions_answers VALUES (2, 36, 105, FALSE);
+INSERT INTO answers(text) VALUES('reduceţi viteza şi opriţi, în locul în care există vizibilitate maximă asupra căii ferate, fără a trece de indicatoarele sau marcajul de oprire');
+INSERT INTO quiz_questions_answers VALUES (2, 36, 106, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum veţi proceda corect pentru a intra pe autostradă folosind banda de intrare (accelerare):', NULL);
+INSERT INTO answers(text) VALUES('veţi mări viteza, întrucât banda pe care circulaţi este special creată în acest scop');
+INSERT INTO quiz_questions_answers VALUES (2, 37, 107, TRUE);
+INSERT INTO answers(text) VALUES('cedaţi trecerea autovehiculelor care circulă pe prima bandă a autostrăzii şi nu stânjeniţi în niciun fel circulaţia acestora');
+INSERT INTO quiz_questions_answers VALUES (2, 37, 108, TRUE);
+INSERT INTO answers(text) VALUES('nu aveţi nicio obligaţie, deoarece autostrada are suficiente benzi pentru a permite circulaţia tuturor vehiculelor');
+INSERT INTO quiz_questions_answers VALUES (2, 37, 109, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce manevre sunt interzise pe autostradă?', NULL);
+INSERT INTO answers(text) VALUES('folosirea benzii de accelerare pentru a schimba direcţia de mers');
+INSERT INTO quiz_questions_answers VALUES (2, 38, 110, FALSE);
+INSERT INTO answers(text) VALUES('circulaţia sau staţionarea pe banda de urgenţă, cu excepţia cazurilor justificate');
+INSERT INTO quiz_questions_answers VALUES (2, 38, 111, TRUE);
+INSERT INTO answers(text) VALUES('deplasarea cu o viteză inferioară limitei maxime permise');
+INSERT INTO quiz_questions_answers VALUES (2, 38, 112, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care este limita maximă de viteză în afara localităților, pe drumurile expres și pe cele naționale europene (E)?', NULL);
+INSERT INTO answers(text) VALUES('100 km/h pe drumurile naționale europene (E) și 120 km/h pe drumurile expres');
+INSERT INTO quiz_questions_answers VALUES (2, 39, 113, TRUE);
+INSERT INTO answers(text) VALUES('110 km/h pe drumurile naționale europene (E) și 130 km/h pe drumurile expres');
+INSERT INTO quiz_questions_answers VALUES (2, 39, 114, FALSE);
+INSERT INTO answers(text) VALUES('90 km/h pe drumurile naționale europene (E) și 110 km/h pe drumurile expres');
+INSERT INTO quiz_questions_answers VALUES (2, 39, 115, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre următoarele situaţii sunteţi obligat să circulaţi cu o viteză care să nu depăşească 30 km/h în localităţi?', NULL);
+INSERT INTO answers(text) VALUES('în zona de acţiune a indicatorului de avertizare „Accident”');
+INSERT INTO quiz_questions_answers VALUES (2, 40, 116, TRUE);
+INSERT INTO answers(text) VALUES('când vizibilitatea este sub 100 m, în condiţii de ceaţă');
+INSERT INTO quiz_questions_answers VALUES (2, 40, 117, TRUE);
+INSERT INTO answers(text) VALUES('la intersectarea cu vehiculele care circulă din sens opus');
+INSERT INTO quiz_questions_answers VALUES (2, 40, 118, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Viteza de deplasare trebuie redusă:', NULL);
+INSERT INTO answers(text) VALUES('la întâlnirea indicatorului „Cedează trecerea“');
+INSERT INTO quiz_questions_answers VALUES (2, 41, 119, TRUE);
+INSERT INTO answers(text) VALUES('atunci când se circulă din direcţia opusă tramvaielor, troleibuzelor şi autobuzelor oprite în staţie, pe drumurile cu o singură bandă pe sens');
+INSERT INTO quiz_questions_answers VALUES (2, 41, 120, FALSE);
+INSERT INTO answers(text) VALUES('la întâlnirea indicatorului „Prioritate faţă de circulaţia din sens invers“');
+INSERT INTO quiz_questions_answers VALUES (2, 41, 121, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care dintre vehicule au prioritate de trecere?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1025.jpg');
+INSERT INTO answers(text) VALUES('autobuzul şi autoturismul verde');
+INSERT INTO quiz_questions_answers VALUES (2, 42, 122, TRUE);
+INSERT INTO answers(text) VALUES('autoturismul verde şi autocamionul');
+INSERT INTO quiz_questions_answers VALUES (2, 42, 123, FALSE);
+INSERT INTO answers(text) VALUES('motocicleta şi autocamionul');
+INSERT INTO quiz_questions_answers VALUES (2, 42, 124, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care este ordinea de trecere prin intersecţie a celor trei vehicule?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_820.jpg');
+INSERT INTO answers(text) VALUES('autoturismul roşu, autoturismul albastru, autobuzul');
+INSERT INTO quiz_questions_answers VALUES (2, 43, 125, TRUE);
+INSERT INTO answers(text) VALUES('autoturismul albastru, autoturismul roşu, autobuzul');
+INSERT INTO quiz_questions_answers VALUES (2, 43, 126, FALSE);
+INSERT INTO answers(text) VALUES('autobuzul, autoturismul albastru, autoturismul roşu');
+INSERT INTO quiz_questions_answers VALUES (2, 43, 127, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Pe care dintre cele două benzi trebuie să se încadreze conducătorul de vehicul şi de la ce distanţă faţă de intersecţie, pentru a schimba direcţia de mers spre dreapta, într-o localitate?', NULL);
+INSERT INTO answers(text) VALUES('pe banda de lângă axul drumului, de la cel puţin 100 m');
+INSERT INTO quiz_questions_answers VALUES (2, 44, 128, FALSE);
+INSERT INTO answers(text) VALUES('pe banda din dreapta, de la cel puţin 50 m');
+INSERT INTO quiz_questions_answers VALUES (2, 44, 129, TRUE);
+INSERT INTO answers(text) VALUES('pe oricare bandă, de la cel puţin 50 m');
+INSERT INTO quiz_questions_answers VALUES (2, 44, 130, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre situaţii consumul de carburant al unui motor creşte?', NULL);
+INSERT INTO answers(text) VALUES('atunci când motorul nu atinge temperatura de funcţionare');
+INSERT INTO quiz_questions_answers VALUES (2, 45, 131, TRUE);
+INSERT INTO answers(text) VALUES('atunci când fumul de eşapament este de culoare neagră');
+INSERT INTO quiz_questions_answers VALUES (2, 45, 132, TRUE);
+INSERT INTO answers(text) VALUES('atunci când motorul funcţionează cu întreruperi');
+INSERT INTO quiz_questions_answers VALUES (2, 45, 133, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care sunt criteriile de apreciere a eficacităţii frânelor?', NULL);
+INSERT INTO answers(text) VALUES('spaţiul de frânare');
+INSERT INTO quiz_questions_answers VALUES (2, 46, 134, TRUE);
+INSERT INTO answers(text) VALUES('forma pedalei');
+INSERT INTO quiz_questions_answers VALUES (2, 46, 135, FALSE);
+INSERT INTO answers(text) VALUES('mărimea urmei de frânare imprimată pe carosabil');
+INSERT INTO quiz_questions_answers VALUES (2, 46, 136, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Autocamionul s-a pus în mişcare. Cum este corect să procedaţi?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_343.jpg');
+INSERT INTO answers(text) VALUES('traversaţi calea ferată cu viteză redusă');
+INSERT INTO quiz_questions_answers VALUES (2, 47, 137, FALSE);
+INSERT INTO answers(text) VALUES('traversaţi imediat după autocamion');
+INSERT INTO quiz_questions_answers VALUES (2, 47, 138, FALSE);
+INSERT INTO answers(text) VALUES('opriţi în locul în care aveţi vizibilitate maximă, fără a depăşi indicatorul, vă asiguraţi şi traversaţi');
+INSERT INTO quiz_questions_answers VALUES (2, 47, 139, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce trebuie să conţină biletul care se prinde lângă garoul aplicat unei persoane rănite?', NULL);
+INSERT INTO answers(text) VALUES('datele de stare civilă ale persoanei');
+INSERT INTO quiz_questions_answers VALUES (2, 48, 140, FALSE);
+INSERT INTO answers(text) VALUES('poziţia în care a fost găsită victima');
+INSERT INTO quiz_questions_answers VALUES (2, 48, 141, FALSE);
+INSERT INTO answers(text) VALUES('ora şi minutul aplicării garoului');
+INSERT INTO quiz_questions_answers VALUES (2, 48, 142, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum trebuie aşezată într-un mijloc de transport o persoană rănită, care prezintă leziuni ale coloanei vertebrale?', NULL);
+INSERT INTO answers(text) VALUES('în poziţie şezândă');
+INSERT INTO quiz_questions_answers VALUES (2, 49, 143, FALSE);
+INSERT INTO answers(text) VALUES('orizontal, cu faţa în sus');
+INSERT INTO quiz_questions_answers VALUES (2, 49, 144, FALSE);
+INSERT INTO answers(text) VALUES('persoana nu trebuie mişcată până la sosirea ambulanţei');
+INSERT INTO quiz_questions_answers VALUES (2, 49, 145, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('O hemoragie produsă la unul dintre membrele unei persoane rănite se va opri prin', NULL);
+INSERT INTO answers(text) VALUES('dezinfectarea rănii, pansarea şi aplicarea atelelor');
+INSERT INTO quiz_questions_answers VALUES (2, 50, 146, FALSE);
+INSERT INTO answers(text) VALUES('ridicarea membrului accidentat în poziţie verticală');
+INSERT INTO quiz_questions_answers VALUES (2, 50, 147, FALSE);
+INSERT INTO answers(text) VALUES('acţiunea compresivă asupra vasului lezat sau aplicarea garoului');
+INSERT INTO quiz_questions_answers VALUES (2, 50, 148, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care dintre următoarele manevre, efectuate pe drumul public de către conducătorul de vehicul, sunt considerate a fi comportament agresiv?', NULL);
+INSERT INTO answers(text) VALUES('deplasarea succesivă de pe o bandă de circulație pe alta sau de pe un rând pe altul, alternând din stânga în dreapta, în scopul depășirii unui șir de vehicule care circulă în același sens');
+INSERT INTO quiz_questions_answers VALUES (2, 51, 149, TRUE);
+INSERT INTO answers(text) VALUES('depășirea pe partea dreaptă a vehiculului care a semnalizat intenția și s-a încadrat corespunzător părăsirii sensului de mers spre stânga');
+INSERT INTO quiz_questions_answers VALUES (2, 51, 150, FALSE);
+INSERT INTO answers(text) VALUES('realizarea intenționată a unui derapaj controlat al vehiculului în vederea întoarcerii sau rotirii acestuia');
+INSERT INTO quiz_questions_answers VALUES (2, 51, 151, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Conducătorilor de autovehicule le este interzis:', NULL);
+INSERT INTO answers(text) VALUES('să transporte în şi pe autoturism obiecte a căror lungime sau lăţime depăşeşte, împreună cu încărcătura, dimensiunile acestuia');
+INSERT INTO quiz_questions_answers VALUES (2, 52, 152, TRUE);
+INSERT INTO answers(text) VALUES('să aibă aplicate folii sau tratamente chimice pe parbrize, lunetă ori geamuri laterale, care reduc vizibilitatea');
+INSERT INTO quiz_questions_answers VALUES (2, 52, 153, TRUE);
+INSERT INTO answers(text) VALUES('să circule cu vehiculele avariate mai mult de 30 de zile');
+INSERT INTO quiz_questions_answers VALUES (2, 52, 154, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Unui autovehicul / tractor agricol sau forestier nu-i este permis să circule atunci când:', NULL);
+INSERT INTO answers(text) VALUES('unul dintre faruri nu funcţionează');
+INSERT INTO quiz_questions_answers VALUES (2, 53, 155, FALSE);
+INSERT INTO answers(text) VALUES('parbrizul este fisurat');
+INSERT INTO quiz_questions_answers VALUES (2, 53, 156, FALSE);
+INSERT INTO answers(text) VALUES('noxele emanate depăşesc limita legală admisă');
+INSERT INTO quiz_questions_answers VALUES (2, 53, 157, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Semnalele date dintr-un autovehicul al poliţiei, care însoţeşte o coloană oficială de vehicule, prin folosirea mijloacelor speciale de avertizare sonoră şi luminoasă, obligă la:', NULL);
+INSERT INTO answers(text) VALUES('părăsirea drumului pe prima stradă la dreapta');
+INSERT INTO quiz_questions_answers VALUES (2, 54, 158, FALSE);
+INSERT INTO answers(text) VALUES('oprirea, de îndată, în afara părţii carosabile sau cât mai aproape de bordură ori acostament, până la trecerea coloanei');
+INSERT INTO quiz_questions_answers VALUES (2, 54, 159, TRUE);
+INSERT INTO answers(text) VALUES('reducerea vitezei şi deplasarea cât mai aproape de bordură sau acostament');
+INSERT INTO quiz_questions_answers VALUES (2, 54, 160, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care dintre tipurile de semnalizare de mai jos vor fi respectate cu prioritate?', NULL);
+INSERT INTO answers(text) VALUES('semnalele luminoase');
+INSERT INTO quiz_questions_answers VALUES (2, 55, 161, FALSE);
+INSERT INTO answers(text) VALUES('semnalizarea temporară, care modifică regimul normal de desfăşurare a circulaţiei');
+INSERT INTO quiz_questions_answers VALUES (2, 55, 162, FALSE);
+INSERT INTO answers(text) VALUES('semnalele şi indicaţiile poliţistului');
+INSERT INTO quiz_questions_answers VALUES (2, 55, 163, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum trebuie să procedaţi în această situaţie?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_44.jpg');
+INSERT INTO answers(text) VALUES('reduceţi viteza şi vă continuaţi deplasarea');
+INSERT INTO quiz_questions_answers VALUES (2, 56, 164, FALSE);
+INSERT INTO answers(text) VALUES('opriţi şi aşteptaţi următorul semnal al poliţistulu');
+INSERT INTO quiz_questions_answers VALUES (2, 56, 165, TRUE);
+INSERT INTO answers(text) VALUES('circulaţi obligatoriu pe direcţia indicată de braţul poliţistului');
+INSERT INTO quiz_questions_answers VALUES (2, 56, 166, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre situaţiile de mai jos este interzisă întoarcerea?', NULL);
+INSERT INTO answers(text) VALUES('în curbele cu vizibilitatea redusă sub 50 m');
+INSERT INTO quiz_questions_answers VALUES (2, 57, 167, TRUE);
+INSERT INTO answers(text) VALUES('la întâlnirea indicatorului „Drum cu prioritate“');
+INSERT INTO quiz_questions_answers VALUES (2, 57, 168, FALSE);
+INSERT INTO answers(text) VALUES('la întâlnirea indicatorului „Drum îngustat“');
+INSERT INTO quiz_questions_answers VALUES (2, 57, 169, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Mersul înapoi este interzis:', NULL);
+INSERT INTO answers(text) VALUES('la mai puţin de 100 m de trecerile la nivel cu calea ferată');
+INSERT INTO quiz_questions_answers VALUES (2, 58, 170, FALSE);
+INSERT INTO answers(text) VALUES('la ieşirea din curţi, garaje sau ganguri');
+INSERT INTO quiz_questions_answers VALUES (2, 58, 171, TRUE);
+INSERT INTO answers(text) VALUES('pe străzile unde circulaţia se desfăşoară într-un singur sens');
+INSERT INTO quiz_questions_answers VALUES (2, 58, 172, FALSE);
+
+
+-- quiz 3
+
+INSERT INTO quiz VALUES(3);
+INSERT INTO quiz_questions(text, image_path) VALUES ('La întâlnirea cărui indicator este permisă întoarcerea vehiculului?', NULL);
+INSERT INTO answers(text) VALUES('„Sens unic“');
+INSERT INTO quiz_questions_answers VALUES (3, 59, 173, FALSE);
+INSERT INTO answers(text) VALUES('„Înainte“');
+INSERT INTO quiz_questions_answers VALUES (3, 59, 174, FALSE);
+INSERT INTO answers(text) VALUES('„Staţionarea interzisă“');
+INSERT INTO quiz_questions_answers VALUES (3, 59, 175, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Se interzice întoarcerea vehiculului:', NULL);
+INSERT INTO answers(text) VALUES('pe marcajul pietonal');
+INSERT INTO quiz_questions_answers VALUES (3, 60, 176, TRUE);
+INSERT INTO answers(text) VALUES('la o distanţă mai mică de 50 m de marcajul pietonal');
+INSERT INTO quiz_questions_answers VALUES (3, 60, 177, FALSE);
+INSERT INTO answers(text) VALUES('în intersecţii, inclusiv în cele cu circulaţie în sens giratoriu');
+INSERT INTO quiz_questions_answers VALUES (3, 60, 178, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Pe străzile cu sens unic este interzis:', NULL);
+INSERT INTO answers(text) VALUES('să întoarceţi autovehiculul');
+INSERT INTO quiz_questions_answers VALUES (3, 61, 179, TRUE);
+INSERT INTO answers(text) VALUES('să viraţi la stânga sau la dreapta');
+INSERT INTO quiz_questions_answers VALUES (3, 61, 180, FALSE);
+INSERT INTO answers(text) VALUES('să manevraţi înapoi autovehiculul');
+INSERT INTO quiz_questions_answers VALUES (3, 61, 181, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cauzele ce pot determina creşterea nivelului de ulei în baia de ungere sunt:', NULL);
+INSERT INTO answers(text) VALUES('circulaţia frecventă pe drumuri neasfaltate');
+INSERT INTO quiz_questions_answers VALUES (3, 62, 182, FALSE);
+INSERT INTO answers(text) VALUES('pătrunderea apei sau a combustibilului în baia de ulei');
+INSERT INTO quiz_questions_answers VALUES (3, 62, 183, TRUE);
+INSERT INTO answers(text) VALUES('defectarea pompei de ulei');
+INSERT INTO quiz_questions_answers VALUES (3, 62, 184, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Termostatul aparţine instalaţiei de:', NULL);
+INSERT INTO answers(text) VALUES('răcire');
+INSERT INTO quiz_questions_answers VALUES (3, 63, 185, TRUE);
+INSERT INTO answers(text) VALUES('ungere');
+INSERT INTO quiz_questions_answers VALUES (3, 63, 186, FALSE);
+INSERT INTO answers(text) VALUES('alimentare');
+INSERT INTO quiz_questions_answers VALUES (3, 63, 187, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Victima care a pierdut mult sânge trebuie să fie aşezată:', NULL);
+INSERT INTO answers(text) VALUES('cu faţa în sus');
+INSERT INTO quiz_questions_answers VALUES (3, 64, 188, FALSE);
+INSERT INTO answers(text) VALUES('cu faţa în jos');
+INSERT INTO quiz_questions_answers VALUES (3, 64, 189, FALSE);
+INSERT INTO answers(text) VALUES('cu picioarele situate mai sus decât nivelul corpului');
+INSERT INTO quiz_questions_answers VALUES (3, 64, 190, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce trebuie să faceţi pentru evitarea complicaţiilor în cazul unei fracturi?', NULL);
+INSERT INTO answers(text) VALUES('să imobilizaţi zona fracturată');
+INSERT INTO quiz_questions_answers VALUES (3, 65, 191, TRUE);
+INSERT INTO answers(text) VALUES('să sterilizaţi şi să pansaţi zona fracturată');
+INSERT INTO quiz_questions_answers VALUES (3, 65, 192, FALSE);
+INSERT INTO answers(text) VALUES('să aplicaţi un garou de cauciuc deasupra fracturii');
+INSERT INTO quiz_questions_answers VALUES (3, 65, 193, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce le este interzis conducătorilor de autovehicule şi de tramvaie?', NULL);
+INSERT INTO answers(text) VALUES('să folosească telefoanele mobile în timpul mersului, fără să aibă sistem de tip „mâini libere“');
+INSERT INTO quiz_questions_answers VALUES (3, 66, 194, TRUE);
+INSERT INTO answers(text) VALUES('să folosească luminile de avarie în localităţi');
+INSERT INTO quiz_questions_answers VALUES (3, 66, 195, FALSE);
+INSERT INTO answers(text) VALUES('să se angajeze în discuţii cu alţi pasageri');
+INSERT INTO quiz_questions_answers VALUES (3, 66, 196, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Aveți posibilitatea de a circula pe drumurile publice cu vehiculul avariat:', NULL);
+INSERT INTO answers(text) VALUES('cel mult 10 zile de la data constatării evenimentului');
+INSERT INTO quiz_questions_answers VALUES (3, 67, 197, FALSE);
+INSERT INTO answers(text) VALUES('până la expirarea asigurării obligatorii de răspundere civilă auto');
+INSERT INTO quiz_questions_answers VALUES (3, 67, 198, FALSE);
+INSERT INTO answers(text) VALUES('cel mult 30 zile de la data producerii avariei');
+INSERT INTO quiz_questions_answers VALUES (3, 67, 199, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce obligații are conducătorul unui vehicul, dacă a obținut permis de conducere de mai puțin de un an?', NULL);
+INSERT INTO answers(text) VALUES('să circule cu semnul distinctiv aplicat regulamentar');
+INSERT INTO quiz_questions_answers VALUES (3, 68, 200, TRUE);
+INSERT INTO answers(text) VALUES('să emită semnale acustice ori de câte ori efectuează o depăşire');
+INSERT INTO quiz_questions_answers VALUES (3, 68, 201, FALSE);
+INSERT INTO answers(text) VALUES('să circule cu faza de drum în funcţiune, inclusiv pe timp de zi');
+INSERT INTO quiz_questions_answers VALUES (3, 68, 202, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce măsuri trebuie să luaţi atunci când circulaţi în condiţii atmosferice ce împiedică mult vizibilitatea?', NULL);
+INSERT INTO answers(text) VALUES('să circulaţi pe distanţe scurte şi cu luminile de poziţie în funcţiune');
+INSERT INTO quiz_questions_answers VALUES (3, 69, 203, FALSE);
+INSERT INTO answers(text) VALUES('să folosiţi luminile de poziţie şi să circulaţi cât mai aproape de marginea din dreapta a drumului');
+INSERT INTO quiz_questions_answers VALUES (3, 69, 204, FALSE);
+INSERT INTO answers(text) VALUES('să folosiţi luminile de întâlnire');
+INSERT INTO quiz_questions_answers VALUES (3, 69, 205, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În ce situaţie, pe timp de zi, conducătorii auto sunt obligaţi să folosească luminile de întâlnire?', NULL);
+INSERT INTO answers(text) VALUES('când tractează alte vehicule');
+INSERT INTO quiz_questions_answers VALUES (3, 70, 206, TRUE);
+INSERT INTO answers(text) VALUES('numai când circulă pe drumurile județene');
+INSERT INTO quiz_questions_answers VALUES (3, 70, 207, FALSE);
+INSERT INTO answers(text) VALUES('numai când circulă cu viteză redusă');
+INSERT INTO quiz_questions_answers VALUES (3, 70, 208, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre situaţiile prezentate mai jos nu este permisă oprirea voluntară a vehiculelor?', NULL);
+INSERT INTO answers(text) VALUES('la o distanţă mai mică de 50 m de trecerea la nivel cu calea ferată');
+INSERT INTO quiz_questions_answers VALUES (3, 71, 209, TRUE);
+INSERT INTO answers(text) VALUES('pe pistele obligatorii pentru pietoni');
+INSERT INTO quiz_questions_answers VALUES (3, 71, 210, TRUE);
+INSERT INTO answers(text) VALUES('pe platforma căii ferate sau de tramvai, dacă prin aceasta este stânjenită circulaţia vehiculelor pe şine');
+INSERT INTO quiz_questions_answers VALUES (3, 71, 211, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre situaţii este interzisă oprirea?', NULL);
+INSERT INTO answers(text) VALUES('la o distanţă mai mică de 25 m înainte şi după indicatorul de staţie pentru mijloacele de transport public de persoane;');
+INSERT INTO quiz_questions_answers VALUES (3, 72, 212, TRUE);
+INSERT INTO answers(text) VALUES('la o distanţă mai mică de 25 m de colţul intersecţiei;');
+INSERT INTO quiz_questions_answers VALUES (3, 72, 213, TRUE);
+INSERT INTO answers(text) VALUES('la o distanţă de 5 m în spatele ultimului vagon de tramvai oprit într-o staţie fără refugiu pentru pietoni');
+INSERT INTO quiz_questions_answers VALUES (3, 72, 214, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre situaţii oprirea este interzisă?', NULL);
+INSERT INTO answers(text) VALUES('în zona de acţiune a indicatorului care interzice depăşirea');
+INSERT INTO quiz_questions_answers VALUES (3, 73, 215, TRUE);
+INSERT INTO answers(text) VALUES('pe străzile unde circulaţia se desfăşoară în sens unic');
+INSERT INTO quiz_questions_answers VALUES (3, 73, 216, FALSE);
+INSERT INTO answers(text) VALUES('în dreptul altui vehicul care se află oprit, dacă prin aceasta se stânjeneşte circulaţia a două vehicule venind din sensuri opuse');
+INSERT INTO quiz_questions_answers VALUES (3, 73, 217, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre situaţii se dispune imobilizarea unui vehicul?', NULL);
+INSERT INTO answers(text) VALUES('când starea tehnică a vehiculului pune în pericol grav siguranţa circulaţiei');
+INSERT INTO quiz_questions_answers VALUES (3, 74, 218, TRUE);
+INSERT INTO answers(text) VALUES('când starea tehnică a vehiculului deteriorează drumul public sau afectează mediul');
+INSERT INTO quiz_questions_answers VALUES (3, 74, 219, TRUE);
+INSERT INTO answers(text) VALUES('când conducătorul autovehiculului nu are asupra sa certificatul de înmatriculare');
+INSERT INTO quiz_questions_answers VALUES (3, 74, 220, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum se penalizează pătrunderea într-o intersecţie dirijată prin semafoare, dacă prin aceasta se produce blocarea circulaţiei în intersecţie?', NULL);
+INSERT INTO answers(text) VALUES('cu amendă contravenţională şi aplicarea punctelor de penalizare');
+INSERT INTO quiz_questions_answers VALUES (3, 75, 221, TRUE);
+INSERT INTO answers(text) VALUES('cu suspendarea exercitării dreptului de a conduce autovehicule pe o perioadă de 30 de zile');
+INSERT INTO quiz_questions_answers VALUES (3, 75, 222, FALSE);
+INSERT INTO answers(text) VALUES('cu amendă contravenţională');
+INSERT INTO quiz_questions_answers VALUES (3, 75, 223, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Se aplică puncte de penalizare pentru:', NULL);
+INSERT INTO answers(text) VALUES('circulaţia sau staţionarea pe spaţiul interzis care separă sensurile de circulaţie pe autostradă');
+INSERT INTO quiz_questions_answers VALUES (3, 76, 224, TRUE);
+INSERT INTO answers(text) VALUES('conducerea unui autovehicul cu permisul de conducere deteriorat');
+INSERT INTO quiz_questions_answers VALUES (3, 76, 225, FALSE);
+INSERT INTO answers(text) VALUES('lipsa unui ştergător de parbriz');
+INSERT INTO quiz_questions_answers VALUES (3, 76, 226, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Dacă semnalul verde este însoţit de un indicator „Înainte sau la dreapta“, conducătorului de vehicul îi este permis să circule:', NULL);
+INSERT INTO answers(text) VALUES('în toate direcţiile, deoarece semnalele luminoase primează asupra semnalizării rutiere');
+INSERT INTO quiz_questions_answers VALUES (3, 77, 227, FALSE);
+INSERT INTO answers(text) VALUES('numai la stânga');
+INSERT INTO quiz_questions_answers VALUES (3, 77, 228, FALSE);
+INSERT INTO answers(text) VALUES('numai înainte sau la dreapta');
+INSERT INTO quiz_questions_answers VALUES (3, 77, 229, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Semnalul verde al semaforului vă permite:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_122.jpg');
+INSERT INTO answers(text) VALUES('să circulaţi pe direcţia înainte sau la stânga');
+INSERT INTO quiz_questions_answers VALUES (3, 78, 230, FALSE);
+INSERT INTO answers(text) VALUES('să circulaţi în orice direcţie');
+INSERT INTO quiz_questions_answers VALUES (3, 78, 231, FALSE);
+INSERT INTO answers(text) VALUES('să circulaţi pe direcţia înainte sau la dreapta');
+INSERT INTO quiz_questions_answers VALUES (3, 78, 232, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care dintre indicatoarele alăturate creează obligații pentru conducătorii de vehicule?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_192.jpg');
+INSERT INTO answers(text) VALUES('indicatorul nr. 1');
+INSERT INTO quiz_questions_answers VALUES (3, 79, 233, TRUE);
+INSERT INTO answers(text) VALUES('indicatorul nr. 2');
+INSERT INTO quiz_questions_answers VALUES (3, 79, 234, FALSE);
+INSERT INTO answers(text) VALUES('nici unul dintre aceste indicatoare');
+INSERT INTO quiz_questions_answers VALUES (3, 79, 235, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('La întâlnirea panoului de pe stâlp aveți obligația:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_331.jpg');
+INSERT INTO answers(text) VALUES('să vă deplasați cu atenție pe sectorul de drum îngustat');
+INSERT INTO quiz_questions_answers VALUES (3, 80, 236, TRUE);
+INSERT INTO answers(text) VALUES('să acordați prioritate numai autocamioanelor și autobuzelor care circulă din sens opus');
+INSERT INTO quiz_questions_answers VALUES (3, 80, 237, FALSE);
+INSERT INTO answers(text) VALUES('să acordați prioritate vehiculelor care circulă din sens opus');
+INSERT INTO quiz_questions_answers VALUES (3, 80, 238, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Marcajul aplicat pe marginea din dreapta a părții carosabile, format dintr-o linie în zig-zag, semnifică:', NULL);
+INSERT INTO answers(text) VALUES('interzicerea staţionării');
+INSERT INTO quiz_questions_answers VALUES (3, 81, 239, TRUE);
+INSERT INTO answers(text) VALUES('interzicerea opririi');
+INSERT INTO quiz_questions_answers VALUES (3, 81, 240, FALSE);
+INSERT INTO answers(text) VALUES('alte pericole');
+INSERT INTO quiz_questions_answers VALUES (3, 81, 241, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Este corect să depăşeşti motocicleta din faţa ta?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_979.jpg');
+-- INSERT INTO answers(text) VALUES('da');
+INSERT INTO quiz_questions_answers VALUES (3, 82, 53, TRUE);
+INSERT INTO answers(text) VALUES('nu, deoarece astfel vei depăşi axul drumului;');
+UPDATE answers SET id=243 WHERE id=242;
+ALTER SEQUENCE answers_id_seq RESTART WITH 244;
+INSERT INTO quiz_questions_answers VALUES (3, 82, 243, FALSE);
+INSERT INTO answers(text) VALUES('nu, deoarece nu respecţi semnificaţia indicatorului');
+INSERT INTO quiz_questions_answers VALUES (3, 82, 244, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Execută corect autoturismul manevra de depăşire?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1016.jpg');
+INSERT INTO answers(text) VALUES('nu, deoarece autobuzul are prioritate la plecarea din staţie');
+INSERT INTO quiz_questions_answers VALUES (3, 83, 245, FALSE);
+INSERT INTO answers(text) VALUES('nu, deoarece această manevră nu este permisă în dreptul staţiilor mijloacelor de transport public de persoane');
+INSERT INTO quiz_questions_answers VALUES (3, 83, 246, FALSE);
+INSERT INTO answers(text) VALUES('da, manevra este regulamentară');
+INSERT INTO quiz_questions_answers VALUES (3, 83, 247, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Când este permisă depăşirea prin stânga a tramvaielor aflate în mers?', NULL);
+INSERT INTO answers(text) VALUES('atunci când drumul public este cu sens unic');
+INSERT INTO quiz_questions_answers VALUES (3, 84, 248, TRUE);
+INSERT INTO answers(text) VALUES('când între şina de tramvai din dreapta şi marginea trotuarului nu există suficient spaţiu pentru depăşire');
+INSERT INTO quiz_questions_answers VALUES (3, 84, 249, TRUE);
+INSERT INTO answers(text) VALUES('în nicio situaţie');
+INSERT INTO quiz_questions_answers VALUES (3, 84, 250, FALSE);
+
+
+-- quiz 4
+INSERT INTO quiz VALUES(4);
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce obligații aveți la întâlnirea indicatorului „Animale“?', NULL);
+INSERT INTO answers(text) VALUES('să reduceți viteza numai la semnalul celor care însoțesc animale');
+INSERT INTO quiz_questions_answers VALUES (4, 85, 251, FALSE);
+INSERT INTO answers(text) VALUES('circulați cu atenție și, dacă se impune, reduceți viteza');
+INSERT INTO quiz_questions_answers VALUES (4, 85, 252, TRUE);
+INSERT INTO answers(text) VALUES('nu aveți nicio obligație, deoarece indicatorul se adresează persoanelor care însoțesc animale');
+INSERT INTO quiz_questions_answers VALUES (4, 85, 253, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Indicatorul semnifică:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_374.jpg');
+INSERT INTO answers(text) VALUES('„Viteză minimă obligatorie“');
+INSERT INTO quiz_questions_answers VALUES (4, 86, 254, FALSE);
+INSERT INTO answers(text) VALUES('„Sfârșitul limitării de viteză“');
+INSERT INTO quiz_questions_answers VALUES (4, 86, 255, FALSE);
+INSERT INTO answers(text) VALUES('„Sfârșitul vitezei minime obligatorii"');
+INSERT INTO quiz_questions_answers VALUES (4, 86, 256, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Indicatorul interzice accesul:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_739.jpg');
+INSERT INTO answers(text) VALUES('autoturismelor, motocicletelor fără ataș și vehiculelor cu tracțiune animală');
+INSERT INTO quiz_questions_answers VALUES (4, 87, 257, FALSE);
+INSERT INTO answers(text) VALUES('autovehiculelor și vehiculelor cu tracțiune animală');
+INSERT INTO quiz_questions_answers VALUES (4, 87, 258, TRUE);
+INSERT INTO answers(text) VALUES('autoturismelor, motocicletelor și vehiculelor împinse sau trase cu mâna');
+INSERT INTO quiz_questions_answers VALUES (4, 87, 259, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Prin intersecţia prezentată pot trece:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_546.jpg');
+INSERT INTO answers(text) VALUES('tramvaiul 1 şi autoturismul');
+INSERT INTO quiz_questions_answers VALUES (4, 88, 260, FALSE);
+INSERT INTO answers(text) VALUES('bicicleta');
+INSERT INTO quiz_questions_answers VALUES (4, 88, 261, TRUE);
+INSERT INTO answers(text) VALUES('tramvaiul 1 şi tramvaiul 2');
+INSERT INTO quiz_questions_answers VALUES (4, 88, 262, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum trebuie să procedaţi în situaţia dată, dacă semnalele luminoase şi sonore nu funcţionează?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1074.jpg');
+INSERT INTO answers(text) VALUES('opriţi fără a depăşi calea ferată, vă asiguraţi şi vă continuaţi deplasarea, dacă nu se apropie trenul');
+INSERT INTO quiz_questions_answers VALUES (4, 89, 263, TRUE);
+INSERT INTO answers(text) VALUES('reduceţi viteza şi vă continuaţi deplasarea, după ce vă asiguraţi că nu se apropie trenul');
+INSERT INTO quiz_questions_answers VALUES (4, 89, 264, FALSE);
+INSERT INTO answers(text) VALUES('opriţi numai dacă se apropie trenul');
+INSERT INTO quiz_questions_answers VALUES (4, 89, 265, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Aţi selectat corect banda de circulaţie pentru a vira la stânga în intersecţia care urmează?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_293.jpg');
+-- INSERT INTO answers(text) VALUES('da');
+INSERT INTO quiz_questions_answers VALUES (4, 90, 53, TRUE);
+INSERT INTO answers(text) VALUES('nu');
+UPDATE answers SET id=267 WHERE id=266;
+ALTER SEQUENCE answers_id_seq RESTART WITH 268;
+INSERT INTO quiz_questions_answers VALUES (4, 90, 267, FALSE);
+INSERT INTO answers(text) VALUES('sunteţi obligat să circulaţi numai înainte');
+INSERT INTO quiz_questions_answers VALUES (4, 90, 268, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce vehicule aveţi permisiunea de a depăşi în situaţia dată?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_369.jpg');
+INSERT INTO answers(text) VALUES('vehiculele cu tracţiune animală, bicicletele şi motocicletele fără ataş');
+INSERT INTO quiz_questions_answers VALUES (4, 91, 269, TRUE);
+INSERT INTO answers(text) VALUES('autoturismele, motocicletele fără ataş şi vehiculele cu tracţiune animală');
+INSERT INTO quiz_questions_answers VALUES (4, 91, 270, FALSE);
+INSERT INTO answers(text) VALUES('autovehiculele, cu excepţia motocicletelor fără ataş');
+INSERT INTO quiz_questions_answers VALUES (4, 91, 271, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Manevra de evitare, prin schimbarea direcţiei de mers, a unui obstacol aflat pe sensul dvs. de circulaţie, urmată de revenirea pe acelaşi sens, constituie:', NULL);
+INSERT INTO answers(text) VALUES('ocolire');
+INSERT INTO quiz_questions_answers VALUES (4, 92, 272, FALSE);
+INSERT INTO answers(text) VALUES('depăşire');
+INSERT INTO quiz_questions_answers VALUES (4, 92, 273, TRUE);
+INSERT INTO answers(text) VALUES('situaţie de urgenţă');
+INSERT INTO quiz_questions_answers VALUES (4, 92, 274, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În ce ordine vor trece prin intersecţie cele patru autovehicule?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_66.jpg');
+INSERT INTO answers(text) VALUES('autoturismul, autocamionul, motocicleta, autobuzul');
+INSERT INTO quiz_questions_answers VALUES (4, 93, 275, FALSE);
+INSERT INTO answers(text) VALUES('autobuzul, autocamionul, motocicleta, autoturismul');
+INSERT INTO quiz_questions_answers VALUES (4, 93, 276, FALSE);
+INSERT INTO answers(text) VALUES('autoturismul, autobuzul, motocicleta, autocamionul');
+INSERT INTO quiz_questions_answers VALUES (4, 93, 277, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În ce ordine vor circula autoturismele prin intersecţiile prezentate?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_600.jpg');
+INSERT INTO answers(text) VALUES('albastru, roşu, galben');
+INSERT INTO quiz_questions_answers VALUES (4, 94, 278, FALSE);
+INSERT INTO answers(text) VALUES('roşu, albastru, galben');
+INSERT INTO quiz_questions_answers VALUES (4, 94, 279, TRUE);
+INSERT INTO answers(text) VALUES('galben, roşu, albastru');
+INSERT INTO quiz_questions_answers VALUES (4, 94, 280, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Unde opriţi în situaţia prezentată?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_397.jpg');
+INSERT INTO answers(text) VALUES('în locul cu vizibilitate maximă, fără a depăşi indicatorul');
+INSERT INTO quiz_questions_answers VALUES (4, 95, 281, TRUE);
+INSERT INTO answers(text) VALUES('la cel puţin 5 m');
+INSERT INTO quiz_questions_answers VALUES (4, 95, 282, FALSE);
+INSERT INTO answers(text) VALUES('la cel puţin 10 m');
+INSERT INTO quiz_questions_answers VALUES (4, 95, 283, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum veţi proceda corect dacă, aflându-vă în interiorul unei intersecţii cu circulaţie în sens giratoriu, observaţi că pe un drum lateral circulă o coloană cu regim de circulaţie prioritară?', NULL);
+INSERT INTO answers(text) VALUES('vă continuaţi drumul, deoarece aveţi prioritate de trecere în sensul giratoriu');
+INSERT INTO quiz_questions_answers VALUES (4, 96, 284, FALSE);
+INSERT INTO answers(text) VALUES('opriţi şi acordaţi prioritate coloanei cu regim prioritar');
+INSERT INTO quiz_questions_answers VALUES (4, 96, 285, TRUE);
+INSERT INTO answers(text) VALUES('viraţi la dreapta şi părăsiţi intersecţia');
+INSERT INTO quiz_questions_answers VALUES (4, 96, 286, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Intenţionaţi să consultaţi o hartă rutieră. Cum este recomandat să procedaţi?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_606.jpg');
+INSERT INTO answers(text) VALUES('opriţi, cu luminile de întâlnire aprinse');
+INSERT INTO quiz_questions_answers VALUES (4, 97, 287, FALSE);
+INSERT INTO answers(text) VALUES('opriţi autovehiculul în afara carosabilului');
+INSERT INTO quiz_questions_answers VALUES (4, 97, 288, TRUE);
+INSERT INTO answers(text) VALUES('nu aveţi voie să consultaţi harta pe timp de noapte');
+INSERT INTO quiz_questions_answers VALUES (4, 97, 289, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Oprirea voluntară a vehiculelor este interzisă:', NULL);
+INSERT INTO answers(text) VALUES('pe drumurile cu sens unic');
+INSERT INTO quiz_questions_answers VALUES (4, 98, 290, FALSE);
+INSERT INTO answers(text) VALUES('în zonele rezidenţiale semnalizate ca atare');
+INSERT INTO quiz_questions_answers VALUES (4, 98, 291, FALSE);
+INSERT INTO answers(text) VALUES('la mai puţin de 25 m înainte şi după staţiile mijloacelor de transport public de persoane');
+INSERT INTO quiz_questions_answers VALUES (4, 98, 292, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Aveți obligația de a opri imediat vehiculul la semnalele adresate de:', NULL);
+INSERT INTO answers(text) VALUES('personalul autorizat de la trecerile la nivel cu calea ferată industrială');
+INSERT INTO quiz_questions_answers VALUES (4, 99, 293, FALSE);
+INSERT INTO answers(text) VALUES('conducătorii unor grupuri organizate');
+INSERT INTO quiz_questions_answers VALUES (4, 99, 294, FALSE);
+INSERT INTO answers(text) VALUES('nevăzătorii, prin ridicarea bastonului alb, atunci când aceştia traversează strada');
+INSERT INTO quiz_questions_answers VALUES (4, 99, 295, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce obligaţii revin conducătorilor de vehicule la trecerea autovehiculelor cu regim de circulaţie prioritară, care au în funcţiune mijloacele speciale de avertizare luminoasă de culoare roşie şi pe cele de avertizare sonoră:', NULL);
+INSERT INTO answers(text) VALUES('să oprească imediat pe acostament sau, în lipsa acestuia, cât mai aproape de marginea drumului sau de bordura trotuarului, în sensul de deplasare');
+INSERT INTO quiz_questions_answers VALUES (4, 100, 296, TRUE);
+INSERT INTO answers(text) VALUES('să reducă viteza şi să circule cât mai aproape de marginea drumului în sensul de deplasare');
+INSERT INTO quiz_questions_answers VALUES (4, 100, 297, FALSE);
+INSERT INTO answers(text) VALUES('să scoată vehiculul în afara drumului, indiferent prin ce mijloace');
+INSERT INTO quiz_questions_answers VALUES (4, 100, 298, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce obligaţii vă revin în ceea ce priveşte regimul vitezei de circulaţie?', NULL);
+INSERT INTO answers(text) VALUES('să respectaţi regimul legal de viteză aplicabil pe traseul pe care vă deplasaţi');
+INSERT INTO quiz_questions_answers VALUES (4, 101, 299, TRUE);
+INSERT INTO answers(text) VALUES('să adaptaţi viteza în funcţie de condiţiile de drum, astfel încât să puteţi efectua orice manevră în condiţii de siguranţă');
+INSERT INTO quiz_questions_answers VALUES (4, 101, 300, TRUE);
+INSERT INTO answers(text) VALUES('să nu depăşiţi viteza legală în zonele în care este instalată aparatura radar');
+INSERT INTO quiz_questions_answers VALUES (4, 101, 301, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Un vehicul va fi imobilizat dacă:', NULL);
+INSERT INTO answers(text) VALUES('numărul de înmatriculare sau de înregistrare este fals');
+INSERT INTO quiz_questions_answers VALUES (4, 102, 302, TRUE);
+INSERT INTO answers(text) VALUES('starea tehnică a pneurilor este necorespunzătoare');
+INSERT INTO quiz_questions_answers VALUES (4, 102, 303, FALSE);
+INSERT INTO answers(text) VALUES('conducătorul auto refuză să poarte centura de siguranţă');
+INSERT INTO quiz_questions_answers VALUES (4, 102, 304, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Suspendarea exercitării dreptului de a conduce pentru 90 de zile se aplică în cazul:', NULL);
+INSERT INTO answers(text) VALUES('conducerii sub influenţa băuturilor alcoolice');
+INSERT INTO quiz_questions_answers VALUES (4, 103, 305, TRUE);
+INSERT INTO answers(text) VALUES('neacordării priorităţii de trecere vehiculelor care au acest drept');
+INSERT INTO quiz_questions_answers VALUES (4, 103, 306, FALSE);
+INSERT INTO answers(text) VALUES('nerespectării semnalelor poliţistului rutier aflat în exercitarea atribuţiilor de serviciu.');
+INSERT INTO quiz_questions_answers VALUES (4, 103, 307, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Este permis ca un conducător de vehicul, angajat într-un accident de circulație din care a rezultat moartea sau lovirea unei persoane, să plece de la locul faptei?', NULL);
+INSERT INTO answers(text) VALUES('da, cu condiția să lase vehiculul la locul accidentului');
+INSERT INTO quiz_questions_answers VALUES (4, 104, 308, FALSE);
+INSERT INTO answers(text) VALUES('da, dacă victima a fost transportată la spital');
+INSERT INTO quiz_questions_answers VALUES (4, 104, 309, FALSE);
+INSERT INTO answers(text) VALUES('nu, fără încuviințarea organelor de poliție');
+INSERT INTO quiz_questions_answers VALUES (4, 104, 310, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Dacă autovehiculul de poliţie transmite mesajul „coloană oficială”, ai voie să te ataşezi la o astfel de coloană?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1005.jpg');
+-- INSERT INTO answers(text) VALUES('nu');
+INSERT INTO quiz_questions_answers VALUES (4, 105, 53, TRUE);
+-- INSERT INTO answers(text) VALUES('da');
+INSERT INTO quiz_questions_answers VALUES (4, 105, 267, FALSE);
+INSERT INTO answers(text) VALUES('da, numai dacă dispui de un autoturism performant');
+
+UPDATE answers SET id=312 WHERE id=311;
+ALTER SEQUENCE answers_id_seq RESTART WITH 313;
+INSERT INTO quiz_questions_answers VALUES (4, 105, 312, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('La frânare, vehiculul derapează. Cum reacţionaţi corect?', NULL);
+INSERT INTO answers(text) VALUES('frânaţi la maximum');
+INSERT INTO quiz_questions_answers VALUES (4, 106, 313, FALSE);
+INSERT INTO answers(text) VALUES('nu acţionaţi frâna şi rotiţi volanul în sens invers derapării');
+INSERT INTO quiz_questions_answers VALUES (4, 106, 314, TRUE);
+INSERT INTO answers(text) VALUES('opriţi motorul');
+INSERT INTO quiz_questions_answers VALUES (4, 106, 315, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum veţi proceda corect în intersecţia care urmează, dacă întâlniţi indicatorul „Oprire“?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_544.jpg');
+INSERT INTO answers(text) VALUES('dacă autobuzul s-a oprit în dreptul indicatorului, vă puteţi continua drumul imediat după acesta');
+INSERT INTO quiz_questions_answers VALUES (4, 107, 316, FALSE);
+INSERT INTO answers(text) VALUES('depăşiţi autobuzul, care s-a asigurat în prealabil în dreptul indicatorului');
+INSERT INTO quiz_questions_answers VALUES (4, 107, 317, FALSE);
+INSERT INTO answers(text) VALUES('după plecarea autobuzului, opriţi în locul în care vizibilitatea este maximă, vă asiguraţi, apoi vă continuaţi drumul');
+INSERT INTO quiz_questions_answers VALUES (4, 107, 318, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Semnele unei fracturi sunt:', NULL);
+INSERT INTO answers(text) VALUES('durere în zona afectată');
+INSERT INTO quiz_questions_answers VALUES (4, 108, 319, FALSE);
+INSERT INTO answers(text) VALUES('durere şi poziţie nefirească');
+INSERT INTO quiz_questions_answers VALUES (4, 108, 320, TRUE);
+INSERT INTO answers(text) VALUES('temperatură mărită şi transpiraţie abundentă');
+INSERT INTO quiz_questions_answers VALUES (4, 108, 321, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În rănile cu hemoragie se va avea în vedere, în faza iniţială:', NULL);
+INSERT INTO answers(text) VALUES('curăţarea şi pansarea rănii');
+INSERT INTO quiz_questions_answers VALUES (4, 109, 322, FALSE);
+INSERT INTO answers(text) VALUES('pansarea rănii');
+INSERT INTO quiz_questions_answers VALUES (4, 109, 323, FALSE);
+INSERT INTO answers(text) VALUES('oprirea hemoragiei');
+INSERT INTO quiz_questions_answers VALUES (4, 109, 324, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce indică efortul mai mare depus la acţionarea pedalei de frână?', NULL);
+INSERT INTO answers(text) VALUES('griparea cilindrilor receptori şi a pistonaşelor');
+INSERT INTO quiz_questions_answers VALUES (4, 110, 325, TRUE);
+INSERT INTO answers(text) VALUES('ruperea cablului frânei de staţionare');
+INSERT INTO quiz_questions_answers VALUES (4, 110, 326, FALSE);
+INSERT INTO answers(text) VALUES('lipsa lichidului din instalaţia de frânare');
+INSERT INTO quiz_questions_answers VALUES (4, 110, 327, FALSE);
+
+-- TRB PUSA O INTREBARE LA STO SI STEARSA
+-- quiz 5
+INSERT INTO quiz VALUES(5);
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care este denumirea indicatorului?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_470.jpg');
+UPDATE quiz_questions SET id=112 WHERE id=111;
+ALTER SEQUENCE quiz_questions_id_seq RESTART WITH 113;
+INSERT INTO answers(text) VALUES('sens giratoriu');
+UPDATE answers SET id=329 WHERE id=328;
+ALTER SEQUENCE answers_id_seq RESTART WITH 330;
+INSERT INTO quiz_questions_answers VALUES (5, 112, 329, FALSE);
+INSERT INTO answers(text) VALUES('punct de colectare a materialelor reciclabile');
+INSERT INTO quiz_questions_answers VALUES (5, 112, 330, FALSE);
+INSERT INTO answers(text) VALUES('presemnalizarea unei intersecţii cu sens giratoriu');
+INSERT INTO quiz_questions_answers VALUES (5, 112, 331, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care este semnificatia indicatorului din imagine?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_698.jpg');
+INSERT INTO answers(text) VALUES('prioritate pentru vehiculele care vin din fata');
+INSERT INTO quiz_questions_answers VALUES (5, 113, 332, FALSE);
+INSERT INTO answers(text) VALUES('drum cu prioritate');
+INSERT INTO quiz_questions_answers VALUES (5, 113, 333, TRUE);
+INSERT INTO answers(text) VALUES('interzis accesul tuturor vehiculelor');
+INSERT INTO quiz_questions_answers VALUES (5, 113, 334, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Indicatorul semnifică o viteză:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_776.jpg');
+INSERT INTO answers(text) VALUES('maximă');
+INSERT INTO quiz_questions_answers VALUES (5, 114, 335, FALSE);
+INSERT INTO answers(text) VALUES('informativă');
+INSERT INTO quiz_questions_answers VALUES (5, 114, 336, FALSE);
+INSERT INTO answers(text) VALUES('minimă obligatorie');
+INSERT INTO quiz_questions_answers VALUES (5, 114, 337, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Semnalul roşu al semaforului:', NULL);
+INSERT INTO answers(text) VALUES('obligă conducătorii vehiculelor care circulă pe direcţia înainte să oprească');
+INSERT INTO quiz_questions_answers VALUES (5, 115, 338, FALSE);
+INSERT INTO answers(text) VALUES('obligă conducătorii vehiculelor, indiferent de direcţia de deplasare, să oprească');
+INSERT INTO quiz_questions_answers VALUES (5, 115, 339, TRUE);
+INSERT INTO answers(text) VALUES('permite trecerea autovehiculelor care schimbă direcţia de mers spre stânga');
+INSERT INTO quiz_questions_answers VALUES (5, 115, 340, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care dintre cei doi conducatori nu circulă corect?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_959.jpg');
+INSERT INTO answers(text) VALUES('conducatorul autoturismului, deoarece nu respecta semnificatia indicatorului');
+INSERT INTO quiz_questions_answers VALUES (5, 116, 341, FALSE);
+INSERT INTO answers(text) VALUES('motociclistul, deoarece circula aproape de axul drumului;');
+INSERT INTO quiz_questions_answers VALUES (5, 116, 342, TRUE);
+INSERT INTO answers(text) VALUES('ambii circula corect');
+INSERT INTO quiz_questions_answers VALUES (5, 116, 343, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum se execută depăşirea autoturismelor şi a autocamioanelor pe un drum fără marcaje, pe care circulaţia se desfăşoară în sens unic?', NULL);
+INSERT INTO answers(text) VALUES('pe partea stângă');
+INSERT INTO quiz_questions_answers VALUES (5, 117, 344, TRUE);
+INSERT INTO answers(text) VALUES('pe partea dreaptă');
+INSERT INTO quiz_questions_answers VALUES (5, 117, 345, FALSE);
+INSERT INTO answers(text) VALUES('pe ambele părţi');
+INSERT INTO quiz_questions_answers VALUES (5, 117, 346, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre următoarele situaţii sunteţi obligat să circulaţi cu o viteză care să nu depăşească 30 km/h în localităţi? care dintre următoarele situaţii sunteţi obligat să circulaţi cu o viteză care să nu depăşească 30 km/h în localităţi?', NULL);
+-- INSERT INTO answers(text) VALUES('în zona de acţiune a indicatorului de avertizare „Accident”');
+INSERT INTO quiz_questions_answers VALUES (5, 118, 116, TRUE);
+-- INSERT INTO answers(text) VALUES('când vizibilitatea este sub 100 m, în condiţii de ceaţă');
+INSERT INTO quiz_questions_answers VALUES (5, 118, 117, FALSE);
+-- INSERT INTO answers(text) VALUES('la intersectarea cu vehiculele care circulă din sens opus');
+INSERT INTO quiz_questions_answers VALUES (5, 118, 118, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În ce ordine vor trece autovehiculele prin intersecţia prezentată?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_516.jpg');
+INSERT INTO answers(text) VALUES('4, 3, 1, 2');
+UPDATE answers SET id=349 WHERE id=347;
+ALTER SEQUENCE answers_id_seq RESTART WITH 350;
+INSERT INTO quiz_questions_answers VALUES (5, 119, 349, FALSE);
+INSERT INTO answers(text) VALUES('4, 3, 2, 1');
+INSERT INTO quiz_questions_answers VALUES (5, 119, 350, FALSE);
+INSERT INTO answers(text) VALUES('3, 4, 1, 2');
+INSERT INTO quiz_questions_answers VALUES (5, 119, 351, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum procedaţi în această situaţie?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_417.jpg');
+INSERT INTO answers(text) VALUES('circulaţi după autocamion');
+INSERT INTO quiz_questions_answers VALUES (5, 120, 352, FALSE);
+INSERT INTO answers(text) VALUES('permiteţi pietonului să traverseze strada');
+INSERT INTO quiz_questions_answers VALUES (5, 120, 353, TRUE);
+INSERT INTO answers(text) VALUES('avertizaţi sonor pietonul pentru a se opri, apoi circulaţi mai departe');
+INSERT INTO quiz_questions_answers VALUES (5, 120, 354, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care dintre vehicule au prioritate de trecere prin intersecţia prezentată?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1041.jpg');
+INSERT INTO answers(text) VALUES('autocamionul şi autoturismul');
+INSERT INTO quiz_questions_answers VALUES (5, 121, 355, FALSE);
+INSERT INTO answers(text) VALUES('motocicleta şi tramvaiul');
+INSERT INTO quiz_questions_answers VALUES (5, 121, 356, FALSE);
+-- INSERT INTO answers(text) VALUES('motocicleta şi autocamionul');
+INSERT INTO quiz_questions_answers VALUES (5, 121, 124, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Apropiindu-vă de o trecere la nivel cu calea ferată, observaţi că se coboară bariera. Cum procedaţi?', NULL);
+INSERT INTO answers(text) VALUES('acceleraţi şi treceţi fără ezitare peste nivelul cu calea ferată');
+UPDATE answers SET id=358 WHERE id=357;
+ALTER SEQUENCE answers_id_seq RESTART WITH 359;
+INSERT INTO quiz_questions_answers VALUES (5, 122, 358, FALSE);
+INSERT INTO answers(text) VALUES('opriţi în faţa barierei');
+INSERT INTO quiz_questions_answers VALUES (5, 122, 359, TRUE);
+INSERT INTO answers(text) VALUES('pentru a nu fi lovit de barieră, o ocoliţi cu atenţie prin stânga');
+INSERT INTO quiz_questions_answers VALUES (5, 122, 360, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Se interzice oprirea voluntară:', NULL);
+INSERT INTO answers(text) VALUES('la mai puţin de 100 m de calea ferată industrială');
+INSERT INTO quiz_questions_answers VALUES (5, 123, 361, FALSE);
+INSERT INTO answers(text) VALUES('pe trotuar');
+UPDATE answers SET id=363 WHERE id=362;
+ALTER SEQUENCE answers_id_seq RESTART WITH 364;
+INSERT INTO quiz_questions_answers VALUES (5, 123, 363, FALSE);
+INSERT INTO answers(text) VALUES('în zona de acţiune a indicatorului „Prioritate faţă de circulaţia din sens invers”');
+INSERT INTO quiz_questions_answers VALUES (5, 123, 364, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Pe ce drumuri sunt permise oprirea şi staţionarea vehiculelor şi pe partea stângă, în sensul de mers?', NULL);
+INSERT INTO answers(text) VALUES('pe drumurile cu trafic redus');
+INSERT INTO quiz_questions_answers VALUES (5, 124, 365, FALSE);
+INSERT INTO answers(text) VALUES('pe drumurile cu sens unic, dacă rămâne liberă cel puţin o bandă de circulaţie');
+INSERT INTO quiz_questions_answers VALUES (5, 124, 366, TRUE);
+INSERT INTO answers(text) VALUES('pe orice drum');
+INSERT INTO quiz_questions_answers VALUES (5, 124, 367, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Este permisă pătrunderea pe racordurile dintre cele două părţi carosabile ale unei autostrăzi?', NULL);
+-- INSERT INTO answers(text) VALUES('nu');
+INSERT INTO quiz_questions_answers VALUES (5, 125, 267, TRUE);
+INSERT INTO answers(text) VALUES('da, pentru oprire în caz de urgenţă');
+INSERT INTO quiz_questions_answers VALUES (5, 125, 368, FALSE);
+INSERT INTO answers(text) VALUES('da, pentru întoarcere, în zona intersecţiilor');
+INSERT INTO quiz_questions_answers VALUES (5, 125, 369, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care dintre participanţii la traficul rutier au obligaţia de a respecta regulile de circulaţie pe drumurile publice din interiorul localităţilor?', NULL);
+INSERT INTO answers(text) VALUES('toţi participanţii la traficul rutier, indiferent de situaţie');
+INSERT INTO quiz_questions_answers VALUES (5, 126, 370, TRUE);
+INSERT INTO answers(text) VALUES('conducătorii auto, atât cei amatori, cât şi cei profesionişti, atât ziua, cât şi noaptea');
+INSERT INTO quiz_questions_answers VALUES (5, 126, 371, FALSE);
+INSERT INTO answers(text) VALUES('conducătorii autovehiculelor destinate transportului în comun, având în vedere destinaţia autovehiculelor pe care le conduc');
+INSERT INTO quiz_questions_answers VALUES (5, 126, 372, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cui îi revine obligaţia efectuării inspecţiilor tehnice periodice, precum şi a respectării periodicităţii acestora?', NULL);
+INSERT INTO answers(text) VALUES('unităţilor service');
+INSERT INTO quiz_questions_answers VALUES (5, 127, 373, FALSE);
+INSERT INTO answers(text) VALUES('deţinătorului legal al autovehiculului');
+INSERT INTO quiz_questions_answers VALUES (5, 127, 374, TRUE);
+INSERT INTO answers(text) VALUES('Registrului Auto Român');
+INSERT INTO quiz_questions_answers VALUES (5, 127, 375, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre situaţiile de mai jos se suspendă exercitarea dreptului de a conduce?', NULL);
+-- INSERT INTO answers(text) VALUES('depăşirea vitezei maxime admise cu peste 20 km/h');
+INSERT INTO quiz_questions_answers VALUES (5, 128, 71, FALSE);
+-- INSERT INTO answers(text) VALUES('nerespectarea regulilor privind depăşirea');
+INSERT INTO quiz_questions_answers VALUES (5, 128, 72, TRUE);
+-- INSERT INTO answers(text) VALUES('nefolosirea luminilor de ceaţă după lăsarea serii');
+INSERT INTO quiz_questions_answers VALUES (5, 128, 73, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('entru a folosi telefonul mobil, atunci când nu aveţi un sistem de tip „mâini libere“:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_233.jpg');
+INSERT INTO answers(text) VALUES('opriţi pe banda de staţionare');
+UPDATE answers SET id=380 WHERE id=376;
+ALTER SEQUENCE answers_id_seq RESTART WITH 381;
+INSERT INTO quiz_questions_answers VALUES (5, 129, 380, FALSE);
+INSERT INTO answers(text) VALUES('opriţi în parcarea din zona complexului de servicii');
+INSERT INTO quiz_questions_answers VALUES (5, 129, 381, TRUE);
+INSERT INTO answers(text) VALUES('telefonul poate fi folosit fără restricţii');
+INSERT INTO quiz_questions_answers VALUES (5, 129, 382, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Poate staţiona noaptea, pe un drum public, remorca unui autoturism?', NULL);
+-- INSERT INTO answers(text) VALUES('nu');
+INSERT INTO quiz_questions_answers VALUES (5, 130, 267, TRUE);
+INSERT INTO answers(text) VALUES('da, dacă drumul este iluminat');
+INSERT INTO quiz_questions_answers VALUES (5, 130, 383, FALSE);
+INSERT INTO answers(text) VALUES('da, dacă aceasta este semnalizată cu triunghiuri reflectorizante.');
+INSERT INTO quiz_questions_answers VALUES (5, 130, 384, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Circulaţi în spatele unui vehicul cu tracţiune animală şi constataţi că acesta doreşte să schimbe direcţia de mers. Cum procedaţi?', NULL);
+INSERT INTO answers(text) VALUES('semnalizaţi sonor intenţia de a-l depăşi');
+INSERT INTO quiz_questions_answers VALUES (5, 131, 385, FALSE);
+INSERT INTO answers(text) VALUES('permiteţi vehiculului efectuarea în siguranţă a manevrei');
+INSERT INTO quiz_questions_answers VALUES (5, 131, 386, TRUE);
+INSERT INTO answers(text) VALUES('nu aveţi nicio obligaţie');
+INSERT INTO quiz_questions_answers VALUES (5, 131, 387, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Pe o porţiune de drum acoperită cu polei, sesizaţi impactul inevitabil cu un câine. Cum veţi proceda pentru evitarea unui accident?', NULL);
+INSERT INTO answers(text) VALUES('consideraţi că o asemenea situaţie nu vi se poate întâmpla');
+INSERT INTO quiz_questions_answers VALUES (5, 132, 388, FALSE);
+INSERT INTO answers(text) VALUES('eliberaţi acceleraţia, menţineţi ferm volanul pe direcţia de deplasare, fiind pregătit pentru a stabiliza autovehiculul după impact, prin manevrarea lină a volanului');
+INSERT INTO quiz_questions_answers VALUES (5, 132, 389, TRUE);
+INSERT INTO answers(text) VALUES('încercaţi, pe cât posibil, să evitaţi impactul frontal, prin manevrarea bruscă a volanului în direcţia de deplasare opusă câinelui');
+INSERT INTO quiz_questions_answers VALUES (5, 132, 390, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce trebuie să aveţi în vedere atunci când circulaţi pe lângă un şir de autovehicule staţionate?', NULL);
+INSERT INTO answers(text) VALUES('o portieră poate fi deschisă în orice moment de către unul dintre ocupanţii autovehiculelor');
+INSERT INTO quiz_questions_answers VALUES (5, 133, 391, TRUE);
+INSERT INTO answers(text) VALUES('respectaţi viteza legală, deoarece conducătorii autovehiculelor sunt obligaţi să se asigure când deschid o portieră');
+INSERT INTO quiz_questions_answers VALUES (5, 133, 392, FALSE);
+INSERT INTO answers(text) VALUES('claxonaţi, pentru a-i avertiza pe ceilalţi conducători că vă deplasaţi în zona respectivă');
+INSERT INTO quiz_questions_answers VALUES (5, 133, 393, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum se acordă primul ajutor în cazul plăgilor tăiate?', NULL);
+INSERT INTO answers(text) VALUES('acoperiţi rana şi opriţi sângerarea, apoi transportaţi rănitul la medic sau la spital');
+INSERT INTO quiz_questions_answers VALUES (5, 134, 394, TRUE);
+INSERT INTO answers(text) VALUES('opriţi sângerarea prin coaserea plăgii');
+INSERT INTO quiz_questions_answers VALUES (5, 134, 395, FALSE);
+INSERT INTO answers(text) VALUES('transportaţi rănitul la medic, fără să faceţi nimic altceva');
+INSERT INTO quiz_questions_answers VALUES (5, 134, 396, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum se recunoaşte o fractură deschisă la membre?', NULL);
+INSERT INTO answers(text) VALUES('zona fracturată este tumefiată');
+INSERT INTO quiz_questions_answers VALUES (5, 135, 397, FALSE);
+INSERT INTO answers(text) VALUES('pielea este străpunsă în zona fracturii');
+INSERT INTO quiz_questions_answers VALUES (5, 135, 398, TRUE);
+INSERT INTO answers(text) VALUES('accidentatul nu se poate mişca');
+INSERT INTO quiz_questions_answers VALUES (5, 135, 399, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Utilizarea sistemului de climatizare are ca efect:', NULL);
+INSERT INTO answers(text) VALUES('creşterea consumului de combustibil');
+INSERT INTO quiz_questions_answers VALUES (5, 136, 400, TRUE);
+INSERT INTO answers(text) VALUES('reducerea consumului de combustibil');
+INSERT INTO quiz_questions_answers VALUES (5, 136, 401, FALSE);
+INSERT INTO answers(text) VALUES('scăderea puternică a gradului de confort');
+INSERT INTO quiz_questions_answers VALUES (5, 136, 402, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Blocarea unei roti in timpul mersului poate fi determinata de una dintre defectiunile:', NULL);
+INSERT INTO answers(text) VALUES('ovalizarea tamburului');
+INSERT INTO quiz_questions_answers VALUES (5, 137, 403, FALSE);
+INSERT INTO answers(text) VALUES('griparea rulmentilor');
+INSERT INTO quiz_questions_answers VALUES (5, 137, 404, TRUE);
+INSERT INTO answers(text) VALUES('uzura exagerata a sabotilor');
+INSERT INTO quiz_questions_answers VALUES (5, 137, 405, FALSE);
+
+
+
+-- quiz 6
+INSERT INTO quiz VALUES(6);
+INSERT INTO quiz_questions(text, image_path) VALUES ('Indicatorul semnifică:', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_98.jpg');
+INSERT INTO answers(text) VALUES('sfârșitul interzicerii de a depăși');
+INSERT INTO quiz_questions_answers VALUES (6, 138, 406, TRUE);
+INSERT INTO answers(text) VALUES('sfârșitul tuturor restricțiilor');
+INSERT INTO quiz_questions_answers VALUES (6, 138, 407, FALSE);
+INSERT INTO answers(text) VALUES('interzicerea depășirii autovehiculelor, cu excepția motocicletelor fără ataș');
+INSERT INTO quiz_questions_answers VALUES (6, 138, 408, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce semnificaţie are marcajul rutier alăturat?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_460.jpg');
+INSERT INTO answers(text) VALUES('marcaj pentru benzi cu circulaţie reversibilă');
+INSERT INTO quiz_questions_answers VALUES (6, 139, 409, TRUE);
+INSERT INTO answers(text) VALUES('marcaj pentru drumuri publice aglomerate');
+INSERT INTO quiz_questions_answers VALUES (6, 139, 410, FALSE);
+INSERT INTO answers(text) VALUES('marcaj cu elemente rezonatoare');
+INSERT INTO quiz_questions_answers VALUES (6, 139, 411, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce semnificaţie are indicatorul alăturat?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_855.jpg');
+INSERT INTO answers(text) VALUES('antenă obligatorie');
+INSERT INTO quiz_questions_answers VALUES (6, 140, 412, FALSE);
+INSERT INTO answers(text) VALUES('unde radar');
+INSERT INTO quiz_questions_answers VALUES (6, 140, 413, FALSE);
+INSERT INTO answers(text) VALUES('vânt lateral');
+INSERT INTO quiz_questions_answers VALUES (6, 140, 414, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce indică panoul alăturat?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1211.jpg');
+INSERT INTO answers(text) VALUES('locul unde este amplasat un telefon de urgenţă');
+INSERT INTO quiz_questions_answers VALUES (6, 141, 415, TRUE);
+INSERT INTO answers(text) VALUES('un loc periculos');
+INSERT INTO quiz_questions_answers VALUES (6, 141, 416, FALSE);
+INSERT INTO answers(text) VALUES('o zonă în care staţionarea şi oprirea sunt permise');
+INSERT INTO quiz_questions_answers VALUES (6, 141, 417, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Sunteţi obligat să opriţi la semnalele date de:', NULL);
+INSERT INTO answers(text) VALUES('îndrumătorii de circulaţie ai Ministerului Apărării');
+INSERT INTO quiz_questions_answers VALUES (6, 142, 418, TRUE);
+INSERT INTO answers(text) VALUES('conducătorii vehiculelor de ambulanţă');
+INSERT INTO quiz_questions_answers VALUES (6, 142, 419, FALSE);
+INSERT INTO answers(text) VALUES('inspectorii primăriei');
+INSERT INTO quiz_questions_answers VALUES (6, 142, 420, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum veți semnaliza faptul că vehiculul cu care circulați a rămas în pană pe partea carosabilă?', NULL);
+INSERT INTO answers(text) VALUES('prin folosirea luminilor de poziţie');
+INSERT INTO quiz_questions_answers VALUES (6, 143, 421, TRUE);
+INSERT INTO answers(text) VALUES('prin instalarea triunghiurilor reflectorizante şi prin folosirea luminilor de avarie');
+INSERT INTO quiz_questions_answers VALUES (6, 143, 422, TRUE);
+INSERT INTO answers(text) VALUES('prin purtarea vestei reflectorizante');
+INSERT INTO quiz_questions_answers VALUES (6, 143, 423, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Un vehicul are luminile de avarie aprinse. Ce trebuie să aveţi în vedere?', NULL);
+INSERT INTO answers(text) VALUES('vehiculul va vira la dreapta sau la stânga');
+INSERT INTO quiz_questions_answers VALUES (6, 144, 424, FALSE);
+INSERT INTO answers(text) VALUES('vehiculul este parcat');
+INSERT INTO quiz_questions_answers VALUES (6, 144, 425, FALSE);
+INSERT INTO answers(text) VALUES('vehiculul a rămas în pană sau este remorcat');
+INSERT INTO quiz_questions_answers VALUES (6, 144, 426, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Când este permisă depăşirea prin stânga a tramvaielor aflate în mers?', NULL);
+-- INSERT INTO answers(text) VALUES('atunci când drumul public este cu sens unic');
+INSERT INTO quiz_questions_answers VALUES (6, 145, 248, TRUE);
+-- INSERT INTO answers(text) VALUES('când între şina de tramvai din dreapta şi marginea trotuarului nu există suficient spaţiu pentru depăşire');
+INSERT INTO quiz_questions_answers VALUES (6, 145, 249, TRUE);
+-- INSERT INTO answers(text) VALUES('în nicio situaţie');
+INSERT INTO quiz_questions_answers VALUES (6, 145, 250, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cu ce viteză veţi circula când partea carosabilă este acoperită cu polei, gheaţă, zăpadă bătătorită, mâzgă sau piatră cubică umedă?', NULL);
+INSERT INTO answers(text) VALUES('viteza va fi redusă la jumătate din viteza legală');
+UPDATE answers SET id=428 WHERE id=427;
+ALTER SEQUENCE answers_id_seq RESTART WITH 429;
+INSERT INTO quiz_questions_answers VALUES (6, 146, 428, FALSE);
+INSERT INTO answers(text) VALUES('viteza să nu depăşească 30 km/h în localităţi sau 50 km/h în afara localităţilor');
+INSERT INTO quiz_questions_answers VALUES (6, 146, 429, TRUE);
+INSERT INTO answers(text) VALUES('viteza va fi redusă în funcţie de condiţiile atmosferice');
+INSERT INTO quiz_questions_answers VALUES (6, 146, 430, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('În care dintre situaţii este interzisă întoarcerea vehiculului?', NULL);
+INSERT INTO answers(text) VALUES('în locul în care este instalat indicatorul cu semnificaţia „Întoarcerea interzisă“');
+INSERT INTO quiz_questions_answers VALUES (6, 147, 431, TRUE);
+INSERT INTO answers(text) VALUES('în locurile în care oprirea este interzisă, cu excepţia intersecţiilor');
+INSERT INTO quiz_questions_answers VALUES (6, 147, 432, TRUE);
+INSERT INTO answers(text) VALUES('în zona de acţiune a indicatorului „Staţionarea interzisă“');
+INSERT INTO quiz_questions_answers VALUES (6, 147, 433, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Neacordarea priorităţii înseamnă:', NULL);
+INSERT INTO answers(text) VALUES('nerespectarea semnificaţiei semnalizării rutiere de obligare sau de avertizare');
+INSERT INTO quiz_questions_answers VALUES (6, 148, 434, FALSE);
+INSERT INTO answers(text) VALUES('nerespectarea dispoziţiilor legale privind asigurarea şi semnalizarea în intersecţii');
+INSERT INTO quiz_questions_answers VALUES (6, 148, 435, FALSE);
+INSERT INTO answers(text) VALUES('obligarea celor care au prioritate de trecere de a-şi modifica brusc direcţia sau viteza de deplasare ori să oprească');
+INSERT INTO quiz_questions_answers VALUES (6, 148, 436, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce indică semnalul agentului de circulaţie?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_1175.jpg');
+-- INSERT INTO answers(text) VALUES('reduceţi viteza');
+INSERT INTO quiz_questions_answers VALUES (6, 149, 32, FALSE);
+-- INSERT INTO answers(text) VALUES('oprire');
+INSERT INTO quiz_questions_answers VALUES (6, 149, 33, TRUE);
+-- INSERT INTO answers(text) VALUES('măriţi viteza');
+INSERT INTO quiz_questions_answers VALUES (6, 149, 34, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cui trebuie să acorzi prioritate în situaţia dată?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_953.jpg');
+INSERT INTO answers(text) VALUES('vehiculelor care circulă din partea stângă');
+UPDATE answers SET id=438 WHERE id=437;
+ALTER SEQUENCE answers_id_seq RESTART WITH 439;
+INSERT INTO quiz_questions_answers VALUES (6, 150, 438, FALSE);
+INSERT INTO answers(text) VALUES('vehiculelor care circulă din partea dreaptă');
+INSERT INTO quiz_questions_answers VALUES (6, 150, 439, FALSE);
+INSERT INTO answers(text) VALUES('tuturor vehiculelor');
+INSERT INTO quiz_questions_answers VALUES (6, 150, 440, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Vă apropiaţi de o trecere la nivel cu calea ferată curentă fără bariere, în traversarea căreia s-a angajat o căruţă aflată în faţa dvs. În această situaţie puteţi efectua depăşirea?', NULL);
+INSERT INTO answers(text) VALUES('da, dacă aceasta nu a ajuns încă la linia de tren');
+INSERT INTO quiz_questions_answers VALUES (6, 151, 441, FALSE);
+INSERT INTO answers(text) VALUES('da, întrucât căruţa este un vehicul lent');
+INSERT INTO quiz_questions_answers VALUES (6, 151, 442, FALSE);
+-- INSERT INTO answers(text) VALUES('nu');
+INSERT INTO quiz_questions_answers VALUES (6, 151, 267, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Este interzisă staționarea unui vehicul pe un drum public cu o lățime mai mică de 6 m?', NULL);
+-- INSERT INTO answers(text) VALUES('da');
+INSERT INTO quiz_questions_answers VALUES (6, 152, 53, TRUE);
+-- INSERT INTO answers(text) VALUES('nu');
+INSERT INTO quiz_questions_answers VALUES (6, 152, 267, FALSE);
+INSERT INTO answers(text) VALUES('legal, nu este prevăzut');
+INSERT INTO quiz_questions_answers VALUES (6, 152, 443, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Este corectă manevra de devansare pe autostradă a unui autovehicul pe banda dreaptă a acestuia?', NULL);
+-- INSERT INTO answers(text) VALUES('da');
+INSERT INTO quiz_questions_answers VALUES (6, 153, 53, TRUE);
+-- INSERT INTO answers(text) VALUES('nu');
+INSERT INTO quiz_questions_answers VALUES (6, 153, 267, FALSE);
+INSERT INTO answers(text) VALUES('da, dar numai dacă se folosesc semnalele de atenţionare sonore şi luminoase');
+INSERT INTO quiz_questions_answers VALUES (6, 153, 444, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Pentru care dintre faptele de mai jos se aplică sancțiuni contravenționale?', NULL);
+INSERT INTO answers(text) VALUES('conducerea pe drumurile publice a unui autovehicul / tractor agricol sau forestier sub influența băuturilor alcoolice, dacă fapta nu constituie, potrivit legii, infracțiune');
+INSERT INTO quiz_questions_answers VALUES (6, 154, 445, TRUE);
+INSERT INTO answers(text) VALUES('punerea în circulație sau conducerea pe drumurile publice a unui autovehicul neînmatriculat');
+INSERT INTO quiz_questions_answers VALUES (6, 154, 446, FALSE);
+INSERT INTO answers(text) VALUES('conducerea pe drumurile publice a unui autovehicul de către o persoană fără permis de conducere');
+INSERT INTO quiz_questions_answers VALUES (6, 154, 447, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Conduita preventivă asigură:', NULL);
+INSERT INTO answers(text) VALUES('menţinerea stării tehnice a autovehiculului');
+INSERT INTO quiz_questions_answers VALUES (6, 155, 448, FALSE);
+INSERT INTO answers(text) VALUES('siguranţa şi fluenţa deplasării pe drumurile publice');
+INSERT INTO quiz_questions_answers VALUES (6, 155, 449, TRUE);
+INSERT INTO answers(text) VALUES('prelungirea duratei de exploatare a motorului');
+INSERT INTO quiz_questions_answers VALUES (6, 155, 450, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum se recomandă să vă comportaţi în această situaţie?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_543.jpg');
+INSERT INTO answers(text) VALUES('opriţi numai în cazul în care mingea se opreşte pe carosabil');
+INSERT INTO quiz_questions_answers VALUES (6, 156, 451, FALSE);
+INSERT INTO answers(text) VALUES('reduceţi viteza şi vă pregătiţi să opriţi');
+INSERT INTO quiz_questions_answers VALUES (6, 156, 452, TRUE);
+INSERT INTO answers(text) VALUES('circulaţi mai departe, întrucât copiilor le este interzis să intre pe carosabil');
+INSERT INTO quiz_questions_answers VALUES (6, 156, 453, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cum trebuie să procedeze conducătorul unui vehicul dacă în timpul deplasării apar probleme tehnice care fac imposibilă continuarea călătoriei?', NULL);
+INSERT INTO answers(text) VALUES('dacă nu poate înlătura defecțiunile, să se deplaseze la cea mai apropiată unitate de depanare');
+INSERT INTO quiz_questions_answers VALUES (6, 157, 454, FALSE);
+INSERT INTO answers(text) VALUES('să scoată vehiculul în afara părții carosabile');
+INSERT INTO quiz_questions_answers VALUES (6, 157, 455, TRUE);
+INSERT INTO answers(text) VALUES('să asigure vehiculul contra efracției și să plece după ajutor');
+INSERT INTO quiz_questions_answers VALUES (6, 157, 456, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce trebuie să aveţi în vedere înaintea transportării unei victime la spital?', NULL);
+INSERT INTO answers(text) VALUES('ca funcţia respiratorie şi funcţia circulatorie să fie asigurate');
+INSERT INTO quiz_questions_answers VALUES (6, 158, 457, TRUE);
+INSERT INTO answers(text) VALUES('ca punctul sanitar către care vă îndreptaţi să nu fie la o distanţă mai mare de 50 km');
+INSERT INTO quiz_questions_answers VALUES (6, 158, 458, FALSE);
+INSERT INTO answers(text) VALUES('ca autovehiculul cu care va fi transportată victima să asigure confortul necesar');
+INSERT INTO quiz_questions_answers VALUES (6, 158, 459, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Temperatura lichidului de răcire care asigură performanţa maximă şi uzura minimă a motorului este cuprinsă în intervalul:', NULL);
+INSERT INTO answers(text) VALUES('100-120 grade C');
+INSERT INTO quiz_questions_answers VALUES (6, 159, 460, FALSE);
+INSERT INTO answers(text) VALUES('60-70 grade C');
+INSERT INTO quiz_questions_answers VALUES (6, 159, 461, FALSE);
+INSERT INTO answers(text) VALUES('90-95 grade C');
+INSERT INTO quiz_questions_answers VALUES (6, 159, 462, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Schimbarea uleiului şi a elementului filtrant se face:', NULL);
+INSERT INTO answers(text) VALUES('conform periodicităţii stabilite de constructor');
+INSERT INTO quiz_questions_answers VALUES (6, 160, 463, TRUE);
+INSERT INTO answers(text) VALUES('din 5 în 5 ani');
+INSERT INTO quiz_questions_answers VALUES (6, 160, 464, FALSE);
+INSERT INTO answers(text) VALUES('din 3 în 3 ani');
+INSERT INTO quiz_questions_answers VALUES (6, 160, 465, FALSE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Cu ce viteză veţi circula în condiţii de ceaţă, ploi torenţiale, ninsori abundente, dacă vizibilitatea este redusă sub 100 m?', NULL);
+INSERT INTO answers(text) VALUES('maxim 50 km/h în localităţi sau 60 km/h în afara localităţilor');
+INSERT INTO quiz_questions_answers VALUES (6, 161, 466, FALSE);
+INSERT INTO answers(text) VALUES('reduceţi viteza până la limita evitării oricărui pericol');
+INSERT INTO quiz_questions_answers VALUES (6, 161, 467, FALSE);
+INSERT INTO answers(text) VALUES('maxim 30 km/h în localităţi sau 50 km/h în afara localităţilor');
+INSERT INTO quiz_questions_answers VALUES (6, 161, 468, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Care este traseul de urmat pentru autoturismul din imagine?', 'https://www.scoalarutiera.ro/upload/img/questions/img/Cat_B_poz_213.jpg');
+INSERT INTO answers(text) VALUES('traseul 1');
+INSERT INTO quiz_questions_answers VALUES (6, 162, 469, FALSE);
+INSERT INTO answers(text) VALUES('traseul 2');
+INSERT INTO quiz_questions_answers VALUES (6, 162, 470, FALSE);
+INSERT INTO answers(text) VALUES('oricare dintre cele două, dacă respectă toate prevederile legii');
+INSERT INTO quiz_questions_answers VALUES (6, 162, 471, TRUE);
+
+INSERT INTO quiz_questions(text, image_path) VALUES ('Ce obligaţii aveţi, în calitate de conducător auto?', NULL);
+INSERT INTO answers(text) VALUES('să circulaţi cu o viteză cel puţin egală celei prescrise de indicatorul „Viteză minimă obligatorie“');
+INSERT INTO quiz_questions_answers VALUES (6, 163, 472, TRUE);
+INSERT INTO answers(text) VALUES('să nu acceleraţi în intersecţie');
+INSERT INTO quiz_questions_answers VALUES (6, 163, 473, FALSE);
+INSERT INTO answers(text) VALUES('să circulaţi cu o viteză inferioară celei înscrise în indicatorul „Viteză minimă obligatorie“');
+INSERT INTO quiz_questions_answers VALUES (6, 163, 474, FALSE);

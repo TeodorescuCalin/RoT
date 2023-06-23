@@ -35,10 +35,10 @@
 				<label for="questionCategory"><b>Categoria</b></label>
 				<i class ="fa-solid fa-keyboard"></i>
 				<select id="questionCategory">
+					<option value="signs">Semne de circulație</option>
 					<option value="notSelected" disabled selected hidden>Selectează categoria potrivită</option>
 					<option value="mechanics">Mecanică</option>
 					<option value="firstAid">Prim ajutor</option>
-					<option value="signs">Semne de circulație</option>
 					<option value="police">Poliție</option>
 					<option value="speed">Limite de viteză</option>
 					<option value="priority">Reguli de prioritate</option>
@@ -55,6 +55,12 @@
 					<option value="multipleChoice">Variante multiple</option>
 					<option value="count">Numărare</option>
 				</select>
+			</div>
+
+			<div class="answersNumber inputContainer">
+				<label><b>Număr variante</b></label>
+				<i class ="fas fa-filter"></i>
+				<input type="text" placeholder="Introdu numărul corespunzător" id="answersNumber" required>
 			</div>
 
 			<div class="selectAnswer inputContainer">

@@ -12,6 +12,7 @@ async function postNewQuestion() {
     const categoryElement = document.getElementById('questionCategory');
     const typeElement = document.getElementById('questionType');
     const answersNumberElement = document.getElementById('correctAnswersNumber');
+    const totalAnswersElement = document.getElementById('answersNumber');
 
     const text = textElement.value;
     const image = imageElement.value;
@@ -19,13 +20,25 @@ async function postNewQuestion() {
     const category = categoryElement.value;
     const type = typeElement.value;
     const answersNumber = answersNumberElement.value;
+    const totalAnswersNumber = totalAnswersElement.value;
     let answersIds = [];
-    for (let i = 0; i < answersNumber; i++) {
-        let newDiv = document.getElementById('newDiv' + i);
-        answersIds.push({"text" : newDiv.value});
-
+    if (type == 'count') {
+        for (let i = 0; i < 2 * answersNumber; i += 2) {
+            let newDiv = document.getElementById('newDiv' + i);
+            let newDivCount = document.getElementById('newDiv' + (i + 1));
+            answersIds.push(
+                {
+                    "text": newDiv.value,
+                    "count": newDivCount.value
+            });
+        }
     }
-
+    else if (type == 'multipleChoice') {
+        for (let i = 0; i < answersNumber; i++) {
+            let newDiv = document.getElementById('newDiv' + i);
+            answersIds.push({"text": newDiv.value});
+        }
+    }
 
     const values = {
         text: text,
@@ -33,13 +46,13 @@ async function postNewQuestion() {
         explanation: explanation,
         category: category,
         type: type,
-        answer_count: answersNumber,
+        answer_count: totalAnswersNumber,
         answers: answersIds
     };
 
     var json = JSON.stringify(values);
 
-    let raspuns = await fetch (
+    await fetch (
         new Request (
             HOST_URL + "learn",
             {
@@ -51,24 +64,4 @@ async function postNewQuestion() {
             }
         )
     )
-    console.log(raspuns);
-
-    // await fetch (
-    //     new Request (
-    //         HOST_URL + "register",
-    //         {
-    //             headers : {
-    //                 "Content-Type" : "application/json"
-    //             },
-    //             method : "POST",
-    //             body : JSON.stringify({
-    //                 "username" : "asd",
-    //                 "name" : "asd",
-    //                 "surname" : "asd",
-    //                 "email" : "asd",
-    //                 "password" : "asd"
-    //             })
-    //         }
-    //     )
-    // )
 }

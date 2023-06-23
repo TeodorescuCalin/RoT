@@ -7,13 +7,11 @@ function incrementQuestionNumber() {
         toJSON();
 
     if (number < 25) {
-        // questions[number] = questionData();
         var incremented = currentText.replace(number, number + 1);
         element.style.fontWeight = 'bold';
         element.innerText = incremented;
     }
     else if (number == 25) {
-        // questions[number] = questionData();
         var incremented = currentText.replace(number, number + 1);
         element.style.fontWeight = 'bold';
         element.innerText = incremented;
@@ -21,16 +19,12 @@ function incrementQuestionNumber() {
         button.innerText = "Creeaza chestionar";
     }
     else if (number == 26) {
-        // questions[number] = questionData();
-        var button = document.getElementById('incrementButton');
-        // button.onclick = toJSON();
-        // console.log(JSON.stringify(questions));
+        toJSON();
     }
 
     deleteNewDivs();
     var selectElement = document.getElementById("correctAnswersNumber");
     selectElement.value = "notSelected";
-    // de verificat daca poate da next (daca a completat toate campurile)
 }
 
 function decrementQuestionNumber() {
@@ -50,10 +44,7 @@ function decrementQuestionNumber() {
         selectElement.value = "notSelected";
     }
     else if (number == 1) {
-        // var button = document.getElementById('decrementButton');
-        // button.style.pointerEvents = "none";
-        // button.style.opacity = 0.5;
-        // button.style.cursor = "not-allowed";
+
     }
     else if (number > 1) {
         var decremented = currentText.replace(number, number - 1);
@@ -252,7 +243,6 @@ function saveNewDivs() {
 function getNewDivs() {
     var newDivsCollection = document.getElementsByClassName('newDiv');
     var newDivs = Array.from(newDivsCollection);
-    // console.log(newDivs);
     var index = 0;
     newDivs.forEach(function () {
         var answerElement = document.getElementById('newDiv' + index);
@@ -297,110 +287,128 @@ function loadFunctionsIncrement() {
     getInputValues();
 }
 
-function modify_loadFunctionsDecrement() {
-    // getInputValues();
-    // mai intai load la intrebari, rasp, etc
-}
-
-function modify_loadFunctionsIncrement() {
-    //
-}
-
 function createCorrectAnswerBoxesQuestionType() {
     deleteNewDivs();
 
     var typeElement = document.getElementById("questionType");
-    var boxes = 1;
-    if (typeElement.value == 'multipleChoice' || typeElement.value == 'notSelected')
-        boxes = getNumberFromSelect();
-    var element = document.getElementById("form-container");
-    var decrementButton = document.getElementsByClassName("buttonsContainer")[0];
-    for (let i = 0; i < boxes; i++) {
-        const div = document.createElement("div");
-        div.classList.add("newDiv");
-        div.classList.add("inputContainer");
+    if (typeElement.value == 'mulipleChoice') {
+        var boxes = getNumberFromSelect();
+        var element = document.getElementById("form-container");
+        var decrementButton = document.getElementsByClassName("buttonsContainer")[0];
+        for (let i = 0; i < boxes; i++) {
+            const div = document.createElement("div");
+            div.classList.add("newDiv");
+            div.classList.add("inputContainer");
 
-        var label = document.createElement("label");
-        label.textContent = "Raspunsul corect " + (i + 1);
-        label.style.fontWeight = 'bold';
-        div.append(label);
+            var label = document.createElement("label");
+            label.textContent = "Raspunsul corect " + (i + 1);
+            label.style.fontWeight = 'bold';
+            div.append(label);
 
-        var icon = document.createElement("i");
-        icon.classList.add("fas", "fa-check");
-        div.append(icon);
+            var icon = document.createElement("i");
+            icon.classList.add("fas", "fa-check");
+            div.append(icon);
 
-        var input = document.createElement("input");
-        input.id = "newDiv" + i;
-        input.type = "text";
-        input.placeholder = "Introdu textul";
-        div.append(input);
+            var input = document.createElement("input");
+            input.id = "newDiv" + i;
+            input.type = "text";
+            input.placeholder = "Introdu textul";
+            div.append(input);
 
-        element.insertBefore(div, decrementButton);
+            element.insertBefore(div, decrementButton);
+        }
+    }
+    else if (typeElement.value == 'count') {
+        var boxes  = 2 * getNumberFromSelect();
+        var element = document.getElementById("form-container");
+        var decrementButton = document.getElementsByClassName("buttonsContainer")[0];
+        for (let i = 0; i < boxes; i++) {
+            if (i % 2 == 0) {
+                const div = document.createElement("div");
+                div.classList.add("newDiv");
+                div.classList.add("inputContainer");
+
+                var label = document.createElement("label");
+                label.textContent = "Semnul " + (i / 2 + 1);
+                label.style.fontWeight = 'bold';
+                div.append(label);
+
+                var icon = document.createElement("i");
+                icon.classList.add("fas", "fa-check");
+                div.append(icon);
+
+                var input = document.createElement("input");
+                input.id = "newDiv" + i;
+                input.type = "text";
+                input.placeholder = "Introdu textul";
+                div.append(input);
+
+                element.insertBefore(div, decrementButton);
+            }
+            else {
+                const div = document.createElement("div");
+                div.classList.add("newDiv");
+                div.classList.add("inputContainer");
+
+                var label = document.createElement("label");
+                label.textContent = "Numărul corespunzator semnului " + ((i-1) / 2 + 1);
+                label.style.fontWeight = 'bold';
+                div.append(label);
+
+                var icon = document.createElement("i");
+                icon.classList.add("fa-solid", "fa-list-ol");
+                div.append(icon);
+
+                var input = document.createElement("input");
+                input.id = "newDiv" + i;
+                input.type = "text";
+                input.placeholder = "Introdu numărul";
+                div.append(input);
+
+                element.insertBefore(div, decrementButton);
+
+            }
+        }
+
     }
 }
 
 function selectAnswersWithType() {
-    select = document.getElementById('correctAnswersNumber');
+    select = document.getElementById('questionCategory');
     type = document.getElementById('questionType');
     if (type.value == 'count') {
-        select.value = 'notSelected';
-        select.remove(2);
-        select.remove(2);
+        select.value = 'signs';
+        for (let i = 0; i < 8; i++)
+            select.remove(1);
     }
+
     else if (type.value == 'multipleChoice' && select.options.length < 3) {
         select.value = 'notSelected';
-        let newOption2 = new Option('2', 2);
-        let newOption3 = new Option('3', 3);
+        let newOption = new Option('Selecteaza categoria', 'notSelected');
+        newOption.disabled = true;
+        newOption.selected = true;
+        newOption.hidden = true;
+        let newOption2 = new Option('Mecanică', 'mechanics');
+        let newOption3 = new Option('Prim ajutor', 'firstAid');
+        let newOption4 = new Option('Poliție', 'police');
+        let newOption5 = new Option('Limite de viteză', 'speed');
+        let newOption6 = new Option('Reguli de prioritate', 'priority');
+        let newOption7 = new Option('Amenzi, sancțiuni', 'fines');
+        let newOption8 = new Option('General', 'general');
+
+        select.add(newOption, undefined);
         select.add(newOption2, undefined);
         select.add(newOption3, undefined);
+        select.add(newOption4, undefined);
+        select.add(newOption5, undefined);
+        select.add(newOption6, undefined);
+        select.add(newOption7, undefined);
+        select.add(newOption8, undefined);
     }
 }
 
-// function questionData() {
-//     textElement = document.getElementById('questionText');
-//     imageElement = document.getElementById('questionImage');
-//     correctAnswersNumberElement = document.getElementById('correctAnswersNumber');
-
-//     text = textElement.value;
-//     image = imageElement.value;
-//     correctAnswersNumber = correctAnswersNumberElement.value;
-
-//     correctAnswers = [];
-//     wrongAnswers = [];
-
-//     for (let i = 0; i < 3; i++) {
-//         var newDiv = document.getElementById('newDiv' + i);
-//         if (i < correctAnswersNumber)
-//             correctAnswers.push(newDiv.value);
-//         else
-//             wrongAnswers.push(newDiv.value);
-//     }
-
-//     var data = {
-//         text: text,
-//         image: image,
-//         correctAnswersNumber: correctAnswersNumber,
-//         correctAnswers: correctAnswers,
-//         wrongAnswers: wrongAnswers
-//     };
-
-//     var json = JSON.stringify(data);
-//     console.log(json);
-//     return data;
-// }
-
 function toJSON() {
     for (let i = 0; i < savedQuestions.length; i++) {
-        // correctAnswers = [];
-        // wrongAnswers = [];
-
-        // for (let j = 0; j < 3; j++) {
-        //     if (j < savedCorectAnswersNumber[i].value)
-        //         correctAnswers.push(savedNewDivs[i * 3 + j].text);
-        //     else
-        //         wrongAnswers.push(savedNewDivs[i * 3 + j].text);
-        // }
-
         firstAnswer = savedNewDivs[i * 3 + 0].text;
         secondAnswer = savedNewDivs[i * 3 + 1].text;
         thirdAnswer = savedNewDivs[i * 3 + 2].text;
@@ -421,14 +429,6 @@ function toJSON() {
             secondAnswerCorrect = true;
             thirdAnswerCorrect = true;
         }
-
-        // var data = {
-        //     text: savedQuestions[i].text,
-        //     image: savedPaths[i].text,
-        //     correctAnswersNumber: savedCorectAnswersNumber[i].value,
-        //     correctAnswers: correctAnswers,
-        //     wrongAnswers: wrongAnswers
-        // };
 
         var data = {
             text: savedQuestions[i].text,
