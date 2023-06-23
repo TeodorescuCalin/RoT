@@ -300,6 +300,15 @@ class LearnController extends Controller {
         }
         $questionModel->answers = $answerList;
 
+        $questionRepository = new LearnQuestionRepository();
+        $questionRepository->create($questionModel);
 
+        
+
+    //    $response->code = 200;
+
+       $response->encodeSuccess(200);
+
+        return $response;
     }
 }

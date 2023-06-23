@@ -169,4 +169,66 @@ class LearnQuestionRepository extends Repository
 
         return true;
     }
+
+    public function create(LearnQuestionModel $questionModel) : void {
+       $statement = $this->pdo->prepare("INSERT INTO learn_questions(text, image_path, explanation, type, category) VALUES((:text), (:image_path), (:explanation), (:type), (:category))");
+       try {
+        $statement->execute(
+            [
+                'text' => $questionModel->text,
+                'image_path' => $questionModel->image_path,
+                'explanation' => $questionModel->explanation,
+                'type' => $questionModel->type,
+                'category' => $questionModel->category
+            ]
+        );
+        $questionModel->id = $this->pdo->lastInsertId();
+ 
+       } catch (PDOException $e) {
+            echo $e -> getMessage();
+       } 
+       
+    //    return ["ok" => true];
+
+
+
+    //     $statement = $this->pdo->prepare(
+    //         "INSERT INTO users (email, name, surname, username, password ) ".
+    //         "VALUES (:email, :name, :surname, :username, :password)");
+    //     try {
+    //         $statement->execute(
+    //             [
+    //                 ":email" => $questionModel->text,
+    //                 ":name" => $questionModel->text,
+    //                 ":surname" => $questionModel->text,
+    //                 ":username" => $questionModel->text,
+    //                 ":password" => $questionModel->text
+    //             ]
+    //         );
+    //     } catch ( PDOException $exception ) {
+    //         if ( $exception->getCode() == 23505 ) {
+    //             if ( str_contains ( $exception->getMessage(), "email") ) {
+    //                 return [
+    //                     "ok" => false,
+    //                     "internal" => false,
+    //                     "error" => "The email already exists"
+    //                 ];
+    //             } else {
+    //                 if ( str_contains ( $exception->getMessage(), "username") ) {
+    //                     return [
+    //                         "ok" => false,
+    //                         "internal" => false,
+    //                         "error" => "The username already exists"
+    //                     ];
+    //                 }
+    //             }
+    //         }
+    //         return [
+    //             "ok" => false,
+    //             "internal" => true
+    //         ];
+    //     }
+
+    //     return ["ok" => true];
+    }
 }

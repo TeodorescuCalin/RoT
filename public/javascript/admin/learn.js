@@ -5,7 +5,7 @@ function loadQuestionNumber(url) {
     window.location.href = url;
 }
 
-async function toJSON() {
+async function postNewQuestion() {
     textElement = document.getElementById('questionText')
     imageElement = document.getElementById('questionImage');
     explanationElement = document.getElementById('questionExplanation');
@@ -38,9 +38,9 @@ async function toJSON() {
 
     var json = JSON.stringify(values);
 
-    await fetch (
+    let raspuns = await fetch (
         new Request (
-            "",
+            HOST_URL + "learn",
             {
                 method : "POST",
                 headers : {
@@ -50,4 +50,24 @@ async function toJSON() {
             }
         )
     )
+    console.log(raspuns);
+
+    // await fetch (
+    //     new Request (
+    //         HOST_URL + "register",
+    //         {
+    //             headers : {
+    //                 "Content-Type" : "application/json"
+    //             },
+    //             method : "POST",
+    //             body : JSON.stringify({
+    //                 "username" : "asd",
+    //                 "name" : "asd",
+    //                 "surname" : "asd",
+    //                 "email" : "asd",
+    //                 "password" : "asd"
+    //             })
+    //         }
+    //     )
+    // )
 }

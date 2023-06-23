@@ -1,13 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Kurale&display=swap");
 body {
-  background-color: #24252A; }
+  background-color: #24252A;
+}
 
 header, header * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background-color: #24252A; }
+  background-color: #24252A;
+}
 
 header {
   display: flex;
@@ -18,19 +20,23 @@ header {
   align-items: flex-start;
   background: transparent;
   padding: 20px 6%;
-  transition: all .50s ease; }
+  transition: all 0.5s ease;
+}
 
 .navButtons {
   position: relative;
   display: flex;
   top: 38px;
-  list-style: none; }
+  list-style: none;
+}
 
 .navButtons a:hover {
-  color: #0088a9; }
+  color: #0088a9;
+}
 
 .navButtons a:active {
-  color: yellow; }
+  color: yellow;
+}
 
 .navButtons a, .loginButton {
   text-align: center;
@@ -41,23 +47,27 @@ header {
   font-size: 20px;
   text-decoration: none;
   padding: 5px 0;
-  margin: 0 20px; }
+  margin: 0 20px;
+}
 
 .homeButton {
-  padding: 9px 25px; }
+  padding: 9px 25px;
+}
 
 .loginButton {
   position: relative;
   padding: 9px 25px;
   border: none;
   border-radius: 50px;
-  background-color: #0088a9;
+  background-color: rgb(0, 136, 169);
   cursor: pointer;
   top: 34px;
-  transition: all .50s ease; }
+  transition: all 0.5s ease;
+}
 
 .loginButton:hover {
-  background-color: rgba(0, 136, 169, 0.5); }
+  background-color: rgba(0, 136, 169, 0.5);
+}
 
 .subMenuHighwayCode {
   position: relative;
@@ -67,13 +77,16 @@ header {
   border: none;
   top: 15px;
   line-height: 50px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px; }
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+}
 
 nav ul li:hover ul {
-  display: block; }
+  display: block;
+}
 
 .subMenuHighwayCode a:hover {
-  color: #0088a9; }
+  color: #0088a9;
+}
 
 div.textHomePage {
   height: 800px;
@@ -88,21 +101,24 @@ div.textHomePage {
   text-decoration: none;
   padding: 5px 0;
   margin: 0 20px;
-  transition: all .50s ease; }
+  transition: all 0.5s ease;
+}
 
 .dropNav {
   color: white;
   font-size: 34px;
   cursor: pointer;
-  display: none; }
+  display: none;
+}
 
 #checkNav {
-  display: none; }
+  display: none;
+}
 
 @media (max-width: 1304px) {
   .navBar {
-    height: 100px; }
-
+    height: 100px;
+  }
   .navButtons {
     text-align: center;
     display: block;
@@ -111,8 +127,8 @@ div.textHomePage {
     top: 60px;
     visibility: hidden;
     line-height: 80px;
-    padding: 0 0 0 0; }
-
+    padding: 0 0 0 0;
+  }
   .dropNav {
     position: relative;
     display: block;
@@ -121,109 +137,123 @@ div.textHomePage {
     left: 45%;
     justify-content: center;
     align-items: center;
-    line-height: 120px; }
-
+    line-height: 120px;
+  }
   .navButtons a {
-    font-size: 28px; }
-
+    font-size: 28px;
+  }
   .subMenuHighwayCode {
     line-height: 50px;
-    margin-bottom: 20px; }
-
+    margin-bottom: 20px;
+  }
   div.textHomePage {
-    align-content: flex-end; }
-
+    align-content: flex-end;
+  }
   #checkNav:checked ~ .navButtons {
-    visibility: visible; } }
+    visibility: visible;
+  }
+}
 @media (max-width: 800px) {
   .homeButton svg {
     height: 90px;
-    width: 90px; }
-
+    width: 90px;
+  }
   .navButtons a {
     font-size: 20px;
-    padding: 0 0 0 0; }
-
+    padding: 0 0 0 0;
+  }
   .navButtons {
     line-height: 60px;
     padding: 0 0 0 0;
-    top: 50px; }
-
+    top: 50px;
+  }
   .navButtons ul {
-    padding: 0 0 0 0; } }
+    padding: 0 0 0 0;
+  }
+}
 @media (max-width: 600px) {
   .homeButton svg {
     height: 65px;
     width: 65px;
-    margin-top: 14px; }
-
+    margin-top: 14px;
+  }
   .dropNav {
-    font-size: 28px; }
-
+    font-size: 28px;
+  }
   .loginButton {
-    font-size: 18px; }
-
+    font-size: 18px;
+  }
   .navButtons a {
     font-size: 18px;
-    padding: 0 0 0 0; }
-
+    padding: 0 0 0 0;
+  }
   .navButtons {
     top: 45px;
     line-height: 60px;
-    padding: 0 0 0 0; } }
+    padding: 0 0 0 0;
+  }
+}
 @media (max-width: 400px) {
   .homeButton svg {
     height: 60px;
     width: 60px;
-    margin-top: 18px; }
-
+    margin-top: 18px;
+  }
   .dropNav {
     font-size: 24px;
-    line-height: 100px; }
-
+    line-height: 100px;
+  }
   .loginButton {
-    font-size: 16px; }
-
+    font-size: 16px;
+  }
   .navButtons a {
     font-size: 18px;
-    padding: 0 0 0 0; }
-
+    padding: 0 0 0 0;
+  }
   .navButtons {
     top: 40px;
     line-height: 60px;
-    padding: 0 0 0 0; } }
+    padding: 0 0 0 0;
+  }
+}
 @media (max-width: 399px) {
   .homeButton svg {
     height: 30px;
     width: 30px;
-    margin-top: 18px; }
-
+    margin-top: 18px;
+  }
   .dropNav {
     font-size: 10px;
-    line-height: 100px; }
-
+    line-height: 100px;
+  }
   .loginButton {
-    font-size: 12px; }
-
+    font-size: 12px;
+  }
   .navButtons a {
     font-size: 18px;
-    padding: 0 0 0 0; }
-
+    padding: 0 0 0 0;
+  }
   .navButtons {
     top: 40px;
     line-height: 60px;
-    padding: 0 0 0 0; } }
+    padding: 0 0 0 0;
+  }
+}
 ::-webkit-scrollbar {
-  width: 8px; }
+  width: 8px;
+}
 
 ::-webkit-scrollbar-track {
-  background: #24252A; }
+  background: #24252A;
+}
 
 ::-webkit-scrollbar-thumb {
-  background: #0088a9; }
+  background: #0088a9;
+}
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 136, 169, 0.5); }
+  background: rgba(0, 136, 169, 0.5);
+}
 
 .flexBlock {
   margin-left: auto;
@@ -234,12 +264,15 @@ div.textHomePage {
   justify-content: center;
   flex-wrap: wrap;
   row-gap: 10vh;
-  column-gap: 100px;
+  -moz-column-gap: 100px;
+       column-gap: 100px;
   width: 1200px;
-  height: 600px; }
+  height: 600px;
+}
 
 .flexBlock__container {
-  flex: 0 0 25%; }
+  flex: 0 0 25%;
+}
 
 .quizBlock {
   border-radius: 10px;
@@ -247,35 +280,41 @@ div.textHomePage {
   text-align: center;
   font-size: 20px;
   height: 40%;
-  font-family: 'Kurale', serif;
+  font-family: "Kurale", serif;
   color: white;
   border-color: #0088a9;
-  display: block; }
+  display: block;
+}
 
 .quizBlock__start:hover {
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .quizBlock__title {
   margin-bottom: 20px;
-  font-size: 100%; }
+  font-size: 100%;
+}
 
 .quizBlock__status {
   width: 100%;
   border-style: solid none solid;
   border-color: #0088a9;
   font-size: 90%;
-  background-color: #cfc50e; }
+  background-color: #cfc50e;
+}
 
 .quizBlock__status--failed {
-  background-color: red; }
+  background-color: red;
+}
 
 .quizBlock__status--successful {
-  background-color: #39cf27; }
+  background-color: #39cf27;
+}
 
 .quizBlock__start {
   border-radius: 5px;
   border-color: #0088a9;
-  font-family: 'Kurale', serif;
+  font-family: "Kurale", serif;
   font-size: 20px;
   background-color: #24252A;
   color: white;
@@ -286,48 +325,59 @@ div.textHomePage {
   height: 20%;
   border-style: solid;
   text-align: center;
-  padding: 0; }
+  padding: 0;
+}
 
 .quizBlock__start:hover {
   text-decoration: none;
-  box-shadow: inset 0 0 5px 5px rgba(26, 188, 156, 0.25); }
+  box-shadow: inset 0 0 5px 5px rgba(26, 188, 156, 0.25);
+}
 
 @media only screen and (max-width: 1180px) {
   .quizSelection {
     width: 850px;
-    height: 425px; } }
+    height: 425px;
+  }
+}
 @media only screen and (max-width: 800px) {
   .quizSelection {
     width: 650px;
-    height: 325px; }
-
+    height: 325px;
+  }
   .quizBlock, .quizBlock__start {
-    font-size: 15px; } }
+    font-size: 15px;
+  }
+}
 @media only screen and (max-width: 600px) {
   .quizSelection {
     width: 500px;
     height: 250px;
-    column-gap: 5px;
-    row-gap: 20px; }
-
+    -moz-column-gap: 5px;
+         column-gap: 5px;
+    row-gap: 20px;
+  }
   .quizBlock {
     flex-basis: 30%;
-    height: 50%; }
-
+    height: 50%;
+  }
   .quizBlock__start {
-    font-size: 10px; } }
+    font-size: 10px;
+  }
+}
 @media only screen and (max-width: 500px) {
   .quizSelection {
     width: 350px;
-    height: 175px; }
-
+    height: 175px;
+  }
   .quizBlock {
-    height: 70%; } }
+    height: 70%;
+  }
+}
 @media only screen and (min-width: 1600px) {
   .quizBlock {
-    font-size: 30px; }
-
+    font-size: 30px;
+  }
   .quizBlock__start {
-    margin-top: 0.1vh; } }
-
-/*# sourceMappingURL=quizSelection.css.map */
+    margin-top: 0.1vh;
+  }
+}/*# sourceMappingURL=quizSelection.css.map */
