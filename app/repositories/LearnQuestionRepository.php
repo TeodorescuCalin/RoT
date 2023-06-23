@@ -184,7 +184,8 @@ class LearnQuestionRepository extends Repository
                     'answer_count' => $questionModel->answer_count
                 ]
             );
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
 
         $questionModel->id = $this->pdo->lastInsertId();
