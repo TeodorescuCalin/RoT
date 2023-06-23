@@ -130,4 +130,58 @@ class QuizRepository extends Repository
 
         return $result;
     }
+
+
+    public function getQuizForUser ($userId, $quizId) : UserQuizModel | null {
+        $statement = $this->pdo->prepare("SELECT status, duration, correct_answers FROM user_quizzes WHERE id_user=(:userId) AND id_quiz=(:quizId)");
+        $statement->execute(
+            [
+                'userId' => $userId,
+                'quizId' => $quizId,
+            ]
+        );
+        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ( ! $fetchArray ) {
+            return null;
+        }
+
+        $userQuizModel = new UserQuizModel();
+        $userQuizModel->userId = $userId;
+        $userQuizModel->quizId = $quizId;
+        $userQuizModel->status = $fetchArray['status'];
+        $userQuizModel->correctAnswerCount = $fetchArray['correct_answers'];
+        $userQuizModel->duration = $fetchArray['duration'];
+
+        return $userQuizModel;
+    }
+
+
+    public function insertQuizForUser ( UserQuizModel $userQuizModel ) : void {
+        $statement = $this->pdo->prepare("INSERT INTO user_quizzes VALUES((:userId), (:quizId), (:status), (:duration), (:correct_answers))");
+        $statement->execute(
+            [
+                "userId" => $userQuizModel->userId,
+                "quizId" => $userQuizModel->quizId,
+                "status" => $userQuizModel->status,
+                "duration" => $userQuizModel->duration,
+                "correct_answers" => $userQuizModel->correctAnswerCount,
+            ]
+        );
+    }
+
+
+    public function updateQuizForUser ( UserQuizModel $userQuizModel ) : void {
+        $statement = $this->pdo->prepare("UPDATE user_quizzes SET status=(:status), duration=(:duration), correct_answers=(:correct_answers) WHERE id_user=(:userId) AND id_quiz=(:quizId)");
+        $statement->execute(
+            [
+                "userId" => $userQuizModel->userId,
+                "quizId" => $userQuizModel->quizId,
+                "status" => $userQuizModel->status,
+                "duration" => $userQuizModel->duration,
+                "correct_answers" => $userQuizModel->correctAnswerCount,
+            ]
+        );
+
+    }
 }

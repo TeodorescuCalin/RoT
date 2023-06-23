@@ -14,6 +14,7 @@ class App {
 
     public function __construct() {
 
+        $this->addRoute ( "GET", "error", "ErrorController@error");
 
         $this->addRoute ( "GET", "", "HomeController@index" );
         $this->addRoute ( "GET", "legislation", "HomeController@legislation" );
@@ -41,6 +42,7 @@ class App {
         $this->addRoute ( "GET", "user_quiz", "QuizController@getQuizzesForUser" );
         $this->addRoute ( "GET", "quiz/{quizId}/questions", "QuizController@getQuiz" );
         $this->addRoute ( "POST", "quiz/{quizId}/{questionId}/check", "QuizController@checkQuizAnswer" );
+        $this->addRoute ( "PUT", "quiz/{quizId}", "QuizController@updateUserQuizStatus" );
 
         $this->addRoute ( "GET", "admin", "AdminController@getPage" );
         $this->addRoute ( "GET", "learnAdminMainPage", "AdminController@getLearnPage" );

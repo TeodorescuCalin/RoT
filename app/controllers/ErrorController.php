@@ -17,4 +17,13 @@ class ErrorController extends Controller {
         $response->body = file_get_contents(__DIR__."/../../protected/html/error/404.html");
         return $response;
     }
+
+    public function error() : Response {
+
+        $response = new Response();
+        $response->setHeader("Content-Type", "text/html");
+        $response->code = 404;
+        $response->body = file_get_contents(__DIR__."/../../protected/html/error/400.html");
+        return $response;
+    }
 }

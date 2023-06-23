@@ -75,3 +75,14 @@ function clearOldQuestion() {
             answerDivs[index].classList.remove("questionContainer__answerBlock__answer--selected");
     }
 }
+
+let remainingTime = 1800;
+
+const timerFunc = setInterval( () => {
+    remainingTime --;
+    document.getElementById("timerBlock").innerText = Math.floor(remainingTime / 60) + ":" + remainingTime % 60;
+    if ( remainingTime <= 0 ) {
+        displayFinalResult();
+        clearInterval(timerFunc);
+    }
+}, 1000)

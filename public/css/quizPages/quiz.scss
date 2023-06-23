@@ -31,6 +31,12 @@
   }
 }
 
+#timerBlock {
+  @include font-style(200%);
+  display: flex;
+  justify-content: center;
+}
+
 .quizInformationCount {
   text-align: center;
 }

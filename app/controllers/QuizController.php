@@ -168,4 +168,98 @@ class QuizController extends Controller {
 
         return $response;
     }
+
+
+    public function updateUserQuizStatus () : Response {
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/json");
+
+
+        $authController = new AuthController($this->request);
+        $decodedToken = $authController->checkJWT();
+        if ( ! $decodedToken['ok'] ) {
+            $response->code = 401;
+            $response->body = file_get_contents(__DIR__."/../../protected/html/error/401.html");
+            return $response;
+        }
+
+        if ( ! $this->request->contentTypeIsJSON() ) {
+            $response->encodeError(400, "Content-Type must be JSON");
+            return $response;
+        }
+
+        $json_body = json_decode($this->request->body, true);
+        if ( $json_body == null ) {
+            $response->encodeError(400, "Bad JSON body");
+            return $response;
+        }
+
+        if ( ! isset ( $json_body['correct_answers'] ) ) {
+            $response->encodeError(400, "Must provide correct answers for quiz");
+            return $response;
+        }
+
+        if ( empty ( $json_body['duration'] ) ) {
+            $response->encodeError(400, "Must provide correct duration for quiz");
+            return $response;
+        }
+
+        $userQuizModel = new UserQuizModel();
+        $userQuizModel->correctAnswerCount = $json_body['correct_answers'];
+        $userQuizModel->quizId = $this->request->pathVariables['quizId'];
+        $userQuizModel->userId = $decodedToken['id'];
+        $userQuizModel->duration = $json_body['duration'];
+
+        if ( $userQuizModel->duration < 0 ) {
+            $userQuizModel->duration = 0;
+        }
+
+        if ( $userQuizModel->correctAnswerCount < 22 ) {
+            $userQuizModel->status = 'failed';
+        } else {
+            if ( $userQuizModel->correctAnswerCount == 26 ) {
+                $userQuizModel->status = 'perfect';
+            } else {
+                $userQuizModel->status = 'passed';
+            }
+        }
+
+
+        if ( $userQuizModel->status == 'failed' ) {
+            $response->encodeSuccess(200, ["message" => "Din păcate ai picat. Mai încearcă"]);
+        } else {
+            if ( $userQuizModel->status == 'passed' ) {
+                $response->encodeSuccess(200, ["message" => "Felicitări! Ai reușit să treci testul...dar nu a fost perfect."]);
+            } else {
+                $response->encodeSuccess(200, ["message" => "Felicitări! Ai făcut un quiz perfect. Tot ce-ți mai rămâne acum este să-ți depășești timpul de rezolvare"]);
+            }
+        }
+
+        $quizRepository = new QuizRepository();
+        $existingModel = $quizRepository->getQuizForUser($userQuizModel->userId, $userQuizModel->quizId);
+        if ( $existingModel == null ) {
+            $quizRepository->insertQuizForUser($userQuizModel);
+            return $response;
+        }
+
+        if ( $existingModel->status == 'failed' ) {
+            if ( $userQuizModel->correctAnswerCount > $existingModel->correctAnswerCount || $userQuizModel->duration < $existingModel->duration ) {
+                $quizRepository->updateQuizForUser($userQuizModel);
+            }
+        } else {
+            if ( $existingModel->status == 'passed' ) {
+                if ( $userQuizModel->status != 'failed' &&
+                    ($userQuizModel->correctAnswerCount > $existingModel->correctAnswerCount || $userQuizModel->duration < $existingModel->duration ) ) {
+                    $quizRepository->updateQuizForUser($userQuizModel);
+                }
+            } else {
+                if ( $userQuizModel->duration < $existingModel->duration ) {
+                    $quizRepository->updateQuizForUser($userQuizModel);
+                }
+            }
+        }
+
+
+        return $response;
+    }
 }

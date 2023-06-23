@@ -58,11 +58,37 @@ async function checkAnswers() {
         )
 }
 
-function displayFinalResult() {
+async function displayFinalResult() {
+    const quizId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
     document.body.children[1].remove();
-    const newDiv = document.createElement("div");
-    newDiv.classList.add("finalAnswerDiv");
-    newDiv.innerHTML = `Felicitări ai făcut <span style="color:green">` + correctQuestions + ` </span> întrebări corecte
-        și <span style="color:red">` + wrongQuestions + `</span> întrebări greșite.`
-    document.body.appendChild(newDiv);
+
+    await fetch (
+        new Request(
+            HOST_URL + "quiz/" + quizId,
+            {
+                method : "PUT",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify(
+                    {
+                        "correct_answers" : correctQuestions,
+                        "duration" : 1800 - remainingTime
+                    }
+                )
+            }
+        )
+    ).then( response => response.json() )
+        .then(
+            response => {
+
+                if ( ! response.ok ) {
+                    window.location = "/public/error"
+                }
+
+                const newDiv = document.createElement("div");
+                newDiv.classList.add("finalAnswerDiv");
+                newDiv.innerHTML = response['data'].message;
+                document.body.appendChild(newDiv);
+            })
 }
