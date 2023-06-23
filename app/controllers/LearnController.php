@@ -284,6 +284,7 @@ class LearnController extends Controller {
         $questionModel->image_path = $json_body['image_path'];
         $questionModel->type = $json_body['type'];
         $questionModel->category = $json_body['category'];
+        $questionModel->answer_count = $json_body['answer_count'];
 
         $answerList = [];
 
@@ -296,7 +297,17 @@ class LearnController extends Controller {
                 $answerRepository->create($answerModel);
 
             }
-            $answerList[] = $answerModel->id;
+            if ( isset ( $answer['count'] ) ) {
+                $answerList[] = [
+                    "id" => $answerModel->id,
+                    "count" => $answer['count']
+                ];
+            } else {
+                $answerList[] = [
+                    "id" => $answerModel->id,
+                    "count" => null
+                ];
+            }
         }
         $questionModel->answers = $answerList;
 

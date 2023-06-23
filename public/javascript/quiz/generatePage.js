@@ -44,8 +44,8 @@ function displayNewQuestion() {
     document.getElementById("questionTitle").innerText = currentQuestion.text;
     const currentQuestionImage = document.getElementById("questionImage");
     if ( currentQuestion.image_path ) {
-        if ( currentQuestionImage !== null ) {
-            currentQuestionImage.src = currentQuestionImage.image_path;
+        if ( currentQuestionImage ) {
+            currentQuestionImage.src = currentQuestion.image_path;
         } else {
             const questionImage = document.createElement("img");
             questionImage.src = currentQuestion.image_path;
@@ -54,7 +54,7 @@ function displayNewQuestion() {
                 .appendChild(questionImage);
         }
     } else {
-        if ( currentQuestionImage !== null ) {
+        if ( currentQuestionImage ) {
             currentQuestionImage.remove();
         }
     }

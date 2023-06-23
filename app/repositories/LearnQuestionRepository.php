@@ -25,6 +25,7 @@ class LearnQuestionRepository extends Repository
         $learnQuestionModel->answers = $fetchArray['answers'];
         $learnQuestionModel->explanation = $fetchArray['explanation'];
         $learnQuestionModel->category = $fetchArray['category'];
+        $learnQuestionModel->answer_count = $fetchArray['answer_count'];
 
         return $learnQuestionModel;
     }
@@ -171,64 +172,37 @@ class LearnQuestionRepository extends Repository
     }
 
     public function create(LearnQuestionModel $questionModel) : void {
-       $statement = $this->pdo->prepare("INSERT INTO learn_questions(text, image_path, explanation, type, category) VALUES((:text), (:image_path), (:explanation), (:type), (:category))");
-       try {
-        $statement->execute(
-            [
-                'text' => $questionModel->text,
-                'image_path' => $questionModel->image_path,
-                'explanation' => $questionModel->explanation,
-                'type' => $questionModel->type,
-                'category' => $questionModel->category
-            ]
-        );
+        $statement = $this->pdo->prepare("INSERT INTO learn_questions(text, image_path, explanation, type, category, answer_count) VALUES((:text), (:image_path), (:explanation), (:type), (:category), (:answer_count))");
+        try {
+            $statement->execute(
+                [
+                    'text' => $questionModel->text,
+                    'image_path' => $questionModel->image_path,
+                    'explanation' => $questionModel->explanation,
+                    'type' => $questionModel->type,
+                    'category' => $questionModel->category,
+                    'answer_count' => $questionModel->answer_count
+                ]
+            );
+        } catch (PDOException) {
+        }
+
         $questionModel->id = $this->pdo->lastInsertId();
- 
-       } catch (PDOException $e) {
-            echo $e -> getMessage();
-       } 
-       
-    //    return ["ok" => true];
 
-
-
-    //     $statement = $this->pdo->prepare(
-    //         "INSERT INTO users (email, name, surname, username, password ) ".
-    //         "VALUES (:email, :name, :surname, :username, :password)");
-    //     try {
-    //         $statement->execute(
-    //             [
-    //                 ":email" => $questionModel->text,
-    //                 ":name" => $questionModel->text,
-    //                 ":surname" => $questionModel->text,
-    //                 ":username" => $questionModel->text,
-    //                 ":password" => $questionModel->text
-    //             ]
-    //         );
-    //     } catch ( PDOException $exception ) {
-    //         if ( $exception->getCode() == 23505 ) {
-    //             if ( str_contains ( $exception->getMessage(), "email") ) {
-    //                 return [
-    //                     "ok" => false,
-    //                     "internal" => false,
-    //                     "error" => "The email already exists"
-    //                 ];
-    //             } else {
-    //                 if ( str_contains ( $exception->getMessage(), "username") ) {
-    //                     return [
-    //                         "ok" => false,
-    //                         "internal" => false,
-    //                         "error" => "The username already exists"
-    //                     ];
-    //                 }
-    //             }
-    //         }
-    //         return [
-    //             "ok" => false,
-    //             "internal" => true
-    //         ];
-    //     }
-
-    //     return ["ok" => true];
+        foreach ( $questionModel->answers as $answer ) {
+            $statement = $this->pdo->prepare("INSERT INTO learn_questions_answers VALUES ((:questionId), (:answerId), (:count), (:category))");
+            try {
+                $statement->execute(
+                    [
+                        'questionId' => $questionModel->id,
+                        'answerId' => $answer['id'],
+                        'category' => $questionModel->category,
+                        'count' => $answer['count']
+                    ]
+                );
+            } catch ( PDOException $e ) {
+                echo $e->getMessage();
+            }
+        }
     }
 }

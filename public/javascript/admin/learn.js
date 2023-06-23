@@ -6,33 +6,34 @@ function loadQuestionNumber(url) {
 }
 
 async function postNewQuestion() {
-    textElement = document.getElementById('questionText')
-    imageElement = document.getElementById('questionImage');
-    explanationElement = document.getElementById('questionExplanation');
-    categoryElement = document.getElementById('questionCategory');
-    typeElement = document.getElementById('questionType');
-    answersNumberElement = document.getElementById('correctAnswersNumber');
+    const textElement = document.getElementById('questionText')
+    const imageElement = document.getElementById('questionImage');
+    const explanationElement = document.getElementById('questionExplanation');
+    const categoryElement = document.getElementById('questionCategory');
+    const typeElement = document.getElementById('questionType');
+    const answersNumberElement = document.getElementById('correctAnswersNumber');
 
-    text = textElement.value;
-    image = imageElement.value;
-    explanation = explanationElement.value;
-    category = categoryElement.value;
-    type = typeElement.value;
-    answersNumber = answersNumberElement.value;
-    answersIds = [];
+    const text = textElement.value;
+    const image = imageElement.value;
+    const explanation = explanationElement.value;
+    const category = categoryElement.value;
+    const type = typeElement.value;
+    const answersNumber = answersNumberElement.value;
+    let answersIds = [];
     for (let i = 0; i < answersNumber; i++) {
-        var newDiv = document.getElementById('newDiv' + i);
-        answersIds.push(newDiv.value);
+        let newDiv = document.getElementById('newDiv' + i);
+        answersIds.push({"text" : newDiv.value});
+
     }
 
 
-    var values = {
+    const values = {
         text: text,
         image_path: image,
         explanation: explanation,
         category: category,
         type: type,
-        answerCount: answersNumber,
+        answer_count: answersNumber,
         answers: answersIds
     };
 
