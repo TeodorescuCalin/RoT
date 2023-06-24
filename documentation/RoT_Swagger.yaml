@@ -1,0 +1,1369 @@
+openapi: 3.0.3
+info:
+  title: Swagger RoT - OpenAPI 3.0
+  description: |-
+    This is the API documentation of the Romanian Traffic Signs Tutor websited based on the OpenAPI 3.0 specification.  You can find us at http://localhost/public.
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+    
+    Some useful links:
+    - [The github repository](https://github.com/TeodorescuCalin/RoT.git)
+    - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+  contact:
+    email: romaniantraffictutor@gmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost
+tags:
+  - name: ErrorController
+    description: Handles the error page and is responsible for returning html error pages
+  - name: HomeController
+    description: Handles the home-related functionality and pages of the web application.
+  - name: UserController
+    description: Operations about user / responsible for user-related functionality and actions
+  - name: LearnController
+    description: Manages the functionality related to the learning module 
+  - name: QuizController
+    description: Responsible for managing quizzes
+  - name: AdminController
+    description: Specific to administrative tasks and functionality
+paths:
+  /error:
+    get:
+      summary: Get the 400 bad request page
+      tags: 
+        - ErrorController
+      responses:
+        '404':
+          description: Bad request
+          content:
+            text/html:
+              example: the html of the custom error404 page
+  /:
+    get:
+      summary: Get the index page
+      tags:
+        - HomeController
+      responses:
+        '200':
+          description: successful operation
+  /legislation:
+    get:
+      summary: Get the legislation page
+      tags:
+        - HomeController
+      responses:
+        '200':
+          description: successful operation
+
+  /tips:
+    get:
+      summary: Get random tips
+      description: Get three random tips
+      tags:
+        - HomeController
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        text:
+                          type: string
+                          example: "Nu uita cum se pune centura"
+  /forgotPassword:
+    get:
+      summary: Get the forgot password page
+      tags:
+        - HomeController
+      responses:
+        '200':
+          description: successful operation
+
+  /about:
+    get:
+      summary: Get the about page
+      tags:
+        - HomeController
+      responses:
+        '200':
+          description: successful operation
+
+  /streetSigns:
+    get:
+      summary: Get the street signs page
+      tags:
+        - HomeController
+      responses:
+        '200':
+          description: successful operation
+
+  /streetSigns/{regionType}/{signPage}:
+    get:
+      summary: Get the specific street signs page
+      description: Retrieve a specific page of street signs based on the region type and sign page provided
+      tags:
+        - HomeController
+      parameters:
+        - name: regionType
+          in: path
+          description: Type of the region
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: signPage
+          in: path
+          description: Page number of the signs
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: successful operation
+
+  /help:
+    get:
+      summary: Get the help page
+      tags:
+        - HomeController
+      responses:
+        '200':
+          description: successful operation
+          
+  /login:
+    post:
+      summary: Logs user into the system
+      tags:
+        - UserController
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "LeNinjaCat"
+                password:
+                  type: string
+                  example: "parola"
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: jwt="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODc1ODIzNTQsIm5iZiI6MTY4NzU4MjM1NCwiaXNzIjoiaHR0cHM6Ly8xMjcuMC4wLjEiLCJleHAiOjE2ODc2MDM5NTQsImlkIjo0LCJ1c2VybmFtZSI6IkxlTmluamFDYXQifQ.t9GLPTlEcZn3CnqlBQICQpF2U_l28NC7yTdl7Xr2rpzuFgwNSL7VxcLUT5VaAnSRorY5SnsTiAfewPwmglPGvQ"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: "LeNinjaCat"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+    get:
+      summary: Get the login page
+      tags:
+        - HomeController
+      responses:
+        '200':
+          description: successful operation
+    
+  /register:
+    post:
+      summary: Register user into the system
+      tags:
+        - UserController
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "LeNinjaCat"
+                name:
+                  type: string
+                  example: "Stefan"
+                surname:
+                  type: string
+                  example: "Paulet"
+                email:
+                  type: string
+                  format: email
+                  example: "stefan.paulet@yahoo.com"
+                password:
+                  type: string
+                  example: "parola"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+          
+          
+    get:
+      summary: Get registration page
+      description: This controller handles the "/register" route and displays the registration page
+      tags:
+        - HomeController
+      responses:
+        '200':
+          description: successful operation
+          
+  /profile/{username}:
+    get:
+      summary: Get the user profile page
+      tags:
+        - UserController
+      parameters:
+        - name: username
+          in: path
+          description: Username of the profile to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+    
+  /user_info:
+    get:
+      summary: Get the user information
+      description: Retrieve the information for the current user profile or self information if query username is not set
+      operationId: getUserInfo
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: username
+          in: query
+          required: false
+          schema:
+            type: string
+      tags:
+        - UserController
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 4
+                      username:
+                        type: string
+                        example: "LeNinjaCat"
+                      name:
+                        type: string
+                        example: "Stefan"
+                      surname:
+                        type: string
+                        example: "Paulet"
+                      email:
+                        type: string
+                        format: email
+                        example: "stefan.paulet@yahoo.com"
+                      last_login_date:
+                        type: string
+                        format: date
+                        example: "2023-06-24"
+                      created_at:
+                        type: string
+                        format: utc
+                        example: "2023-06-21 18:30:51"
+                      updated_at:
+                        type: string
+                        format: utc
+                        example: "2023-06-21 18:30:51"
+                      statistics:
+                        type: object
+                        properties:
+                          learnProgress:
+                            type: integer
+                            example: 0
+                          quizProgress:
+                            type: integer
+                            example: 5
+                          learnCountWeekly:
+                            type: integer
+                            example: 4
+                          quizCountWeekly:
+                            type: integer
+                            example: 14
+                          statsByCategory:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                count:
+                                  type: integer
+                                  example: 1
+                                category: 
+                                  type: string
+                                  example: "firstAid"
+                          learnWeeklyStats:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                count:
+                                  type: integer
+                                  example: 1
+                                week: 
+                                  type: integer
+                                  example: 1
+                          quizWeeklyStats:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                count:
+                                  type: integer
+                                  example: 2
+                                week: 
+                                  type: integer
+                                  example: 5
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+
+  /ranking:
+    get:
+      summary: Get the user ranking
+      description: Get the top learning and quizzing users from the past week
+      operationId: getRanking
+      security:
+        - cookieAuth: []
+      tags:
+        - UserController
+      responses:
+        '200':
+          description: successful operation
+          content: 
+            application/json:
+              schema:
+                type: object  
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      learn:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            username:
+                              type: string
+                              example: "LeNinjaCat"
+                            result:
+                              type: integer
+                              example: 1
+                      quiz:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            username:
+                              type: string
+                              example: "LeNinjaCat"
+                            result:
+                              type: integer
+                              example: 1
+  /ranking_rss:
+    get:
+      summary: Get user ranking in RSS format
+      description: Retrieve the ranking in RSS 2.0 format
+      operationId: getRSSRanking
+      tags:
+        - UserController
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/rss+xml:
+              schema:
+                type: object
+                properties:
+                  root:
+                    type: string
+                    example: xmlns:atom="http://www.w3.org/2005/Atom"
+  /users:
+    get:
+      summary: Get all users
+      description: As admin, retrieve all the users
+      security:
+        - cookieAuth: []
+      operationId: getAllUsers
+      tags:
+        - UserController
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 4
+                        username:
+                          type: string
+                          example: "LeNinjaCat"
+                        name:
+                          type: string
+                          example: "Stefan"
+                        surname:
+                          type: string
+                          example: "Paulet"
+                        email:
+                          type: string
+                          format: email
+                          example: "stefan.paulet@yahoo.com"
+                        last_login_date:
+                          type: string
+                          format: date
+                          example: "2023-06-24"
+                        created_at:
+                          type: string
+                          format: utc
+                          example: "2023-06-21 18:30:51"
+                        updated_at:
+                          type: string
+                          format: utc
+                          example: "2023-06-21 18:30:51"
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+  /users/{userId}:
+    delete:
+      summary: Delete user
+      description: As an admin, delete a user from the website
+      security:
+        - cookieAuth: []
+      operationId: deleteUser
+      tags:
+        - UserController
+      parameters:
+        - name: userId
+          in: path
+          description: "The id of the user that must be deleted"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+  /learn:
+    get:
+      summary: Get learn page
+      tags:
+        - LearnController
+      responses:
+        '200':
+          description: successful operation
+  /learn/question:
+    get:
+      summary: Get a question
+      description: Get the appropriate question for the current user
+      security:
+        - cookieAuth: []
+      operationId: getQeustion
+      tags:
+        - LearnController
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    ok:
+                      type: boolean
+                      example: true
+                    data:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 4
+                        text:
+                          type: string
+                          example: "Intrebare"
+                        image_patdh:
+                          type: string
+                          example: null
+                        type:
+                          type: string
+                          example: "count"
+                        answers:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 5
+                              text:
+                                type: string
+                                example: "Raspuns"
+                        explanation:
+                          type: string
+                          example: "Explicatie"
+                        category:
+                          type: string
+                          example: "firstAid"
+                        answer_count:
+                          type: integer
+                          example: 6
+        '404':
+          description: question not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404Response'
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+  # /learn/questions/{questionId}:
+  #   get:
+  #     summary: Get question
+  #     description: As an admin, get the question by id
+  #     security:
+  #       - cookieAuth: []
+  #     tags:
+  #       - LearnController
+  #     parameters:
+  #       - name: questionId
+  #         in: path
+  #         required: true
+  #         description: ID of the requested question
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #         content:
+  #           application/json:
+  /learn/questions/{questionId}/status:
+    put:
+      summary: Update question status
+      description: Update the status of the question for the current user
+      security:
+        - cookieAuth: []
+      tags:
+        - LearnController
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          description: ID of the question to update
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                -
+                  type: object
+                  properties:
+                    answers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 4
+                          count:
+                            type: integer
+                            example: 4
+                - 
+                  type: object
+                  properties:
+                    answers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 4
+                          selected:
+                            type: boolean
+                            example: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 31
+                        correct:
+                          type: boolean
+                          example: false
+                      
+        '404':
+          description: question not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404Response'
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+  /learn/questions:
+    post:
+      summary: Create a new question
+      description: As an admin, create a new learning question
+      security:
+        - cookieAuth: []
+      tags:
+        - LearnController
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: "Intrebare"
+                explanation:
+                  type: string
+                  example: "Explicatie"
+                image_path:
+                  type: string
+                  example: "path/catre/imagine"
+                type:
+                  type: string
+                  example: "count"
+                category:
+                  type: string
+                  example: "firstAid"
+                answer_count:
+                  type: integer
+                  example: 6
+                answers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      text:
+                        type: string
+                        example: "Raspuns"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+    # put:
+  /quizSelection:
+    get:
+      summary: Get the quiz selection page
+      tags:
+        - QuizController
+      responses:
+        '200':
+          description: successful operation
+
+  /quiz/{quizId}:
+    get:
+      summary: Get the quiz page
+      tags:
+        - QuizController
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          description: ID of the quiz to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+
+  /user_quizzes:
+    get:
+      summary: Get the quizzes for user
+      description: Retrieve the list of quizzes and their statuses for the current user
+      security:
+        - cookieAuth: []
+      operationId: getQuizzesForUser
+      tags:
+        - QuizController
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        quizId:
+                          type: integer
+                          example: 1
+                        status:
+                          type: string
+                          example: "passed"
+                        duration:
+                          type: integer
+                          example: 1800
+                        correctAnswerCount:
+                          type: integer
+                          example: 24
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+  /quizzes/{quizId}:
+    get:
+      summary: Get quiz by id
+      description: Retrieve the quiz with the given id
+      security:
+        - cookieAuth: []
+      operationId: getQuiz
+      tags:
+        - QuizController
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          description: ID of the quiz to retrieve questions from
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: 
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 25
+                        text:
+                          type: string
+                          example: "Intrebare"
+                        image_path:
+                          type: string
+                          example: "path/catre/imagine"
+                        first_answer_id:
+                          type: integer
+                          example: 52
+                        second_answer_id:
+                          type: integer
+                          example: 52
+                        third_answer_id:
+                          type: integer
+                          example: 52
+                        first_answer_text:
+                          type: string
+                          example: "Raspuns 1"
+                        second_answer_text:
+                          type: string
+                          example: "Raspuns 2"
+                        third_answer_text:
+                          type: string
+                          example: "Raspuns 3"
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+        '404':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404Response'
+  /quiz/{quizId}/{questionId}/check:
+    post:
+      summary: Check quiz answer
+      description: Check the answers of the given quiz
+      security:
+        - cookieAuth: []
+      operationId: checkQuizAnswer
+      tags:
+        - QuizController
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          description: ID of the quiz
+          schema:
+            type: string
+        - name: questionId
+          in: path
+          required: true
+          description: ID of the question
+          schema:
+            type: integer
+      request_body:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_answer_id:
+                  type: integer
+                  example: 52
+                second_answer_id:
+                  type: integer
+                  example: 52
+                third_answer_id:
+                  type: integer
+                  example: 52
+                first_answer_selected:
+                  type: boolean
+                  example: true
+                second_answer_selected:
+                  type: boolean
+                  example: false
+                third_answer_selected:
+                  type: boolean
+                  example: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      solved:
+                        type: boolean
+                        example: false
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+  /quizzes/{quizId}/user_status:
+    put:
+      summary: Update user quiz status
+      description: Updates the status of a user's quiz
+      security:
+        - cookieAuth: []
+      operationId: updateUserQuizStatus
+      tags:
+        - QuizController
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          description: ID of the quiz
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correct_answers:
+                  type: integer
+                  example: 20
+                duration:
+                  type: integer
+                  example: 190
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Felicitari, ai rezolvat quiz-ul"
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+  /quizzes:
+    post:
+      summary: Create a new quiz
+      description: As an admin, create a new quiz
+      security:
+        - cookieAuth: []
+      operationId: postQuiz
+      tags:
+        - QuizController
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      text:
+                        type: string
+                        example: "Intrebarea 1"
+                      image_path:
+                        type: string
+                        example: null
+                      answers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text: 
+                              type: string
+                              example: "Raspuns 1"
+                            correct:
+                              type: boolean
+                              example: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+        '401':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+  /admin:
+    get:
+      summary: Get the admin page
+      security:
+        - cookieAuth: []
+      tags:
+        - AdminController
+      responses:
+        '200':
+          description: successful operation
+
+  /learnAdminMainPage:
+    get:
+      summary: Get admin learn page
+      security:
+        - cookieAuth: []
+      tags:
+        - AdminController
+      responses:
+        '200':
+          description: successful operation
+
+  /quizAdminMainPage:
+    get:
+      summary: Get admin quiz page
+      security:
+        - cookieAuth: []
+      tags:
+        - AdminController
+      responses:
+        '200':
+          description: successful operation
+
+  /userAdminMainPage:
+    get:
+      summary: Get admin user page
+      security:
+        - cookieAuth: []
+      tags:
+        - AdminController
+      responses:
+        '200':
+          description: successful operation
+
+  /addNewQuestion:
+    get:
+      summary: Get add new question page
+      security:
+        - cookieAuth: []
+      tags:
+        - AdminController
+      responses:
+        '200':
+          description: successful operation
+
+  /selectQuestion:
+    get:
+      summary: Get modify question page
+      security:
+        - cookieAuth: []
+      tags:
+        - AdminController
+      responses:
+        '200':
+          description: successful operation
+
+  /addNewQuiz:
+    get:
+      summary: Get add new quiz page
+      security:
+        - cookieAuth: []
+      tags:
+        - AdminController
+      responses:
+        '200':
+          description: successful operation
+
+  /AdminController/modifyQuiz:
+    get:
+      summary: Get modify quiz page
+      security:
+        - cookieAuth: []
+      tags:
+        - AdminController
+      responses:
+        '200':
+          description: successful operation
+          
+        
+        
+        
+        
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: jwt
+  schemas:
+    200Response:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: true
+    400Response:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Bad request"
+    401Response:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "You are not authenticated"
+    404Response:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Data not found"
+    UserModel:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "calincalin@gmail.com"
+        name:
+          type: string
+          example: "Calin"
+        surname:
+          type: string
+          example: "Teodorescu"
+        username:
+          type: string
+          example: "calincalin2"
+        password:
+          type: string
+          example: "teodorescu02"
+        last_login_date:
+          type: string
+          format: date-time
+          example: "22/06/2023"
+        created_at:
+          type: string
+          format: date-time
+          example: "05/06/2023"
+        updated_at: 
+          type: string
+          format: date-time
+          example: "20/06/2023"
+    UserQuizModel:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 3
+        quizId:
+          type: integer
+          format: int64
+          example: 5
+        status:
+          type: string
+          example: "Picat"
+        duration:
+          type: string
+          example: 03:22
+        correctAnswerCount:
+          type: integer
+          format: int64
+          example: 22
+    UserStatisticsModel:
+      type: object
+      properties:
+        learnProgress:
+          type: number
+          example: 82.50
+        quizProgress:
+          type: number
+          example: 54.76
+        categoryStats:
+          type: number
+        learnCountlyWeek:
+          type: integer
+        quizCountWeekly:
+          type: integer
+        learkWeeklyStats:
+          type: array
+          items:
+            type: integer
+        quizWeeklyStats:
+          type: array
+          items:
+            type: integer
+    UserLearnQuestionModel:
+      type: object
+      properties:
+        status:
+          type: string
+        userId:
+          type: integer
+          example: 3
+        questionId:
+          type: integer
+          example: 5
+    TipModel:
+      type: object
+      properties:
+        text:
+          type: string
+          example: "Nu conduce sub influenta bauturilor alcoolice!"
+    QuizQuestionModel:
+      type: object
+      properties:
+        text:
+          type: string
+        image_path:
+          type: string
+        first_answer_id:
+          type: integer
+        second_answer_id:
+          type: integer
+        third_answer_id:
+          type: integer
+        first_answer_text:
+          type: integer
+        second_answer_text:
+          type: integer
+        third_answer_text:
+          type: integer
+        first_answer_correct:
+          type: integer
+        second_answer_correct:
+          type: integer
