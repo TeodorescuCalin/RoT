@@ -219,8 +219,6 @@ END;
 $BODY$ LANGUAGE plpgsql;
 
 
-SELECT * FROM get_random_tips();
-
 CREATE OR REPLACE FUNCTION get_random_tips() RETURNS SETOF tips AS
 $BODY$
 BEGIN
@@ -324,7 +322,7 @@ BEGIN
     RETURN QUERY SELECT COUNT(*), lq.category
         FROM user_learn_questions
         JOIN learn_questions lq on lq.id = user_learn_questions.id_question
-        WHERE user_learn_questions.id_user = p_user_id
+        WHERE user_learn_questions.id_user = p_user_id AND user_learn_questions.status != 'skipped'
         GROUP BY (lq.category);
 END;
 $BODY$ LANGUAGE plpgsql;
@@ -660,37 +658,73 @@ BEGIN
 END;
 $BODY$ LANGUAGE plpgsql;
 
+CREATE TYPE user_quiz_statistics AS(
+    total INT,
+    passed INT,
+    perfect INT,
+    failed INT,
+    average_duration INT,
+    shortest_duration INT,
+    longest_duration INT
+);
+
+CREATE OR REPLACE FUNCTION get_user_quiz_statistics(p_user_id user_quizzes.id_user%TYPE) RETURNS user_quiz_statistics AS
+$BODY$
+DECLARE
+    v_result user_quiz_statistics;
+BEGIN
+    SELECT COUNT(*) INTO v_result.total FROM user_quizzes WHERE id_user=p_user_id;
+    SELECT COUNT(*) INTO v_result.passed FROM user_quizzes WHERE id_user=p_user_id AND status='passed';
+    SELECT COUNT(*) INTO v_result.perfect FROM user_quizzes WHERE id_user=p_user_id AND status='perfect';
+    SELECT COUNT(*) INTO v_result.failed FROM user_quizzes WHERE id_user=p_user_id AND status='failed';
+    SELECT COALESCE(AVG(duration),0) INTO v_result.average_duration FROM user_quizzes WHERE id_user=p_user_id;
+    SELECT COALESCE(MIN(duration),0) INTO v_result.shortest_duration FROM user_quizzes WHERE id_user=p_user_id;
+    SELECT COALESCE(MAX(duration),0) INTO v_result.longest_duration FROM user_quizzes WHERE id_user=p_user_id;
+
+    RETURN v_result;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_user_last_quizzes_times(p_user_id user_quizzes.id_user%TYPE) RETURNS SETOF user_quizzes.duration%TYPE AS
+$BODY$
+BEGIN
+    RETURN QUERY SELECT duration FROM user_quizzes WHERE id_user=p_user_id ORDER BY updated_at DESC LIMIT(10);
+END;
+$BODY$ LANGUAGE plpgsql;
 
 
+CREATE TYPE user_learn_statistics AS(
+    total INT,
+    passed INT,
+    failed INT
+);
+CREATE OR REPLACE FUNCTION get_user_learn_statistics(p_user_id user_learn_questions.id_user%TYPE) RETURNS user_learn_statistics AS
+$BODY$
+DECLARE
+    v_result user_learn_statistics;
+BEGIN
+    SELECT COUNT(*) INTO v_result.total FROM user_learn_questions WHERE id_user=p_user_id AND status!='skipped';
+    SELECT COUNT(*) INTO v_result.passed FROM user_learn_questions WHERE id_user=p_user_id AND status='passed';
+    SELECT COUNT(*) INTO v_result.failed FROM user_learn_questions WHERE id_user=p_user_id AND status='failed';
 
-SELECT DISTINCT qqa.id_question, qq.text, qq.image_path FROM quiz_questions_answers qqa JOIN quiz_questions qq on qqa.id_question = qq.id
-WHERE qqa.id_quiz = 1;
+    RETURN v_result;
+END;
+$BODY$ LANGUAGE plpgsql;
 
-SELECT * FROM get_quiz_question(1, 1);
 
-SELECT ARRAY ( SELECT (id_answer, correct)::question_answer_type FROM quiz_questions_answers WHERE id_question=1 AND id_quiz=1);
-
-SELECT * FROM quiz_questions_answers;
-
-DELETE FROM quiz_questions_answers WHERE id_quiz!=1 OR id_question!=1;
-
-INSERT INTO learn_questions_answers VALUES (20, 70, null, 'general');
-
-SELECT id, status, duration, correct_answers FROM quiz LEFT OUTER JOIN user_quizzes uq on quiz.id = uq.id_quiz WHERE uq.id_user = 4 OR uq.id_user IS NULL;
-
-SELECT * FROM learn_questions;
-SELECT * FROM answers;
-
-SELECT * FROM learn_questions_answers;
 
 INSERT INTO tips (text) VALUES ('Nu conduce sub influența băuturilor alcoolice');
 INSERT INTO tips (text) VALUES ('Nu uita să-ți aprinzi luminile în zonele fără luminozitate');
 INSERT INTO tips (text) VALUES ('Ai grijă în interecțiile cu drumuri comunale');
 
 
+
+
+
 TRUNCATE TABLE quiz_questions CASCADE;
 TRUNCATE TABLE answers CASCADE;
 TRUNCATE TABLE quiz CASCADE;
+
 
 ALTER SEQUENCE quiz_questions_id_seq RESTART WITH 7;
 ALTER SEQUENCE answers_id_seq RESTART WITH 17;
