@@ -75,9 +75,9 @@ class LearnQuestionRepository extends Repository
         );
 
         $fetchValues = $answersStatement->fetchAll(PDO::FETCH_ASSOC);
-        if ( ! $fetchValues ) {
-            return null;
-        }
+//        if ( ! $fetchValues ) {
+//            return null;
+//        }
 
         $fetchArray['answers'] = $fetchValues;
 

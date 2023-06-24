@@ -42,22 +42,22 @@
 		<div class="learnStats">
 			<h2>Învățare</h2>
 			<ul class="infoLearn">
-				<li>Întrebări parcurse:</li>
-				<li>Întrebări răspunse corect:</li>
-				<li>Întrebări răspunse greșit:</li>
+				<li id="totalQuestions"></li>
+				<li id="passedQuestions"></li>
+				<li id="failedQuestions"></li>
 			</ul>
 		</div>
 
 		<div class="quizStats">
 			<h2>Chestionare</h2>
 			<ul class="infoQuiz">
-				<li>Chestionare parcurse:</li>
-				<li>Chestionare promovate:</li>
-				<li>Chestionare perfecte:</li>
-				<li>Chestionare picate:</li>
-				<li>Timp mediu de rezolvare:</li>
-				<li>Cel mai scurt timp de rezolvare: 20:15</li>
-				<li>Cel mai lung timp de rezolvare:</li>
+				<li id="quiz_total"></li>
+				<li id="quiz_failed"></li>
+				<li id="quiz_passed"></li>
+				<li id="quiz_perfect"></li>
+				<li id="quiz_average_duration"></li>
+				<li id="quiz_shortest_duration"></li>
+				<li id="quiz_longest_duration"></li>
 			</ul>
 		</div>   
         
@@ -81,10 +81,11 @@
 
 
     <script src="/public/javascript/navBar/load.js"></script>
+    <script src="/public/javascript/profile/loadOtherProfile.js"></script>
     <script src="/public/javascript/profile/loadOwnProfile.js"></script>
     <script>
         loadNavbar();
-        getUserInfo();
+        fillProfile()
     </script>
 </body>
 </html>

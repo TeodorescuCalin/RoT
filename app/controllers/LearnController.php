@@ -33,7 +33,6 @@ class LearnController extends Controller {
 
 
     public function getQuestionForUser () : Response {
-
         $response = new Response();
         $response->setHeader("Content-Type", "application/json");
 

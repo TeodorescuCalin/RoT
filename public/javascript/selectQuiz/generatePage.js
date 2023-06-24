@@ -2,7 +2,7 @@
 loadPage();
 
 async function loadPage () {
-    await fetch ( HOST_URL + "user_quiz" )
+    await fetch ( HOST_URL + "user_quizzes" )
         .then( response => response.json() )
         .then(
             response => {

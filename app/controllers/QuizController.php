@@ -69,7 +69,7 @@ class QuizController extends Controller {
     }
 
 
-    public function getQuiz () : Response {
+    public function getQuizForUser () : Response {
         $response = new Response();
         $response->setHeader("Content-Type", "application/json");
 
@@ -343,6 +343,32 @@ class QuizController extends Controller {
 
         $quizRepository->create($quizModel);
         $response->encodeSuccess(200);
+        return $response;
+    }
+
+
+    public function getQuiz() : Response {
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/json");
+
+
+        $authController = new AuthController($this->request);
+        $decodedToken = $authController->checkJWT();
+        if ( ! $decodedToken['ok'] ) {
+            $response->encodeError(401, "You are not authenticated");
+            return $response;
+        }
+
+        $userRepository = new UserRepository();
+        if ( ! $userRepository->checkAdmin($decodedToken['id'] ) ) {
+            $response->encodeError(401, "You are not an admin");
+            return $response;
+        }
+        $quizRepository = new QuizRepository();
+        $quizModel = $quizRepository->getById($this->request->pathVariables['quizId']);
+
+        $response->encodeSuccess(200, (array)$quizModel);
+
         return $response;
     }
 }

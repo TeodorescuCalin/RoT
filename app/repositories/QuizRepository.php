@@ -89,6 +89,10 @@ class QuizRepository extends Repository
             return null;
         }
 
+        if ( $fetchArray['text'] == null ) {
+            return null;
+        }
+
         $quizQuestionModel = new QuizQuestionModel();
         $quizQuestionModel->id = $fetchArray['id'];
         $quizQuestionModel->text = $fetchArray['text'];

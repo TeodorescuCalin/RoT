@@ -11,7 +11,7 @@ async function checkAnswers() {
     const quizId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
     const questionDiv = document.getElementsByClassName("questionContainer__answerBlock__answer");
     await fetch (
-        new Request(HOST_URL + "quiz/" + quizId + "/" + document.getElementById("questionId").value + "/check",
+        new Request(HOST_URL + "quizzes/" + quizId + "/" + document.getElementById("questionId").value + "/check",
             {
                 method : "POST",
                 headers : {
@@ -63,7 +63,7 @@ async function displayFinalResult() {
 
     await fetch (
         new Request(
-            HOST_URL + "quiz/" + quizId,
+            HOST_URL + "quizzes/" + quizId + "/user_status",
             {
                 method : "PUT",
                 headers : {

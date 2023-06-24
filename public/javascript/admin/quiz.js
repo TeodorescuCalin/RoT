@@ -461,7 +461,7 @@ async function createQuestion() {
     }
 
     await fetch (
-        new Request( HOST_URL + "quiz",
+        new Request( HOST_URL + "quizzes",
             {
                 method : "POST",
                 headers : {
@@ -481,6 +481,87 @@ async function createQuestion() {
         )
 }
 
-// window.addEventListener('beforeunload', function(event) {
-//     event.preventDefault();
-// });
+function loadQuizNumber() {
+    window.location = HOST_URL + "modifyQuiz/" + document.getElementById('quizNumber').value;
+}
+
+
+async function fillQuiz () {
+
+    const quizId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    await fetch (
+        HOST_URL + "quizzes/" + quizId
+    ).then( response => response.json() )
+        .then(
+            response => {
+
+                if ( ! response.ok ) {
+                    window.location = HOST_URL + "error";
+                }
+
+                let data = response['data']['questions'];
+
+                for ( let itemIndex = 1; itemIndex <= data.length; itemIndex ++ ) {
+                    item = data[itemIndex - 1];
+
+                    savedQuestions.push(
+                        {
+                            index: itemIndex,
+                            text: item.text
+                        }
+                    );
+                    savedPaths.push(
+                        {
+                            index: itemIndex,
+                            text: item.image_path
+                        });
+                    let answers = [];
+                    let count = 0;
+
+                    if ( item.first_answer_correct ) {
+                        answers.push(item.first_answer_text);
+                        count++;
+                    }
+                    if ( item.second_answer_correct ) {
+                        answers.push(item.second_answer_text);
+                        count ++;
+                    }
+                    if ( item.third_answer_correct ) {
+                        answers.push(item.third_answer_text);
+                        count ++;
+                    }
+                    savedCorectAnswersNumber.push(
+                        {
+                            index: itemIndex,
+                            value: count
+                        }
+                    );
+
+                    if ( ! item.first_answer_correct ) {
+                        answers.push(item.first_answer_text);
+                    }
+                    if ( ! item.second_answer_correct ) {
+                        answers.push(item.second_answer_text);
+                    }
+                    if ( ! item.third_answer_correct ) {
+                        answers.push(item.third_answer_text);
+                    }
+
+                    for ( let index = 0; index < answers.length; ++index ) {
+                        savedNewDivs.push(
+                            {
+                                questionNumber : itemIndex,
+                                index : index,
+                                text : answers[index]
+                            }
+                        )
+                    }
+                }
+                console.log(savedNewDivs);
+                getInputValues();
+                createCorrectAnswerBoxes();
+                createWrongAnswerBoxes();
+                getInputValues();
+            }
+        )
+}

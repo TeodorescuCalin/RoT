@@ -4,7 +4,7 @@ let questionQueue;
 getQuestions();
 async function getQuestions() {
     const quizId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-    await fetch ( HOST_URL + "quiz/" + quizId + "/questions" )
+    await fetch ( HOST_URL + "quizzes/" + quizId + "/user" )
         .then(response => response.json() )
         .then(
             response => {
