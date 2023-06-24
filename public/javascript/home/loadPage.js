@@ -6,7 +6,7 @@ async function getTips () {
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 let tipList = document.getElementById('tipList');
@@ -27,7 +27,7 @@ async function getRanking () {
 
 
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 let learnRanking = document.getElementById('learningRanks');

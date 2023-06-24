@@ -234,4 +234,21 @@ class QuizRepository extends Repository
             }
         }
     }
+
+
+    public function update ( QuizModel $quizModel ) : void {
+        $this->pdo->prepare ("DELETE FROM quiz_questions_answers WHERE id_quiz=(:quizId)")->execute (["quizId" => $quizModel->id]);
+        $quizId = $quizModel->id;
+
+        foreach ( $quizModel->questions as $question ) {
+            foreach ( $question['answers'] as $answer ) {
+                $statement = $this->pdo->prepare("INSERT INTO quiz_questions_answers VALUES((:quizId),(:questionId),(:answerId),(:correct))");
+                $statement->bindParam(":correct", $answer['correct'], PDO::PARAM_BOOL);
+                $statement->bindParam(":quizId", $quizId);
+                $statement->bindParam(":questionId", $question['id']);
+                $statement->bindParam(":answerId", $answer['id']);
+                $statement->execute();
+            }
+        }
+    }
 }

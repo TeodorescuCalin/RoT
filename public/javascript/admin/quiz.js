@@ -460,29 +460,56 @@ async function createQuestion() {
         questionsData.push(data);
     }
 
-    await fetch (
-        new Request( HOST_URL + "quizzes",
-            {
-                method : "POST",
-                headers : {
-                    "Content-Type" : "application/json"
-                },
-                body : JSON.stringify({"questions" : questionsData})
-            }
-        )
-    ).then ( response => response.json() )
-        .then(
-            response => {
-
-                if ( ! response.ok ) {
-                    window.location = HOST_URL + "error";
+    if ( window.location.href.includes("modify") ) {
+        const quizId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        await fetch(
+            new Request(HOST_URL + "quizzes/" + quizId,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({"questions": questionsData})
                 }
-            }
-        )
+            )
+        ).then(response => response.json())
+            .then(
+                response => {
+
+                    if (!response.ok) {
+                        window.location.href = HOST_URL + "error";
+                    } else {
+                        alert("Ai modificat quiz-ul");
+                    }
+                }
+            )
+    } else {
+        await fetch(
+            new Request(HOST_URL + "quizzes",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({"questions": questionsData})
+                }
+            )
+        ).then(response => response.json())
+            .then(
+                response => {
+
+                    if (!response.ok) {
+                        window.location.href = HOST_URL + "error";
+                    } else {
+                        alert("Ai creat quiz-ul");
+                    }
+                }
+            )
+    }
 }
 
 function loadQuizNumber() {
-    window.location = HOST_URL + "modifyQuiz/" + document.getElementById('quizNumber').value;
+    window.location.href =HOST_URL + "modifyQuiz/" + document.getElementById('quizNumber').value;
 }
 
 
@@ -496,7 +523,7 @@ async function fillQuiz () {
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = HOST_URL + "error";
+                    window.location.href =HOST_URL + "error";
                 }
 
                 let data = response['data']['questions'];
@@ -557,7 +584,6 @@ async function fillQuiz () {
                         )
                     }
                 }
-                console.log(savedNewDivs);
                 getInputValues();
                 createCorrectAnswerBoxes();
                 createWrongAnswerBoxes();

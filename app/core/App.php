@@ -35,6 +35,9 @@ class App {
         $this->addRoute ( "GET", "ranking_rss", "UserController@getRSSRanking" );
         $this->addRoute("GET", "users", "UserController@getAllUsers");
         $this->addRoute("DELETE", "users/{userId}", "UserController@deleteUser");
+        $this->addRoute("POST", "recover_password", "UserController@recoverPassword");
+        $this->addRoute("GET", "resetPassword", "UserController@getResetPasswordPage");
+        $this->addRoute("POST", "resetPassword", "UserController@resetPassword");
 
         $this->addRoute ( "GET", "learn", "LearnController@getPage" );
         $this->addRoute ( "GET", "learn/question", "LearnController@getQuestionForUser" );
@@ -51,6 +54,7 @@ class App {
         $this->addRoute ( "PUT", "quizzes/{quizId}/user_status", "QuizController@updateUserQuizStatus" );
         $this->addRoute ( "POST", "quizzes", "QuizController@postQuiz" );
         $this->addRoute ( "GET", "quizzes/{quizId}", "QuizController@getQuiz" );
+        $this->addRoute ( "PUT", "quizzes/{quizId}", "QuizController@updateQuiz" );
 
         $this->addRoute ( "GET", "admin", "AdminController@getPage" );
         $this->addRoute ( "GET", "learnAdminMainPage", "AdminController@getLearnPage" );

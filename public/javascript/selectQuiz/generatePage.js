@@ -8,7 +8,7 @@ async function loadPage () {
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 const data = response['data'];

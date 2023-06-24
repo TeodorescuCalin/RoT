@@ -371,6 +371,88 @@ class QuizController extends Controller {
 
         return $response;
     }
+
+
+    public function updateQuiz () : Response {
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/json");
+
+
+        $authController = new AuthController($this->request);
+        $decodedToken = $authController->checkJWT();
+        if ( ! $decodedToken['ok'] ) {
+            $response->encodeError(401, "You are not authenticated");
+            return $response;
+        }
+
+        $userRepository = new UserRepository();
+        if ( ! $userRepository->checkAdmin($decodedToken['id'] ) ) {
+            $response->encodeError(401, "You are not an admin");
+            return $response;
+        }
+
+        if ( ! $this->request->contentTypeIsJSON() ) {
+            $response->encodeError(400, "Must provide JSON as Content-Type");
+            return $response;
+        }
+
+        $json_body = json_decode($this->request->body, true);
+        if ( $json_body == null ) {
+            $response->encodeError(400, "Bad JSON body");
+            return $response;
+        }
+
+        $quizRepository = new QuizRepository();
+        $answerRepository = new AnswerRepository();
+
+        $quizModel = new QuizModel();
+        $quizModel->id = $this->request->pathVariables['quizId'];
+        $quizModel->questions = [];
+
+        $questionModel = new QuizModel();
+        $questionModel->questions = $json_body['questions'];
+
+        if ( count ( $questionModel->questions ) != 26  ){
+            $response->encodeError(400, "All quizzes must have 26 answers");
+            return $response;
+        }
+
+        foreach ( $questionModel->questions as $question ) {
+            if ( count ( $question['answers'] ) != 3 ) {
+                $response->encodeError(400, "All questions must have 3 answers");
+                return $response;
+            }
+
+            $questionId = $quizRepository->getQuestionByText($question['text']);
+            if ( $questionId == null ) {
+                $questionId = $quizRepository->createQuestion($question['text'], $question['image_path']);
+            }
+
+            $answerList = [];
+
+            foreach ( $question['answers'] as $answer ) {
+                $answerModel = $answerRepository->getByText($answer['text']);
+                if ( $answerModel == null ) {
+                    $answerModel = new AnswerModel();
+                    $answerModel->text = $answer['text'];
+                    $answerRepository->create($answerModel);
+                }
+                $answerList[] = [
+                    "id" => $answerModel->id,
+                    "correct" => $answer['correct']
+                ];
+            }
+
+            $quizModel->questions[] = [
+                "id" => $questionId,
+                "answers" => $answerList
+            ];
+        }
+
+        $quizRepository->update($quizModel);
+        $response->encodeSuccess(200);
+        return $response;
+    }
 }
 
 

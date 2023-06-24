@@ -1,8 +1,7 @@
 {
     "require": {
         "firebase/php-jwt": "^6.7",
-      "ext-pdo": "*",
-      "ext-simplexml": "*"
+      "ext-pdo": "*"
     },
     "autoload": {
         "files": [

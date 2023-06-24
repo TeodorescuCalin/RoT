@@ -3,14 +3,19 @@ let category_yValues = [];
 let category_barColors = ["red", "green","blue","orange","salmon", "black", "white", "purple"];
 let category_sum = 0;
 
-
+Date.prototype.substractDays = function(days)
+{
+    var day = new Date(this.valueOf());
+    day.setDate(day.getDate() - days);
+    return day;
+}
 
 const currentDate = new Date();
 const currentDay = currentDate.getDate();
-const oneWeekAgo = currentDay - 7;
-const twoWeeksAgo = oneWeekAgo - 7;
-const threeWeeksAgo = twoWeeksAgo - 7;
-const fourWeeksAgo = threeWeeksAgo - 7;
+const oneWeekAgo = currentDate.substractDays(7).getDate();
+const twoWeeksAgo = currentDate.substractDays(14).getDate();
+const threeWeeksAgo = currentDate.substractDays(21).getDate();
+const fourWeeksAgo = currentDate.substractDays(28).getDate();
 const currentWeek = oneWeekAgo + "-" + currentDay;
 const lastWeek = twoWeeksAgo + "-" + oneWeekAgo;
 const last2Weeks = threeWeeksAgo + "-" + twoWeeksAgo;
@@ -42,7 +47,7 @@ async function getUserInfo() {
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 response = response['data'];

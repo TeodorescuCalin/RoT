@@ -34,7 +34,7 @@ async function checkAnswers() {
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 if ( response['data'].solved ) {
@@ -82,7 +82,7 @@ async function displayFinalResult() {
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 const newDiv = document.createElement("div");

@@ -1,6 +1,6 @@
 function loadQuestionNumber() {
     element = document.getElementById('questionNumber');
-    window.location = HOST_URL + "modifyQuestion/" + document.getElementById('questionNumber').value;
+    window.location.href =HOST_URL + "modifyQuestion/" + document.getElementById('questionNumber').value;
 }
 
 async function postNewQuestion() {
@@ -71,7 +71,7 @@ async function loadQuestion() {
         .then(
             response => {
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 const data = response['data'];

@@ -21,10 +21,10 @@ async function register () {
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    alert ( response.error );
+                } else {
+                    window.location.href = HOST_URL;
                 }
-
-                window.location.href = HOST_URL;
             }
         );
 }

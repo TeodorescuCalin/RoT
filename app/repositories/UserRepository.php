@@ -60,14 +60,14 @@ class UserRepository extends Repository {
                     return [
                         "ok" => false,
                         "internal" => false,
-                        "error" => "The email already exists"
+                        "error" => "Email-ul este deja înregistrat"
                     ];
                 } else {
                     if ( str_contains ( $exception->getMessage(), "username") ) {
                         return [
                             "ok" => false,
                             "internal" => false,
-                            "error" => "The username already exists"
+                            "error" => "Numele de utilizator este deja înregistrat"
                         ];
                     }
                 }
@@ -88,6 +88,28 @@ class UserRepository extends Repository {
             $statement->execute(
                 [
                     ":username" => $username
+                ]
+            );
+        } catch ( PDOException ) {
+            return null;
+        }
+
+        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ( ! $fetchArray ) {
+            return null;
+        }
+
+        return $this->createModel($fetchArray);
+    }
+
+
+    public function getByEmail ( string $email ) : UserModel | null {
+        $statement = $this->pdo->prepare("SELECT * FROM users WHERE email=:email");
+        try {
+            $statement->execute(
+                [
+                    ":email" => $email
                 ]
             );
         } catch ( PDOException ) {
@@ -140,6 +162,17 @@ class UserRepository extends Repository {
         $statement->execute(
             [
                 "userId" => $userId
+            ]
+        );
+    }
+
+
+    public function updatePassword ( UserModel $userModel ) : void {
+        $statement = $this->pdo->prepare ("UPDATE users SET password=(:password) WHERE id=(:id)");
+        $statement->execute (
+            [
+                "id" => $userModel->id,
+                "password" => $userModel->password
             ]
         );
     }

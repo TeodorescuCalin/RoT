@@ -18,11 +18,11 @@ async function login () {
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    alert ( response.error );
+                } else {
+                    localStorage['username'] = response['data']['username'];
+                    window.location.href = HOST_URL;
                 }
-
-                localStorage['username'] = response['data']['username'];
-                window.location.href = HOST_URL;
             }
         );
 }

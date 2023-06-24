@@ -8,7 +8,7 @@ async function createTable() {
         .then(
             response => {
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 const data = response['data'];
