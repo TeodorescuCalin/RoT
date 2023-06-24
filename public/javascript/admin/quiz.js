@@ -289,7 +289,7 @@ function createCorrectAnswerBoxesQuestionType() {
     deleteNewDivs();
 
     var typeElement = document.getElementById("questionType");
-    if (typeElement.value == 'mulipleChoice') {
+    if (typeElement.value === 'multipleChoice') {
         var boxes = getNumberFromSelect();
         var element = document.getElementById("form-container");
         var decrementButton = document.getElementsByClassName("buttonsContainer")[0];
@@ -316,7 +316,7 @@ function createCorrectAnswerBoxesQuestionType() {
             element.insertBefore(div, decrementButton);
         }
     }
-    else if (typeElement.value == 'count') {
+    else if (typeElement.value === 'count') {
         var boxes  = 2 * getNumberFromSelect();
         var element = document.getElementById("form-container");
         var decrementButton = document.getElementsByClassName("buttonsContainer")[0];

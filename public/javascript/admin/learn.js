@@ -1,8 +1,6 @@
-function loadQuestionNumber(url) {
+function loadQuestionNumber() {
     element = document.getElementById('questionNumber');
-    const value = parseInt(element.value, 10);
-    // verificare daca este exista in bd
-    window.location.href = url;
+    window.location = HOST_URL + "modifyQuestion/" + document.getElementById('questionNumber').value;
 }
 
 async function postNewQuestion() {
@@ -54,7 +52,7 @@ async function postNewQuestion() {
 
     await fetch (
         new Request (
-            HOST_URL + "learn",
+            HOST_URL + "learn/questions",
             {
                 method : "POST",
                 headers : {
@@ -64,4 +62,32 @@ async function postNewQuestion() {
             }
         )
     )
+}
+
+async function loadQuestion() {
+    const questionId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    await fetch (HOST_URL + "learn/questions/" + questionId)
+        .then (response => response.json())
+        .then(
+            response => {
+                if ( ! response.ok ) {
+                    window.location = "/public/error"
+                }
+
+                const data = response['data'];
+                var textElement = document.getElementById('questionText');
+                var imageElement = document.getElementById('questionImage');
+                var explanationElement = document.getElementById('questionExplanation');
+                var categoryElement = document.getElementById('questionCategory');
+                var typeElement = document.getElementById('questionType');
+                var correctAnswersElement = document.getElementById('correctAnswersNumber');
+
+                textElement.value = data.text;
+                imageElement.value = data.image_path;
+                explanationElement.value = data.explanation;
+                categoryElement.value = data.category;
+                typeElement.value = data.type;
+                correctAnswersElement.value = data.answers.length;
+            }
+        )
 }

@@ -38,7 +38,7 @@ class App {
 
         $this->addRoute ( "GET", "learn", "LearnController@getPage" );
         $this->addRoute ( "GET", "learn/question", "LearnController@getQuestionForUser" );
-        $this->addRoute ( "GET", "learn/questions/{questionId", "LearnController@getQuestion" );
+        $this->addRoute ( "GET", "learn/questions/{questionId}", "LearnController@getQuestion" );
         $this->addRoute ( "PUT", "learn/questions/{questionId}/status", "LearnController@updateQuestionStatus" );
         $this->addRoute ( "POST", "learn/questions", "LearnController@postQuestion" );
         $this->addRoute ( "PUT", "learn/questions", "LearnController@updateQuestion" );
@@ -57,8 +57,10 @@ class App {
         $this->addRoute ( "GET", "userAdminMainPage", "AdminController@getUserPage" );
         $this->addRoute ( "GET", "addNewQuestion", "AdminController@getAddNewQuestionPage" );
         $this->addRoute ( "GET", "selectQuestion", "AdminController@getModifyQuestionPage" );
+        $this->addRoute ( "GET", "modifyQuestion/{questionId}", "AdminController@getModifyLearnPage" );
         $this->addRoute ( "GET", "addNewQuiz", "AdminController@getAddNewQuizPage" );
         $this->addRoute ( "GET", "modifyQuiz", "AdminController@getModifyQuizPage" );
+
     }
 
     public function parseURL() : void {
