@@ -81,6 +81,7 @@ async function loadQuestion() {
                 var categoryElement = document.getElementById('questionCategory');
                 var typeElement = document.getElementById('questionType');
                 var correctAnswersElement = document.getElementById('correctAnswersNumber');
+                var answersNumber = document.getElementById('answersNumber');
 
                 textElement.value = data.text;
                 imageElement.value = data.image_path;
@@ -88,6 +89,7 @@ async function loadQuestion() {
                 categoryElement.value = data.category;
                 typeElement.value = data.type;
                 correctAnswersElement.value = data.answers.length;
+                answersNumber.value = data.answer_count;
 
                 var answers = [];
                 for (let i = 0; i < correctAnswersElement.value; i++) {
@@ -120,6 +122,77 @@ async function loadQuestion() {
                         var newDiv = document.getElementById('newDiv' + i);
                         newDiv.value = answers[i].text;
                     }
+                }
+            }
+        )
+}
+
+async function updateQuestion() {
+    const textElement = document.getElementById('questionText')
+    const imageElement = document.getElementById('questionImage');
+    const explanationElement = document.getElementById('questionExplanation');
+    const categoryElement = document.getElementById('questionCategory');
+    const typeElement = document.getElementById('questionType');
+    const answersNumberElement = document.getElementById('correctAnswersNumber');
+    const totalAnswersElement = document.getElementById('answersNumber');
+
+    const text = textElement.value;
+    const image = imageElement.value;
+    const explanation = explanationElement.value;
+    const category = categoryElement.value;
+    const type = typeElement.value;
+    const answersNumber = answersNumberElement.value;
+    const totalAnswersNumber = totalAnswersElement.value;
+    let answersIds = [];
+    if (type == 'count') {
+        for (let i = 0; i < 2 * answersNumber; i += 2) {
+            let newDiv = document.getElementById('newDiv' + i);
+            let newDivCount = document.getElementById('newDiv' + (i + 1));
+            answersIds.push(
+                {
+                    "text": newDiv.value,
+                    "count": newDivCount.value
+                });
+        }
+    }
+    else if (type == 'multipleChoice') {
+        for (let i = 0; i < answersNumber; i++) {
+            let newDiv = document.getElementById('newDiv' + i);
+            answersIds.push({"text": newDiv.value});
+        }
+    }
+
+    const values = {
+        text: text,
+        image_path: image,
+        explanation: explanation,
+        category: category,
+        type: type,
+        answer_count: totalAnswersNumber,
+        answers: answersIds
+    };
+
+    var json = JSON.stringify(values);
+
+    const questionId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    await fetch (
+        new Request (
+            HOST_URL + "learn/questions/" + questionId,
+            {
+                method : "PUT",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : json
+            }
+        )
+    ).then( response => response.json() )
+        .then(
+            response => {
+                if ( ! response.ok ) {
+                    window.location.href = HOST_URL + "error"
+                } else {
+                    alert("Ai modificat întrebarea");
                 }
             }
         )

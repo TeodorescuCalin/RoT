@@ -65,6 +65,9 @@ class LearnQuestionRepository extends Repository
         }
 
         $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+        if ( ! $fetchArray ) {
+            return null;
+        }
 
         $answersStatement = $this->pdo->prepare("SELECT answers.id, answers.text, la.count 
                 FROM answers 
@@ -195,6 +198,39 @@ class LearnQuestionRepository extends Repository
         }
 
         $questionModel->id = $this->pdo->lastInsertId();
+
+        foreach ( $questionModel->answers as $answer ) {
+            $statement = $this->pdo->prepare("INSERT INTO learn_questions_answers VALUES ((:questionId), (:answerId), (:count), (:category))");
+            try {
+                $statement->execute(
+                    [
+                        'questionId' => $questionModel->id,
+                        'answerId' => $answer['id'],
+                        'category' => $questionModel->category,
+                        'count' => $answer['count']
+                    ]
+                );
+            } catch ( PDOException $e ) {
+                echo $e->getMessage();
+            }
+        }
+    }
+
+    public function update(LearnQuestionModel $questionModel) : void {
+        $statement = $this->pdo->prepare("UPDATE learn_questions SET text=(:text), image_path=(:image_path), explanation=(:explanation), type=(:type), category=(:category), answer_count=(:answer_count) WHERE id=(:id)");
+
+        $statement->execute(
+            [
+                'id' => $questionModel->id,
+                'text' => $questionModel->text,
+                'image_path' => $questionModel->image_path,
+                'explanation' => $questionModel->explanation,
+                'type' => $questionModel->type,
+                'category' => $questionModel->category,
+                'answer_count' => $questionModel->answer_count
+            ]
+        );
+        $this->pdo->prepare ("DELETE FROM learn_questions_answers WHERE id_question=(:questionId)")->execute (["questionId" => $questionModel->id]);
 
         foreach ( $questionModel->answers as $answer ) {
             $statement = $this->pdo->prepare("INSERT INTO learn_questions_answers VALUES ((:questionId), (:answerId), (:count), (:category))");

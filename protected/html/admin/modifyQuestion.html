@@ -58,6 +58,12 @@
 				</select>
 			</div>
 
+			<div class="answersNumber inputContainer">
+				<label><b>Număr variante</b></label>
+				<i class ="fas fa-filter"></i>
+				<input type="text" placeholder="Introdu numărul corespunzător" id="answersNumber" required>
+			</div>
+
 			<div class="selectAnswer inputContainer">
 				<label for="correctAnswersNumber"><b>Număr răspunsuri corecte</b></label>
 				<i class ="fas fa-filter"></i>
@@ -70,7 +76,7 @@
 			</div>
 
 			<div class="buttonsContainer">
-				<button id="addButton" onclick="">Salvează</button>
+				<button id="addButton" onclick="updateQuestion()">Salvează</button>
 			</div>
 		</div>
 	</div>
