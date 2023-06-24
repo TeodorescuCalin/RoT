@@ -367,6 +367,20 @@ div.textHomePage {
   height: 250px;
 }
 
+.rankBlock button {
+  background-color: #0088a9;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  margin-left: 25%;
+}
+.rankBlock button:hover {
+  background-color: rgba(0, 136, 169, 0.5);
+}
+
 @media (max-width: 1314px) {
   .tipBlock {
     width: 30%;

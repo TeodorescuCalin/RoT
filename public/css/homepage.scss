@@ -113,6 +113,24 @@
   height: 250px;
 }
 
+.rankBlock {
+  button {
+    background-color: $primary-color;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 50%;
+    margin-left: 25%;
+  }
+
+  button:hover {
+    background-color: rgba(0, 136, 169, 0.5);
+  }
+
+}
+
 @media (max-width: 1314px){
   .tipBlock {
     width: 30%;
@@ -215,9 +233,6 @@
 }
 
 @media (max-width: 600px) {
-  .mainBlock {
-    //margin: 0;
-  }
   .mainBlock .picNews1 {
     width: 120px;
   }

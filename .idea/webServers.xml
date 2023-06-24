@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="675d1070-acd9-45eb-8711-da11b5547541" name="localhost" url="http://localhost">
-        <fileTransfer mountedRoot="/opt/lampp/htdocs" accessType="MOUNT" port="0" />
+        <fileTransfer mountedRoot="D:\Xampp\htdocs" accessType="MOUNT" port="0" />
       </webServer>
     </option>
   </component>

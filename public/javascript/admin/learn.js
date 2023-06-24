@@ -70,7 +70,7 @@ async function loadQuestion() {
         .then (response => response.json())
         .then(
             response => {
-                if ( ! response.ok ) {
+                if (!response.ok) {
                     window.location = "/public/error"
                 }
 
@@ -88,6 +88,39 @@ async function loadQuestion() {
                 categoryElement.value = data.category;
                 typeElement.value = data.type;
                 correctAnswersElement.value = data.answers.length;
+
+                var answers = [];
+                for (let i = 0; i < correctAnswersElement.value; i++) {
+                    var answerData = {
+                        text: data.answers[i].text,
+                        count: data.answers[i].count
+                    };
+                    answers.push(answerData);
+                }
+                var json = JSON.stringify(answers);
+                console.log(json);
+
+
+                createCorrectAnswerBoxesQuestionType();
+                if (typeElement.value === "count") {
+                    var boxes = 2 * answers.length;
+                    console.log(boxes);
+                    for (let i = 0; i < boxes; i++) {
+                        var newDiv = document.getElementById('newDiv' + i);
+                        if (i % 2 == 0)
+                            newDiv.value = answers[i / 2].text;
+                        else {
+                            newDiv.value = answers[(i - 1) / 2].count;
+                            console.log("asdasdasd");
+                        }
+                    }
+                } else {
+                    var boxes = correctAnswersElement.value;
+                    for (let i = 0; i < boxes; i++) {
+                        var newDiv = document.getElementById('newDiv' + i);
+                        newDiv.value = answers[i].text;
+                    }
+                }
             }
         )
 }

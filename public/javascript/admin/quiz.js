@@ -291,6 +291,7 @@ function createCorrectAnswerBoxesQuestionType() {
     var typeElement = document.getElementById("questionType");
     if (typeElement.value === 'multipleChoice') {
         var boxes = getNumberFromSelect();
+        // console.log(boxes);
         var element = document.getElementById("form-container");
         var decrementButton = document.getElementsByClassName("buttonsContainer")[0];
         for (let i = 0; i < boxes; i++) {
@@ -312,6 +313,7 @@ function createCorrectAnswerBoxesQuestionType() {
             input.type = "text";
             input.placeholder = "Introdu textul";
             div.append(input);
+            console.log("asdojhnasjkd");
 
             element.insertBefore(div, decrementButton);
         }

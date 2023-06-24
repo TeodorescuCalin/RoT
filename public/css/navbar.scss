@@ -13,7 +13,7 @@ $loginButtonHoverColor: rgba(0, 136, 169, 0.5);
     justify-content: $justify;
 }
 
-@mixin block-display($display: left){;
+@mixin block-display($display: left){
     text-align: center;
     display: $display;
 }
@@ -130,6 +130,8 @@ div.textHomePage {
 #checkNav {
     display: none;
 }
+
+
 
 @media (max-width: 1304px) {
     .navBar {
