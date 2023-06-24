@@ -54,7 +54,7 @@ class LearnQuestionRepository extends Repository
         return $resultArray;
     }
 
-    public function getById($id) : Model | null {
+    public function getById($id) : Model | null  {
         $statement = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE id = (:id)");
         try {
             $statement->execute(

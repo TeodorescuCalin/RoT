@@ -244,4 +244,30 @@ class AdminController extends Controller {
         return $response;
     }
 
+    public function getModifyLearnPage () : Response {
+
+        $response = new Response();
+        $response->setHeader("Content-Type", "text/html");
+
+        $authController = new AuthController($this->request);
+        $decodedToken = $authController->checkJWT();
+        if ( ! $decodedToken['ok'] ) {
+            $response->code = 401;
+            $response->body = file_get_contents(__DIR__."/../../protected/html/error/401.html");
+            return $response;
+        }
+
+        $userRepository = new UserRepository();
+        if ( ! $userRepository->checkAdmin($decodedToken['id'] ) ) {
+            $response->code = 401;
+            $response->body = file_get_contents(__DIR__."/../../protected/html/error/401.html");
+            return $response;
+        }
+
+
+        $response->code = 200;
+        $response->body = file_get_contents(__DIR__."/../../protected/html/admin/modifyQuestion.html");
+        return $response;
+    }
+
 }
