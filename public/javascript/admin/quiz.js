@@ -462,27 +462,134 @@ async function createQuestion() {
         questionsData.push(data);
     }
 
+    if ( window.location.href.includes("modify") ) {
+        const quizId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        await fetch(
+            new Request(HOST_URL + "quizzes/" + quizId,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({"questions": questionsData})
+                }
+            )
+        ).then(response => response.json())
+            .then(
+                response => {
+
+                    if (!response.ok) {
+                        window.location.href = HOST_URL + "error";
+                    } else {
+                        alert("Ai modificat quiz-ul");
+                    }
+                }
+            )
+    } else {
+        await fetch(
+            new Request(HOST_URL + "quizzes",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({"questions": questionsData})
+                }
+            )
+        ).then(response => response.json())
+            .then(
+                response => {
+
+                    if (!response.ok) {
+                        window.location.href = HOST_URL + "error";
+                    } else {
+                        alert("Ai creat quiz-ul");
+                    }
+                }
+            )
+    }
+}
+
+function loadQuizNumber() {
+    window.location.href =HOST_URL + "modifyQuiz/" + document.getElementById('quizNumber').value;
+}
+
+
+async function fillQuiz () {
+
+    const quizId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
     await fetch (
-        new Request( HOST_URL + "quiz",
-            {
-                method : "POST",
-                headers : {
-                    "Content-Type" : "application/json"
-                },
-                body : JSON.stringify({"questions" : questionsData})
-            }
-        )
-    ).then ( response => response.json() )
+        HOST_URL + "quizzes/" + quizId
+    ).then( response => response.json() )
         .then(
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = HOST_URL + "error";
+                    window.location.href =HOST_URL + "error";
                 }
+
+                let data = response['data']['questions'];
+
+                for ( let itemIndex = 1; itemIndex <= data.length; itemIndex ++ ) {
+                    item = data[itemIndex - 1];
+
+                    savedQuestions.push(
+                        {
+                            index: itemIndex,
+                            text: item.text
+                        }
+                    );
+                    savedPaths.push(
+                        {
+                            index: itemIndex,
+                            text: item.image_path
+                        });
+                    let answers = [];
+                    let count = 0;
+
+                    if ( item.first_answer_correct ) {
+                        answers.push(item.first_answer_text);
+                        count++;
+                    }
+                    if ( item.second_answer_correct ) {
+                        answers.push(item.second_answer_text);
+                        count ++;
+                    }
+                    if ( item.third_answer_correct ) {
+                        answers.push(item.third_answer_text);
+                        count ++;
+                    }
+                    savedCorectAnswersNumber.push(
+                        {
+                            index: itemIndex,
+                            value: count
+                        }
+                    );
+
+                    if ( ! item.first_answer_correct ) {
+                        answers.push(item.first_answer_text);
+                    }
+                    if ( ! item.second_answer_correct ) {
+                        answers.push(item.second_answer_text);
+                    }
+                    if ( ! item.third_answer_correct ) {
+                        answers.push(item.third_answer_text);
+                    }
+
+                    for ( let index = 0; index < answers.length; ++index ) {
+                        savedNewDivs.push(
+                            {
+                                questionNumber : itemIndex,
+                                index : index,
+                                text : answers[index]
+                            }
+                        )
+                    }
+                }
+                getInputValues();
+                createCorrectAnswerBoxes();
+                createWrongAnswerBoxes();
+                getInputValues();
             }
         )
 }
-
-// window.addEventListener('beforeunload', function(event) {
-//     event.preventDefault();
-// });

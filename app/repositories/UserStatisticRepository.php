@@ -26,6 +26,9 @@ class UserStatisticRepository extends Repository {
         $userStatisticsModel->categoryStats = $this->getCategoryStats($fetchArray['id']);
         $userStatisticsModel->learnWeeklyStats = $this->getWeeklyLearningStats($fetchArray['id']);
         $userStatisticsModel->quizWeeklyStats = $this->getWeeklyQuizStats($fetchArray['id']);
+        $userStatisticsModel->learnStatistics = $this->getLearnStatistics($fetchArray['id']);
+        $userStatisticsModel->quizStatistics = $this->getQuizStatistics($fetchArray['id']);
+        $userStatisticsModel->quizDurations = $this->getQuizDurations($fetchArray['id']);
 
         return $userStatisticsModel;
     }
@@ -101,5 +104,51 @@ class UserStatisticRepository extends Repository {
             $rezArray[] = $rez;
         }
         return $rezArray;
+    }
+
+    private function getQuizStatistics($id) :UserQuizStatistics {
+        $statement = $this->pdo->prepare("SELECT * FROM get_user_quiz_statistics(:userId)");
+        $statement->execute(
+            [":userId" => $id]
+        );
+
+        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+        $userQuizStatistics = new UserQuizStatistics();
+        $userQuizStatistics->total = $fetchArray['total'];
+        $userQuizStatistics->failed = $fetchArray['failed'];
+        $userQuizStatistics->passed = $fetchArray['passed'];
+        $userQuizStatistics->perfect = $fetchArray['perfect'];
+        $userQuizStatistics->average_duration = $fetchArray['average_duration'];
+        $userQuizStatistics->shortest_duration = $fetchArray['shortest_duration'];
+        $userQuizStatistics->longest_duration = $fetchArray['longest_duration'];
+        return $userQuizStatistics;
+    }
+
+    private function getLearnStatistics($id) :UserLearnStatistics {
+        $statement = $this->pdo->prepare("SELECT * FROM get_user_learn_statistics(:userId)");
+        $statement->execute(
+            [":userId" => $id]
+        );
+
+        $fetchArray = $statement->fetch(PDO::FETCH_ASSOC);
+        $userQuizStatistics = new UserLearnStatistics();
+        $userQuizStatistics->total = $fetchArray['total'];
+        $userQuizStatistics->failed = $fetchArray['failed'];
+        $userQuizStatistics->passed = $fetchArray['passed'];
+        return $userQuizStatistics;
+    }
+
+    private function getQuizDurations($id) :array {
+        $statement = $this->pdo->prepare("SELECT * FROM get_user_last_quizzes_times(:userId)");
+        $statement->execute(
+            [":userId" => $id]
+        );
+
+        $result = [];
+        foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $item ) {
+            $result[] = $item['get_user_last_quizzes_times'];
+        }
+
+        return $result;
     }
 }

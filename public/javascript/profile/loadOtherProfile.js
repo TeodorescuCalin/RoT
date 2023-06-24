@@ -3,14 +3,19 @@ let category_yValues = [];
 let category_barColors = ["red", "green","blue","orange","salmon", "black", "white", "purple"];
 let category_sum = 0;
 
-
+Date.prototype.substractDays = function(days)
+{
+    var day = new Date(this.valueOf());
+    day.setDate(day.getDate() - days);
+    return day;
+}
 
 const currentDate = new Date();
 const currentDay = currentDate.getDate();
-const oneWeekAgo = currentDay - 7;
-const twoWeeksAgo = oneWeekAgo - 7;
-const threeWeeksAgo = twoWeeksAgo - 7;
-const fourWeeksAgo = threeWeeksAgo - 7;
+const oneWeekAgo = currentDate.substractDays(7).getDate();
+const twoWeeksAgo = currentDate.substractDays(14).getDate();
+const threeWeeksAgo = currentDate.substractDays(21).getDate();
+const fourWeeksAgo = currentDate.substractDays(28).getDate();
 const currentWeek = oneWeekAgo + "-" + currentDay;
 const lastWeek = twoWeeksAgo + "-" + oneWeekAgo;
 const last2Weeks = threeWeeksAgo + "-" + twoWeeksAgo;
@@ -26,24 +31,27 @@ let quizProgress_xValues = [last3Weeks, last2Weeks, lastWeek, currentWeek];
 let quizProgress_yValues = [];
 let quizProgress_sum = 0;
 let quizProgress_mean;
+
+let quizDuration_xValues = [];
+let quizDuration_yValues_seconds = [];
+
+let userData;
+
 async function getUserInfo() {
-
-    const username = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-
     await fetch(
         new Request(
-            HOST_URL + "user_info?username=" + username
+            HOST_URL + "user_info"
         )
     ).then( response => response.json() )
         .then(
             response => {
 
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 response = response['data'];
-                console.log(response);
+                userData = response;
                 document.getElementById('profileName')
                     .innerText = response.username;
 
@@ -58,7 +66,6 @@ async function getUserInfo() {
                     learnProgress_yValues.push(stat.count);
                     learnProgress_sum += stat.count;
                 }
-                console.log(learnProgress_sum / learnProgress_yValues.length);
                 learnProgress_mean = learnProgress_sum / learnProgress_yValues.length;
 
                 for ( let stat of response.statistics.quizWeeklyStats ) {
@@ -67,6 +74,11 @@ async function getUserInfo() {
                 }
                 quizProgress_mean = quizProgress_sum / quizProgress_yValues.length;
 
+
+                for ( let index = 1; index <= response.statistics.quizDurations.length; ++ index ) {
+                    quizDuration_xValues.push(index);
+                    quizDuration_yValues_seconds.push(response.statistics.quizDurations[index - 1]);
+                }
                 drawProgressCharts();
             }
         );
@@ -99,13 +111,13 @@ function drawCategoryStatsChart() {
             }
         }
     });
-    document.getElementById("totalLearn").innerHTML = "În total, a răspuns corect la " + category_sum + " întrebări.";
+    document.getElementById("totalLearn").innerHTML = "În total, ai răspuns corect la " + category_sum + " întrebări.";
 }
 
 
 function drawProgressCharts() {
 
-    document.getElementById("learnMean").innerHTML = "În medie, a rezolvat aproximativ " + Math.floor(learnProgress_mean) + " întrebări pe săptămână.";
+    document.getElementById("learnMean").innerHTML = "În medie, ai rezolvat aproximativ " + Math.floor(learnProgress_mean) + " întrebări pe săptămână.";
     new Chart("learnProgressChart", {
         type: "line",
         data: {
@@ -135,7 +147,7 @@ function drawProgressCharts() {
         }
     });
 
-    document.getElementById("quizMean").innerHTML = "În medie, a rezolvat aproximativ " + Math.floor(quizProgress_mean) + " chestionare pe săptămână.";
+    document.getElementById("quizMean").innerHTML = "În medie, ai rezolvat aproximativ " + Math.floor(quizProgress_mean) + " chestionare pe săptămână.";
     new Chart("quizProgressChart", {
         type: "line",
         data: {
@@ -164,6 +176,58 @@ function drawProgressCharts() {
             }
         }
     });
+    let quizDuration_yValues = {
+        0 : '0:00',
+        300 : '5:00',
+        600 : '10:00',
+        900 : '15:00',
+        1200 : '20:00',
+        1500: '25:00',
+        1800: '30:00'
+    };
+
+    let quizDuration_sum = 0;
+    for (let i = 0; i < quizDuration_yValues_seconds.length; i++)
+        quizDuration_sum += quizDuration_yValues_seconds[i];
+    let quizDuration_mean = quizDuration_sum / quizDuration_yValues_seconds.length;
+    if (quizDuration_mean > 1500)
+        document.getElementById("quizDuration").innerHTML = "În medie, ți-a luat " + secondsToMinSec(Math.floor(quizDuration_mean)) +
+            " minute să rezolvi un chestionar. Aproape rămâi fără timp. Întoarce-te la mediul de învățare pentru a te pregăti mai bine.";
+    else
+        document.getElementById("quizDuration").innerHTML = "În medie, ți-a luat " + secondsToMinSec(Math.floor(quizDuration_mean)) + " minute să rezolvi un chestionar.";
+
+    let quizDuration_yValues_formatted = secondsToMinSec(quizDuration_yValues_seconds);
+
+    new Chart("quizDurationChart", {
+        type: "line",
+        data: {
+            labels: quizDuration_xValues,
+            datasets: [{
+                borderColor: "#0088a9",
+                data: quizDuration_yValues_seconds,
+                tension: 0.01
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value, index) {
+                            return quizDuration_yValues[value];
+                        }
+                    }
+                }]
+            },
+            title: {
+                display: true,
+                text: "Durata ultimelor 10 chestionare",
+                fontSize: 16,
+                color: "white"
+            }
+        }
+    });
 }
 
 function secondsToMinSec(input) {
@@ -174,60 +238,3 @@ function secondsToMinSec(input) {
     let result = min + ":" + sec;
     return result;
 }
-
-let quizDuration_xValues = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-let quizDuration_yValues_seconds = [100, 170, 160, 170, 140, 130, 160, 174, 1304, 1523];
-let quizDuration_yValues = {
-    0 : '0:00',
-    300 : '5:00',
-    600 : '10:00',
-    900 : '15:00',
-    1200 : '20:00',
-    1500: '25:00',
-    1800: '30:00'
-};
-
-let quizDuration_sum = 0;
-for (let i = 0; i < quizDuration_yValues_seconds.length; i++)
-    quizDuration_sum += quizDuration_yValues_seconds[i];
-let quizDuration_mean = quizDuration_sum / quizDuration_yValues_seconds.length;
-if (quizDuration_mean > 1500)
-    document.getElementById("quizDuration").innerHTML = "În medie, i-a luat " + secondsToMinSec(Math.floor(quizDuration_mean)) +
-        " minute să rezolvi un chestionar. Aproape rămâi fără timp. Întoarce-te la mediul de învățare pentru a te pregăti mai bine.";
-else
-    document.getElementById("quizDuration").innerHTML = "În medie, i-a luat " + secondsToMinSec(Math.floor(quizDuration_mean)) + " minute să rezolvi un chestionar.";
-
-let quizDuration_yValues_formatted = secondsToMinSec(quizDuration_yValues_seconds);
-
-new Chart("quizDurationChart", {
-    type: "line",
-    data: {
-        labels: quizDuration_xValues,
-        datasets: [{
-            borderColor: "#0088a9",
-            data: quizDuration_yValues_seconds,
-            tension: 0.01
-        }]
-    },
-    options: {
-        legend: {display: false},
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: function(value, index) {
-                        return quizDuration_yValues[value];
-                    }
-                }
-            }]
-        },
-        title: {
-            display: true,
-            text: "Durata ultimelor 10 chestionare",
-            fontSize: 16,
-            color: "white"
-        }
-    }
-});
-
-

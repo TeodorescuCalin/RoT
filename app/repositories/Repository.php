@@ -42,6 +42,6 @@ abstract class Repository extends Database {
             return null;
         }
 
-        return $this->createModel( $statement->fetch($fetchArray ) );
+        return $this->createModel( $fetchArray );
     }
 }

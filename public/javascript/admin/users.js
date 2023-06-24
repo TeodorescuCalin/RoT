@@ -8,7 +8,7 @@ async function createTable() {
         .then(
             response => {
                 if ( ! response.ok ) {
-                    window.location = "/public/error"
+                    window.location.href ="/public/error"
                 }
 
                 const data = response['data'];
@@ -50,19 +50,15 @@ async function createTable() {
 }
 
 async function deleteUser(userId) {
-    data = {"userId" : userId};
-    const json = JSON.stringify(data);
-    console.log(json);
 
     await fetch (
         new Request (
-            HOST_URL + "users",
+            HOST_URL + "users/" + userId,
             {
                 method : "DELETE",
                 headers : {
                     "Content-Type" : "application/json"
-                },
-                body : json
+                }
             }
         )
     )
