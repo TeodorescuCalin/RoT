@@ -38,6 +38,7 @@ class App {
         $this->addRoute("POST", "recover_password", "UserController@recoverPassword");
         $this->addRoute("GET", "resetPassword", "UserController@getResetPasswordPage");
         $this->addRoute("POST", "resetPassword", "UserController@resetPassword");
+        $this->addRoute("POST", "logout", "UserController@logout");
 
         $this->addRoute ( "GET", "learn", "LearnController@getPage" );
         $this->addRoute ( "GET", "learn/question", "LearnController@getQuestionForUser" );

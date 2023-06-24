@@ -47,3 +47,8 @@ async function getRanking () {
                 }
             })
 }
+
+
+function getRSS () {
+    window.location.href = HOST_URL + "ranking_rss";
+}

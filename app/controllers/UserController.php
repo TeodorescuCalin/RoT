@@ -410,4 +410,29 @@ class UserController extends Controller {
         $response->encodeSuccess (200);
         return $response;
     }
+
+
+    public function logout () : Response {
+        $response = new Response();
+        $response->setHeader("Content-Type", "application/json");
+
+        $authController = new AuthController($this->request);
+        $decodedToken = $authController->checkJWT();
+        if ( ! $decodedToken['ok'] ) {
+            $response->encodeError(401, "You are not authenticated");
+            return $response;
+        }
+
+        if ( isset ( $_COOKIE['jwt'] ) ) {
+            unset ( $_COOKIE[ 'jwt' ] );
+            setcookie(
+                "jwt",
+                '',
+                1,
+                httponly: true
+            );
+        }
+        $response->encodeSuccess (200 );
+        return $response;
+    }
 }

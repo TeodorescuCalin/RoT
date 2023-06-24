@@ -17,8 +17,8 @@
             <h1 id="profileName" class="profileName"></h1>
         </div>
         <div class="buttonsContainer">
-            <button class="logoutButton">Logout</button>
-            <button class="changePasswordButton">Schimbă parola</button>
+            <button class="logoutButton" onclick="logout()">Logout</button>
+            <button class="changePasswordButton" onclick="resetPassword()">Schimbă parola</button>
         </div>
         <div class="profileGeneralStats">
             <div class="stat">
@@ -87,6 +87,7 @@
     <script src="/public/javascript/navBar/load.js"></script>
     <script src="/public/javascript/profile/loadOtherProfile.js"></script>
     <script src="/public/javascript/profile/loadOwnProfile.js"></script>
+    <script src="/public/javascript/profile/buttonActions.js"></script>
     <script>
         loadNavbar();
         fillProfile()
