@@ -56,8 +56,7 @@ class QuizController extends Controller {
         $authController = new AuthController($this->request);
         $decodedToken = $authController->checkJWT();
         if ( ! $decodedToken['ok'] ) {
-            $response->code = 401;
-            $response->body = file_get_contents(__DIR__."/../../protected/html/error/401.html");
+            $response->encodeError(401, "You are no authenticated");
             return $response;
         }
 

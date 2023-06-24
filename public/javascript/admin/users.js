@@ -8,8 +8,7 @@ async function createTable() {
         .then(
             response => {
                 if ( ! response.ok ) {
-                    alert ( response.error );
-                    return;
+                    window.location = "/public/error"
                 }
 
                 const data = response['data'];

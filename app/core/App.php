@@ -18,7 +18,7 @@ class App {
 
         $this->addRoute ( "GET", "", "HomeController@index" );
         $this->addRoute ( "GET", "legislation", "HomeController@legislation" );
-        $this->addRoute ( "GET", "tip", "HomeController@getTip" );
+        $this->addRoute ( "GET", "tips", "HomeController@getTips" );
         $this->addRoute ( "GET", "login", "HomeController@login" );
         $this->addRoute ( "GET", "register", "HomeController@register" );
         $this->addRoute ( "GET", "forgotPassword", "HomeController@forgotPassword" );
@@ -34,20 +34,22 @@ class App {
         $this->addRoute ( "GET", "ranking", "UserController@getRanking" );
         $this->addRoute ( "GET", "ranking_rss", "UserController@getRSSRanking" );
         $this->addRoute("GET", "users", "UserController@getAllUsers");
-        $this->addRoute("DELETE", "users", "UserController@deleteUser");
+        $this->addRoute("DELETE", "users/{userId}", "UserController@deleteUser");
 
         $this->addRoute ( "GET", "learn", "LearnController@getPage" );
-        $this->addRoute ( "GET", "learn/questions", "LearnController@getQuestion" );
-//        $this->addRoute ( "GET", "learn/questions/{questionId}/answers", "LearnController@getQuestionAnswers" );
+        $this->addRoute ( "GET", "learn/question", "LearnController@getQuestionForUser" );
+        $this->addRoute ( "GET", "learn/questions/{questionId", "LearnController@getQuestion" );
         $this->addRoute ( "PUT", "learn/questions/{questionId}/status", "LearnController@updateQuestionStatus" );
+        $this->addRoute ( "POST", "learn/questions", "LearnController@postQuestion" );
+        $this->addRoute ( "PUT", "learn/questions", "LearnController@updateQuestion" );
 
         $this->addRoute ( "GET", "quizSelection", "QuizController@getSelectionPage" );
         $this->addRoute ( "GET", "quiz/{quizId}", "QuizController@getQuizPage" );
-        $this->addRoute ( "GET", "user_quiz", "QuizController@getQuizzesForUser" );
-        $this->addRoute ( "GET", "quiz/{quizId}/questions", "QuizController@getQuiz" );
-        $this->addRoute ( "POST", "quiz/{quizId}/{questionId}/check", "QuizController@checkQuizAnswer" );
-        $this->addRoute ( "PUT", "quiz/{quizId}", "QuizController@updateUserQuizStatus" );
-        $this->addRoute ( "POST", "quiz", "QuizController@postQuiz" );
+        $this->addRoute ( "GET", "user_quizzes", "QuizController@getQuizzesForUser" );
+        $this->addRoute ( "GET", "quizzes/{quizId}", "QuizController@getQuiz" );
+        $this->addRoute ( "POST", "quizzes/{quizId}/{questionId}/check", "QuizController@checkQuizAnswer" );
+        $this->addRoute ( "PUT", "quizzes/{quizId}", "QuizController@updateUserQuizStatus" );
+        $this->addRoute ( "POST", "quizzes", "QuizController@postQuiz" );
 
         $this->addRoute ( "GET", "admin", "AdminController@getPage" );
         $this->addRoute ( "GET", "learnAdminMainPage", "AdminController@getLearnPage" );
@@ -57,8 +59,6 @@ class App {
         $this->addRoute ( "GET", "selectQuestion", "AdminController@getModifyQuestionPage" );
         $this->addRoute ( "GET", "addNewQuiz", "AdminController@getAddNewQuizPage" );
         $this->addRoute ( "GET", "modifyQuiz", "AdminController@getModifyQuizPage" );
-
-        $this->addRoute ( "POST", "learn", "LearnController@postQuestion" );
     }
 
     public function parseURL() : void {

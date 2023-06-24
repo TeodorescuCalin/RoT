@@ -21,8 +21,7 @@ async function register () {
             response => {
 
                 if ( ! response.ok ) {
-                    alert(response.error);
-                    return;
+                    window.location = "/public/error"
                 }
 
                 window.location.href = HOST_URL;

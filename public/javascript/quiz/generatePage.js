@@ -9,8 +9,7 @@ async function getQuestions() {
         .then(
             response => {
                 if ( ! response.ok ) {
-                    alert(response.error);
-                    return;
+                    window.location = "/public/error"
                 }
 
                 questionQueue = response['data'];

@@ -1,13 +1,12 @@
 async function getTips () {
 
-    await fetch ( HOST_URL + "tip" )
+    await fetch ( HOST_URL + "tips" )
         .then(response => response.json())
         .then(
             response => {
 
                 if ( ! response.ok ) {
-                    alert(response.error);
-                    return;
+                    window.location = "/public/error"
                 }
 
                 let tipList = document.getElementById('tipList');
@@ -28,8 +27,7 @@ async function getRanking () {
 
 
                 if ( ! response.ok ) {
-                    alert(response.error);
-                    return;
+                    window.location = "/public/error"
                 }
 
                 let learnRanking = document.getElementById('learningRanks');

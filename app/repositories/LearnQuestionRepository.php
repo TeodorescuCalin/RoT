@@ -73,7 +73,13 @@ class LearnQuestionRepository extends Repository
         $answersStatement->execute(
             ['id_question' => $id]
         );
-        $fetchArray['answers'] = $answersStatement->fetchAll(PDO::FETCH_ASSOC);
+
+        $fetchValues = $answersStatement->fetchAll(PDO::FETCH_ASSOC);
+        if ( ! $fetchValues ) {
+            return null;
+        }
+
+        $fetchArray['answers'] = $fetchValues;
 
         return $this->createModel($fetchArray);
     }

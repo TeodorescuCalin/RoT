@@ -470,7 +470,15 @@ async function createQuestion() {
                 body : JSON.stringify({"questions" : questionsData})
             }
         )
-    )
+    ).then ( response => response.json() )
+        .then(
+            response => {
+
+                if ( ! response.ok ) {
+                    window.location = HOST_URL + "error";
+                }
+            }
+        )
 }
 
 // window.addEventListener('beforeunload', function(event) {

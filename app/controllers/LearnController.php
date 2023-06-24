@@ -32,7 +32,7 @@ class LearnController extends Controller {
     }
 
 
-    public function getQuestion () : Response {
+    public function getQuestionForUser () : Response {
 
         $response = new Response();
         $response->setHeader("Content-Type", "application/json");
@@ -98,6 +98,10 @@ class LearnController extends Controller {
                 return $response;
             }
             $answerArray = $this->computeQuestionResult($questionId, $json_body['answers']);
+            if ( empty ( $answerArray ) ) {
+                $response->encodeError(404, "Question not found");
+                return $response;
+            }
             $questionStatus = $answerArray['status'];
 
             unset($answerArray['status']);
@@ -139,6 +143,9 @@ class LearnController extends Controller {
     private function computeQuestionResult ($questionId, $answers) : array {
         $questionRepository = new LearnQuestionRepository();
         $questionModel = $questionRepository->getById($questionId);
+        if ( $questionModel == null ) {
+            return [];
+        }
         $responseArray = [];
 
         $status = 'passed';

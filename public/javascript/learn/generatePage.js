@@ -2,14 +2,13 @@
 loadPage();
 
 async function loadPage () {
-    await fetch ( HOST_URL + "learn/questions" )
+    await fetch ( HOST_URL + "learn/question" )
         .then( response => response.json() )
         .then(
             response => {
 
                 if ( ! response.ok ) {
-                    alert ( response.error );
-                    return;
+                    window.location = "/public/error"
                 }
 
                 const data = response['data'];

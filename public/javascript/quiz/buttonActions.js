@@ -34,8 +34,7 @@ async function checkAnswers() {
             response => {
 
                 if ( ! response.ok ) {
-                    alert(response.error);
-                    return;
+                    window.location = "/public/error"
                 }
 
                 if ( response['data'].solved ) {

@@ -36,8 +36,7 @@ async function getUserInfo() {
             response => {
 
                 if ( ! response.ok ) {
-                    alert(response.error);
-                    return;
+                    window.location = "/public/error"
                 }
 
                 response = response['data'];

@@ -18,8 +18,7 @@ async function login () {
             response => {
 
                 if ( ! response.ok ) {
-                    alert(response.error);
-                    return;
+                    window.location = "/public/error"
                 }
 
                 localStorage['username'] = response['data']['username'];

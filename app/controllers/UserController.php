@@ -233,6 +233,28 @@ class UserController extends Controller {
         $channel = $xml->addChild('channel');
         $channel->addChild('title', 'ROT ranking feed');
         $channel->addChild('description', 'The top users of Romanian');
+        $channel->addChild('description', 'The top users of Romanian traffic signs tutor');
+        $channel->addChild('link', "http://localhost/public/ranking_rss");
+
+        $learnDateTime = new DateTime($data['learn_update']);
+
+        foreach ( $data['learn'] as $user ) {
+            $userItem = $channel->addChild('item');
+            $userItem->addChild('description', 'The number of questions leanred by the user '.$user['username'].' is '.$user['result']);
+            $userItem->addChild('pubDate', $learnDateTime->format(DateTimeInterface::RFC822));
+        }
+
+        $quizDateTime = new DateTime($data['quiz_update']);
+
+        foreach ( $data['quiz'] as $user ) {
+            $userItem = $channel->addChild('item');
+            $userItem->addChild('description', 'The number of quizzes solved by the user '.$user['username'].' is '.$user['result']);
+            $userItem->addChild('pubDate', $quizDateTime->format(DateTimeInterface::RFC822) );
+        }
+
+        $response->code = 200;
+        $response->body = $xml->asXML();
+
         return $response;
     }
 
@@ -279,32 +301,8 @@ class UserController extends Controller {
             return $response;
         }
 
-        $json_body = json_decode($this->request->body, true);
-        $userRepository->deleteUser($json_body['userId']);
+        $userRepository->deleteUser($this->request->pathVariables['userId']);
         $response->encodeSuccess(200);
-        return $response;
-        $channel->addChild('description', 'The top users of Romanian traffic signs tutor');
-        $channel->addChild('link', "http://localhost/public/ranking_rss");
-
-        $learnDateTime = new DateTime($data['learn_update']);
-
-        foreach ( $data['learn'] as $user ) {
-            $userItem = $channel->addChild('item');
-            $userItem->addChild('description', 'The number of questions leanred by the user '.$user['username'].' is '.$user['result']);
-            $userItem->addChild('pubDate', $learnDateTime->format(DateTimeInterface::RFC822));
-        }
-
-        $quizDateTime = new DateTime($data['quiz_update']);
-
-        foreach ( $data['quiz'] as $user ) {
-            $userItem = $channel->addChild('item');
-            $userItem->addChild('description', 'The number of quizzes solved by the user '.$user['username'].' is '.$user['result']);
-            $userItem->addChild('pubDate', $quizDateTime->format(DateTimeInterface::RFC822) );
-        }
-
-        $response->code = 200;
-        $response->body = $xml->asXML();
-
         return $response;
     }
 }

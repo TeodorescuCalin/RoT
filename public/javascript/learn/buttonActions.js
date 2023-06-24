@@ -19,7 +19,7 @@ async function nextQuestion() {
             .then(
                 response => {
                     if ( ! response.ok ) {
-                        alert ( response.error );
+                        window.location = "/public/error";
                     }
                     location.reload();
                 }
@@ -49,8 +49,7 @@ async function checkAnswers() {
         .then(
             response => {
                 if ( ! response.ok ) {
-                    alert ( response.error );
-                    return;
+                    window.location = "/public/error"
                 }
                 displayResult(response.data);
             }

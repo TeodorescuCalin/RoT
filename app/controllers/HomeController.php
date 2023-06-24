@@ -103,7 +103,7 @@ class HomeController extends Controller  {
     }
 
 
-    public function getTip () : Response {
+    public function getTips () : Response {
 
         $response = new Response();
         $response->setHeader("Content-Type", "application/json");
