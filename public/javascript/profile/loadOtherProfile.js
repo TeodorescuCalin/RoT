@@ -38,9 +38,14 @@ let quizDuration_yValues_seconds = [];
 let userData;
 
 async function getUserInfo() {
+    let username = window.location.href.substring(window.location.href.lastIndexOf('/') + 1 );
+    let requestUrl = HOST_URL + "user_info"
+    if ( username !== localStorage['username'] ) {
+        requestUrl = HOST_URL + "user_info?username=" + username;
+    }
     await fetch(
         new Request(
-            HOST_URL + "user_info"
+            requestUrl
         )
     ).then( response => response.json() )
         .then(
