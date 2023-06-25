@@ -1,0 +1,388 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+body {
+  background-color: #24252A;
+}
+
+header, header * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-color: #24252A;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  top: 0;
+  right: 0;
+  align-items: flex-start;
+  background: transparent;
+  padding: 20px 6%;
+  transition: all 0.5s ease;
+}
+
+.navButtons {
+  position: relative;
+  display: flex;
+  top: 38px;
+  list-style: none;
+}
+
+.navButtons a:hover {
+  color: #0088a9;
+}
+
+.navButtons a:active {
+  color: yellow;
+}
+
+.navButtons a, .loginButton {
+  text-align: center;
+  display: block;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  text-decoration: none;
+  padding: 5px 0;
+  margin: 0 20px;
+}
+
+.homeButton {
+  padding: 9px 25px;
+}
+
+.loginButton {
+  position: relative;
+  padding: 9px 25px;
+  border: none;
+  border-radius: 50px;
+  background-color: rgb(0, 136, 169);
+  cursor: pointer;
+  top: 34px;
+  transition: all 0.5s ease;
+}
+
+.loginButton:hover {
+  background-color: rgba(0, 136, 169, 0.5);
+}
+
+.subMenuHighwayCode {
+  position: relative;
+  background-color: #0088a9;
+  display: none;
+  list-style: none;
+  border: none;
+  top: 15px;
+  line-height: 50px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+}
+
+nav ul li:hover ul {
+  display: block;
+}
+
+.subMenuHighwayCode a:hover {
+  color: #0088a9;
+}
+
+div.textHomePage {
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  text-decoration: none;
+  padding: 5px 0;
+  margin: 0 20px;
+  transition: all 0.5s ease;
+}
+
+.dropNav {
+  color: white;
+  font-size: 34px;
+  cursor: pointer;
+  display: none;
+}
+
+#checkNav {
+  display: none;
+}
+
+@media (max-width: 1304px) {
+  .navBar {
+    height: 100px;
+  }
+  .navButtons {
+    text-align: center;
+    display: block;
+    position: relative;
+    width: 100%;
+    top: 60px;
+    visibility: hidden;
+    line-height: 80px;
+    padding: 0 0 0 0;
+  }
+  .dropNav {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 20%;
+    left: 45%;
+    justify-content: center;
+    align-items: center;
+    line-height: 120px;
+  }
+  .navButtons a {
+    font-size: 28px;
+  }
+  .subMenuHighwayCode {
+    line-height: 50px;
+    margin-bottom: 20px;
+  }
+  div.textHomePage {
+    align-content: flex-end;
+  }
+  #checkNav:checked ~ .navButtons {
+    visibility: visible;
+  }
+}
+@media (max-width: 800px) {
+  .homeButton svg {
+    height: 90px;
+    width: 90px;
+  }
+  .navButtons a {
+    font-size: 20px;
+    padding: 0 0 0 0;
+  }
+  .navButtons {
+    line-height: 60px;
+    padding: 0 0 0 0;
+    top: 50px;
+  }
+  .navButtons ul {
+    padding: 0 0 0 0;
+  }
+}
+@media (max-width: 600px) {
+  .homeButton svg {
+    height: 65px;
+    width: 65px;
+    margin-top: 14px;
+  }
+  .dropNav {
+    font-size: 28px;
+  }
+  .loginButton {
+    font-size: 18px;
+  }
+  .navButtons a {
+    font-size: 18px;
+    padding: 0 0 0 0;
+  }
+  .navButtons {
+    top: 45px;
+    line-height: 60px;
+    padding: 0 0 0 0;
+  }
+}
+@media (max-width: 400px) {
+  .homeButton svg {
+    height: 60px;
+    width: 60px;
+    margin-top: 18px;
+  }
+  .dropNav {
+    font-size: 24px;
+    line-height: 100px;
+  }
+  .loginButton {
+    font-size: 16px;
+  }
+  .navButtons a {
+    font-size: 18px;
+    padding: 0 0 0 0;
+  }
+  .navButtons {
+    top: 40px;
+    line-height: 60px;
+    padding: 0 0 0 0;
+  }
+}
+@media (max-width: 399px) {
+  .homeButton svg {
+    height: 30px;
+    width: 30px;
+    margin-top: 18px;
+  }
+  .dropNav {
+    font-size: 10px;
+    line-height: 100px;
+  }
+  .loginButton {
+    font-size: 12px;
+  }
+  .navButtons a {
+    font-size: 18px;
+    padding: 0 0 0 0;
+  }
+  .navButtons {
+    top: 40px;
+    line-height: 60px;
+    padding: 0 0 0 0;
+  }
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #24252A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0088a9;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 136, 169, 0.5);
+}
+
+body {
+  background-color: #24252A;
+  font-family: Arial, sans-serif;
+}
+
+.formBlock {
+  margin: 200px auto auto;
+  background-color: #24252A;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #0088a9;
+  box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.3);
+  padding: 20px;
+  max-width: 400px;
+}
+.formBlock h1 {
+  text-align: center;
+  color: white;
+}
+.formBlock .form-container label {
+  display: block;
+  margin-bottom: 1px;
+  color: white;
+}
+.formBlock .form-container input[type=text],
+.formBlock .form-container input[type=password] {
+  width: 100%;
+  padding: 12px 20px 12px 60px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #0088a9;
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: white;
+  background: #24252A;
+}
+.formBlock .form-container input[type=text]:focus,
+.formBlock .form-container input[type=password]:focus {
+  box-shadow: inset 0 0 5px 5px rgba(26, 188, 156, 0.25);
+  outline-width: 0;
+}
+.formBlock .form-container .inputContainer {
+  position: relative;
+}
+.formBlock .form-container .inputContainer i {
+  position: absolute;
+  width: 47px;
+  height: 41px;
+  color: #fff;
+  font-size: 18px;
+  background: #0088a9;
+  border-radius: 5px 0 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 0 0;
+}
+.formBlock .form-container .inputContainer select {
+  width: 100%;
+  height: 41px;
+  padding: 12px 20px 12px 60px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #0088a9;
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: white;
+  background: #24252A;
+}
+.formBlock .form-container .inputContainer select:focus {
+  box-shadow: inset 0 0 5px 5px rgba(26, 188, 156, 0.25);
+  outline-width: 0;
+}
+.formBlock .form-container button {
+  background-color: #0088a9;
+  color: #24252A;
+  padding: 14px 20px;
+  margin: 15px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+.formBlock .form-container button:hover {
+  background-color: #005f76;
+}
+.formBlock a:link {
+  color: #0088a9;
+  text-decoration: none;
+}
+.formBlock a:hover {
+  text-decoration: underline;
+}
+.formBlock a:visited {
+  color: #0088a9;
+}
+.formBlock input::-moz-placeholder {
+  color: white;
+}
+.formBlock input::placeholder {
+  color: white;
+}
+@media screen and (max-width: 600px) {
+  .formBlock {
+    max-width: 100%;
+  }
+}
+
+.loginButton {
+  visibility: hidden;
+}
+
+.usersTable {
+  margin: 30px 10% auto 10%;
+  width: 80%;
+  border-collapse: collapse;
+  text-align: center;
+  color: white;
+}
+.usersTable td {
+  padding: 10px;
+  border: 3px solid #0088a9;
+}
+.usersTable button {
+  background-color: #0088a9;
+  cursor: pointer;
+  border: 1px solid #0088a9;
+  border-radius: 4px;
+}
+.usersTable button:hover {
+  background-color: #005f76;
+}/*# sourceMappingURL=userAdminMainPage.css.map */
