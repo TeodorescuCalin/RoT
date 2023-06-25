@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Documentație</title>
-  <link rel="stylesheet">
 </head>
 
 <body>
@@ -246,14 +245,14 @@
         <li>dacă utilizatorul are rol de <b>admin</b>, acesta poate adăuga chestionare noi</li>
         <li>dacă utilizatorul are rol de <b>admin</b>, acesta poate modifica chestionare deja existente</li>
       </ul>
-<!--      <div class="diagrams">-->
-<!--        <img src="img/useCase1.PNG" id="old" alt="flow diagram" width=800 >-->
-<!--        <img src="img/useCase3.PNG" id="old2" alt="flow diagram" width=800 >-->
+      <!--      <div class="diagrams">-->
+      <!--        <img src="img/useCase1.PNG" id="old" alt="flow diagram" width=800 >-->
+      <!--        <img src="img/useCase3.PNG" id="old2" alt="flow diagram" width=800 >-->
 
-<!--      </div>-->
-<!--      <img src="img/useCase2.PNG" alt="flow diagram" width=800 >-->
-<!--      <br>-->
-<!--      Diagramele useCase reprezintă interacțiunile dintre pagini ilustrând funcționalitățile de care beneficiază fiecare utilizator.În prima diagram sunt ilustrate funcționalitățile pe care le are un utilizator care nu deține un cont.În a doua diagramă sunt ilustrate funcționalitățile pe care le are un utilizator care deține un cont.Iar în a treia diagramă sunt ilustrate funcționalitățile la care are acces un utilizator care deține un rol de admin.-->
+      <!--      </div>-->
+      <!--      <img src="img/useCase2.PNG" alt="flow diagram" width=800 >-->
+      <!--      <br>-->
+      <!--      Diagramele useCase reprezintă interacțiunile dintre pagini ilustrând funcționalitățile de care beneficiază fiecare utilizator.În prima diagram sunt ilustrate funcționalitățile pe care le are un utilizator care nu deține un cont.În a doua diagramă sunt ilustrate funcționalitățile pe care le are un utilizator care deține un cont.Iar în a treia diagramă sunt ilustrate funcționalitățile la care are acces un utilizator care deține un rol de admin.-->
     </section>
     <section id="users">
       <h4>2.3 Clase și caracteristici ale utilizatorilor</h4>
@@ -266,10 +265,12 @@
 
           </ul>
         </li>
-        <li>utilizatorii neautentificați pot fi:</li>
+        <li>
+          utilizatorii neautentificați pot fi:
           <ul>
             <li>cursanți al școlilor de șoferi ce se pregătesc pentru susținerea probei teoretice a examenului de obținere a permisului de conducere.</li>
           </ul>
+        </li>
       </ul>
       <h5>2.3.2 Caracteristici</h5>
       <ul>
@@ -307,7 +308,8 @@
 
     <section id="user-interface">
       <h4>3.1 Interfața utilizatorului</h4>
-      Mai jos, puteți vedea o prezentare generală a fiecărei pagini a aplicației și funcționalităților pe care le oferă: <ul>
+      Mai jos, puteți vedea o prezentare generală a fiecărei pagini a aplicației și funcționalităților pe care le oferă:
+    <ul>
 
       <li id="nav-bar"><b>Bara de navigație</b></li>
       <li style="list-style: none">
@@ -345,7 +347,7 @@
             trebuie să fie <b>unice</b>.</li>
           <li>În cazul în care utilizatorul își amintește că are un cont existent, acesta poate apasă butonul
             <b>Autentificare</b> aflat în partea de jos a formularului, sau pe butonul <b>Login</b> din coltul din dreapta-sus
-             al paginii, pentru a reveni la meniul de autentificare.
+            al paginii, pentru a reveni la meniul de autentificare.
           </li>
 
           <li style="list-style: none" class="pictures"><img src="images/signupPage.png" alt="signup" width=800 height="400">
@@ -362,8 +364,6 @@
           <li style="list-style: none" class="pictures"><img src="images/sendMail.png" alt="login" width=800 height="400"></li>
         </ul>
       </li>
-
-    </ul>
 
       <li id="home-page"><b> Pagina de acasă</b></li>
       <li style="list-style: none">
@@ -394,8 +394,6 @@
           </li>
         </ul>
       </li>
-
-
       <li id="rules"><b>Pagina cu legislația</b></li>
       <li style="list-style: none">
         <ul>
@@ -480,8 +478,9 @@
       <li style="list-style: none">
         <ul>
           <li>Pagina prezintă informații despre utilizator.</li>
+          <li>
           <img src="images/profile1.png" alt="overview" width=800 >
-
+          </li>
           <li>Utilizatorul <b>autentificat</b> își va vedea la profil detalii despre cont, un procent referitor la
             progresul sau, numărul de întrebări/chestionare parcurse (corecte și greșite), dar și câteva grafice
             corespunzătoare acestora.
@@ -570,7 +569,7 @@
 
         </ul>
       </li>
-
+    </ul>
 
       <section id="hardware-interface">
 
