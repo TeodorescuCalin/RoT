@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "c729a9ac-c941-431c-a130-da67d5c09b89",
+		"name": "web",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "15144507",
+		"_collection_link": "https://grey-satellite-778015.postman.co/workspace/project_web~5983190d-07fe-4f3e-ae39-d3f263c3b9c8/collection/15144507-c729a9ac-c941-431c-a130-da67d5c09b89?action=share&creator=15144507&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"LeNinjaCat\",\n    \"password\" : \"da\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/public/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"apache\",\n    \"name\" : \"Apache\",\n    \"surname\" : \"Apachescu\",\n    \"email\" : \"apache.apache@yahoo.com\",\n    \"password\" : \"parola\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/public/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Get profile",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODcwOTA0NTcsIm5iZiI6MTY4NzA5MDQ1NywiaXNzIjoiaHR0cHM6Ly8xMjcuMC4wLjEiLCJleHAiOjE2ODcwOTQwNTcsImlkIjoxLCJ1c2VybmFtZSI6IkxlTmluamFDYXQifQ.fRajFgBtLQXD_6e6s4y6q_yjTqSLLAoPGYAeK1IaQGgROiL4uuhoS7rWvlfGascmdrycQ-PqJqt04ZU9nFe96w",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost/public/profile/LeNinjaCat"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/user_info"
+			},
+			"response": []
+		},
+		{
+			"name": "Get question",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/learn/question"
+			},
+			"response": []
+		},
+		{
+			"name": "Update question status",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"answers\" : [\n        {\n            \"id\" : 31,\n            \"count\" : 4\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/public/learn/questions/10/status"
+			},
+			"response": []
+		},
+		{
+			"name": "Get question answers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/learn/questions/71/answers"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user quizzes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/user_quizzes"
+			},
+			"response": []
+		},
+		{
+			"name": "Get quiz questions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/quizzes/101"
+			},
+			"response": []
+		},
+		{
+			"name": "Check quiz question answer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_answer_id\" : 101,\n    \"first_answer_selected\" : true,\n    \"second_answer_id\" : 102,\n    \"second_answer_selected\" : false,\n    \"third_answer_id\" : 103,\n    \"third_answer_selected\" : true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/public/quizzes/1/15/check"
+			},
+			"response": []
+		},
+		{
+			"name": "Create question",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\" : \"Intrebare\",\n    \"explanation\" : \"Explicatie\",\n    \"image_path\" : null,\n    \"type\" : \"count\",\n    \"category\" : \"firstAid\",\n    \"answer_count\" : 6,\n    \"answers\" : [\n        {\n            \"text\" : \"Bla bla\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/public/learn"
+			},
+			"response": []
+		},
+		{
+			"name": "Update quiz status",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"correct_answers\" : 26,\n    \"duration\" : 30\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/public/quizzes/1/user_status"
+			},
+			"response": []
+		},
+		{
+			"name": "Get tips",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/tips"
+			},
+			"response": []
+		},
+		{
+			"name": "Get rss",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/ranking_rss"
+			},
+			"response": []
+		},
+		{
+			"name": "Get users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create quiz",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"questions\" : [\n    {\n        \"text\" : \"Intrebare quiz 1\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 2\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 3\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 4\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 5\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 6\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 7\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 8\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 9\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 10\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 11\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 12\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 13\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 14\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 15\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 16\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 17\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 18\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 19\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 20\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 21\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 22\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 23\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 24\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 25\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    },\n    {\n        \"text\" : \"Intrebare quiz 26\",\n        \"image_path\" : null,\n        \"answers\" : [\n            {\n                \"text\" : \"Raspuns 1\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 2\",\n                \"correct\" : false\n            },\n            {\n                \"text\" : \"Raspuns 3\",\n                \"correct\" : true\n            }\n        ]\n    }\n]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost/public/quizzes"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user ranking",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/ranking"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/users"
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost/public/logout"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Get quiz/quizzes/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/public/quizzes/1"
+			},
+			"response": []
+		}
+	]
+}
