@@ -59,7 +59,6 @@
             <li><a href="#error404">3.1.15 Pagina 404 </a></li>
             <li><a href="#admin">3.1.16 Pagina administratorului </a></li>
             <li><a href="#changepass">3.1.17 Pagina de schimbare a parolei </a></li>
-
           </ul>
         </li>
         <li><a href="#hardware-interface">3.2 Interfața Hardware </a></li>
@@ -114,7 +113,6 @@
       </ul>
     </li>
   </ul>
-
   <div role="contentinfo">
     <section id="authors" typeof="sa:AuthorsList">
       <h2>Autori</h2>
@@ -132,7 +130,6 @@
             </li>
           </ul>
         </li>
-
         <li typeof="sa:ContributorRole" property="schema:author">
             <span typeof="schema:Person">
               <meta property="schema:givenName" content="Tudor">
@@ -158,11 +155,9 @@
             </li>
           </ul>
         </li>
-
       </ul>
     </section>
   </div>
-
   <section id="introduction">
     <h3>1. Introducere</h3>
     <section id="introduction-purpose">
@@ -195,7 +190,6 @@
         poate consulta secțiunile de <b>Interfeța utilizatorului</b> și <b>Caracteristici ale sistemului</b> pentru a
         obține o mai bună înțelegere a ceea ce oferă aplicația.
       </p>
-
     </section>
     <section id="product-scope">
       <h4>1.4 Scopul Produsului</h4>
@@ -216,7 +210,6 @@
       </ul>
     </section>
   </section>
-
   <section id="overall">
     <h3>2. Descriere Generală</h3>
     <section id="product-perspective">
@@ -245,14 +238,6 @@
         <li>dacă utilizatorul are rol de <b>admin</b>, acesta poate adăuga chestionare noi</li>
         <li>dacă utilizatorul are rol de <b>admin</b>, acesta poate modifica chestionare deja existente</li>
       </ul>
-      <!--      <div class="diagrams">-->
-      <!--        <img src="img/useCase1.PNG" id="old" alt="flow diagram" width=800 >-->
-      <!--        <img src="img/useCase3.PNG" id="old2" alt="flow diagram" width=800 >-->
-
-      <!--      </div>-->
-      <!--      <img src="img/useCase2.PNG" alt="flow diagram" width=800 >-->
-      <!--      <br>-->
-      <!--      Diagramele useCase reprezintă interacțiunile dintre pagini ilustrând funcționalitățile de care beneficiază fiecare utilizator.În prima diagram sunt ilustrate funcționalitățile pe care le are un utilizator care nu deține un cont.În a doua diagramă sunt ilustrate funcționalitățile pe care le are un utilizator care deține un cont.Iar în a treia diagramă sunt ilustrate funcționalitățile la care are acces un utilizator care deține un rol de admin.-->
     </section>
     <section id="users">
       <h4>2.3 Clase și caracteristici ale utilizatorilor</h4>
@@ -262,7 +247,6 @@
         <li style="list-style: none">
           <ul>
             <li>orice categorie de oameni care doresc să învețe legislația rutieră și semne de circulație din România și nu numai.</li>
-
           </ul>
         </li>
         <li>
@@ -285,7 +269,6 @@
           Așadar, aceștia pot să se înregistreze ca și utilizator și să beneficieze de toate funcționalitățile.
         </li>
       </ul>
-
     </section>
     <section id="operating-environment">
       <h4>2.4 Mediul de operare</h4>
@@ -300,9 +283,7 @@
         Utilizatorii pot consulta acest document pentru explicații detaliate despre funcționalitățile aplicației web.
       </p>
     </section>
-
   </section>
-
   <section id="external">
     <h3>3. Interfețele aplicației</h3>
 
@@ -310,7 +291,6 @@
       <h4>3.1 Interfața utilizatorului</h4>
       Mai jos, puteți vedea o prezentare generală a fiecărei pagini a aplicației și funcționalităților pe care le oferă:
     <ul>
-
       <li id="nav-bar"><b>Bara de navigație</b></li>
       <li style="list-style: none">
         <ul>
@@ -320,7 +300,6 @@
           ></li>
         </ul>
       </li>
-
       <li id="login-page"><b>Pagina de autentificare</b></li>
       <li style="list-style: none">
         <ul>
@@ -336,7 +315,6 @@
           </li>
         </ul>
       </li>
-
       <li id="signup-page"><b>Pagina de înregistrare</b></li>
       <li style="list-style: none">
         <ul>
@@ -349,12 +327,9 @@
             <b>Autentificare</b> aflat în partea de jos a formularului, sau pe butonul <b>Login</b> din coltul din dreapta-sus
             al paginii, pentru a reveni la meniul de autentificare.
           </li>
-
           <li style="list-style: none" class="pictures"><img src="images/signupPage.png" alt="signup" width=800 height="400">
-
         </ul>
       </li>
-
       <li id="sendMail-page"><b>Pagina de de resetare a parolei prin mail</b></li>
       <li style="list-style: none">
         <ul>
@@ -364,7 +339,6 @@
           <li style="list-style: none" class="pictures"><img src="images/sendMail.png" alt="login" width=800 height="400"></li>
         </ul>
       </li>
-
       <li id="home-page"><b> Pagina de acasă</b></li>
       <li style="list-style: none">
         <ul>
@@ -373,23 +347,18 @@
           </li>
         </ul>
       </li>
-
       <li id="learning"><b>Pagina de învățare</b></li>
       <li style="list-style: none">
         <ul>
           <li>Pagina oferă o întrebare dată spre rezolvare, la care se va oferi o explicație indiferent de corectitudinea
             răspunsului dat de utilizator. Butonul <b>Trimite răspunsul</b> va valida întrebarea, iar <b>Următoarea întrebare</b>
             o va sări pe cea curentă, dar se va reveni mai târziu la ea.</li>
-
           <li style="list-style: none" class="pictures"><img src="images/learn1.png" alt="overview" width=800>
           </li>
-
           <li>După ce răspunsul a fost trimis, utilizatorul va vedea corectitudinea fiecărui răspuns, însoțite de o
             explicație corespunzătoare.</li>
-
           <li style="list-style: none" class="pictures"><img src="images/learn2.png" alt="overview" width=800>
           </li>
-
           <li style="list-style: none" class="pictures"><img src="images/learningPage.png" alt="editprofile" width=800>
           </li>
         </ul>
@@ -399,10 +368,8 @@
         <ul>
           <li>Pagina conține codul rutier actualizat la zi. </li>
           <li style="list-style: none" class="pictures"><img src="images/rulesPage.png" alt="overview" width=800>
-
           </li>
         </ul>
-
       <li id="signs"><b>Pagina cu semnele de circulație</b></li>
       <li style="list-style: none">
         <ul>
