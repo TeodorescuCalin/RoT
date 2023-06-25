@@ -950,7 +950,7 @@ paths:
           description: ID of the question
           schema:
             type: integer
-      request_body:
+      requestBody:
         content:
           application/json:
             schema:
