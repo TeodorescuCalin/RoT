@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="ro">
-
 <head>
     <meta charset="UTF-8">
     <title>Documentație</title>
 </head>
-
 <body>
-
 <article>
     <header>
         <h1>
@@ -326,7 +323,6 @@
                         <li>Aceasta reprezintă meniul de navigare către fiecare pagina a aplicației, prezent pe fiecare
                             pagină totodată.
                         </li>
-
                         <li class="pictures" style="list-style: none"><img alt="login" src="images/navBar.png" width=800
                         ></li>
                     </ul>
@@ -477,7 +473,6 @@
                             primi un mesaj
                             conform căruia utilizatorul a trecut sau nu testul cu brio.
                         </li>
-
                         <li class="pictures" style="list-style: none"><img alt="streetSignsRomania"
                                                                            src="images/testList.png" width=800
                         ></li>
@@ -522,13 +517,10 @@
                             grafice
                             corespunzătoare acestora.
                         </li>
-
                         <li>Mai mult, utilizatorul va avea la dispoziție un buton <b>Logout</b> prin care poate ieși din
                             cont,
                             dar is unul <b>Schimbă parolă</b>, în cazul în care își dorește acest lucru.
                         </li>
-
-
                         <li><img alt="overview" src="images/profile2.png" width=800></li>
                         <li><img alt="overview" src="images/profile3.png" width=800></li>
                         <li><img alt="overview" src="images/profile4.png" width=800></li>
@@ -588,7 +580,6 @@
                         </li>
                     </ul>
                 </li>
-
                 <li id="changepass"><b>Pagina de schimbare a parolei</b></li>
                 <li style="list-style: none">
                     <ul>
@@ -610,7 +601,6 @@
                 </li>
             </ul>
             <section id="hardware-interface">
-
                 <h4>3.2 Interfața Hardware</h4>
                 <p>
                     Acest produs nu necesită interfețe hardware, funcționând pe orice platformă (calculatoare,
@@ -637,7 +627,6 @@
                 <h3>4. Caracteristici ale sistemului</h3>
                 <section id="management">
                     <h4>4.1 Gestionarea contului</h4>
-
                     <h5 id="management-1">4.1.1 Descriere și generalități</h5>
                     Un utilizator se poate înregistra alegându-și un nume de utilizator, un email, o parola, numele si
                     prenumele.
@@ -745,7 +734,6 @@
                         </li>
                     </ul>
                 </section>
-
                 <section id="other">
                     <h4>4.5 Alte funcționalități</h4>
                     <h5 id="other-1">4.6.1 Descriere și generalități</h5>
@@ -774,7 +762,6 @@
                         Aplicația va asigura confidențialitatea datelor prin intermediul unei criptări.
                     </p>
                 </section>
-
                 <section id="security">
                     <h4>5.2 Securizarea datelor</h4>
                     <p>
@@ -796,11 +783,9 @@
                         <li>Flexibilitate</li>
                     </ul>
                 </section>
-
             </section>
         </section>
     </section>
 </article>
 </body>
-
 </html>
